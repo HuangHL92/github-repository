@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">表单提交</li>
+                <li>layui组件</li>
+                <li>layui表单</li>
+            </ul>
+
+            <div class="layui-tab-content">
+                <!--表单提交-->
+                <div class="layui-tab-item layui-show">
+                    <form class="form-horizontal m" id="form-demo-add" action="system/demo/add">
+
+                        <!--非明细数据-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>所有表单元素 <small>包括自定义样式的复选和单选按钮</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                                <i class="fa fa-wrench"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-user">
+                                                <li><a href="form_basic.html#">选项1</a>
+                                                </li>
+                                                <li><a href="form_basic.html#">选项2</a>
+                                                </li>
+                                            </ul>
+                                            <a class="close-link">
+                                                <i class="fa fa-times"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <form method="get" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">普通</label>
+
+                                                <div class="col-sm-10">
+                                                    <input type="text"  name="Name" id="Name" class="form-control" placeholder="提示信息">
+                                                    <span class="help-block m-b-none">帮助文本，可能会超过一行，以块级元素显示</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+
+                                                <label class="col-sm-2 control-label">状态</label>
+                                                <div class="col-sm-10">
+                                                    <select name="status" class="form-control" th:with="type=${@dict.getType('sys_normal_disable')}">
+                                                        <option value="">所有</option>
+                                                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">密码</label>
+
+                                                <div class="col-sm-10">
+                                                    <input type="password" id="pw"  class="form-control" name="password">
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">禁用</label>
+
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="name2" disabled="" placeholder="已被禁用" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">静态控制</label>
+
+                                                <div class="col-sm-10">
+                                                    <p class="form-control-static">i@zi-han.net</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">复选框&amp;单选框
+                                                    <br/><small class="text-navy">自定义样式</small>
+                                                </label>
+
+                                                <div class="col-sm-10">
+                                                    <div class="checkbox i-checks">
+                                                        <label>
+                                                            <input type="checkbox" name="ckb1" value=""> <i></i> 选项1</label>
+                                                    </div>
+                                                    <div class="checkbox i-checks">
+                                                        <label>
+                                                            <input type="checkbox" name="ckb1" value="" checked=""> <i></i> 选项2（选中）</label>
+                                                    </div>
+                                                    <div class="checkbox i-checks">
+                                                        <label>
+                                                            <input type="checkbox" name="ckb1" value="" disabled="" checked=""> <i></i> 选项3（选中并禁用）</label>
+                                                    </div>
+                                                    <div class="checkbox i-checks">
+                                                        <label>
+                                                            <input type="checkbox" name="ckb1" value="" disabled=""> <i></i> 选项4（禁用）</label>
+                                                    </div>
+                                                    <div class="radio i-checks">
+                                                        <label>
+                                                            <input type="radio" name="ckb2" value="option1"> <i></i> 选项1</label>
+                                                    </div>
+                                                    <div class="radio i-checks">
+                                                        <label>
+                                                            <input type="radio" name="ckb2" checked="" value="option2" > <i></i> 选项2（选中）</label>
+                                                    </div>
+                                                    <div class="radio i-checks">
+                                                        <label>
+                                                            <input type="radio" name="ckb2" disabled="" checked="" value="option2"> <i></i> 选项3（选中并禁用）</label>
+                                                    </div>
+                                                    <div class="radio i-checks">
+                                                        <label>
+                                                            <input type="radio" name="ckb2" disabled=""> <i></i> 选项4（禁用）</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">内联复选框</label>
+
+                                                <div class="col-sm-10">
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input type="checkbox" value="option1">a</label>
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input type="checkbox" value="option2">b</label>
+                                                    <label class="checkbox-inline i-checks">
+                                                        <input type="checkbox" value="option3">c</label>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">日期选择：</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-group">
+                                                        <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                            <input type="text" class="form-control" value="2018-04-20">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">备注：</label>
+                                                <div class="col-sm-10">
+                                                    <textarea id="remark" name="remark" class="form-control" rows="10"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--明细数据-->
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+                                    <div class="ibox-title">
+                                        <h5>明细数据
+                                            <small style="margin-left: 10px">
+                                                <button class="btn btn-primary btn-xs" type="button"><i class="fa fa-plus"></i>
+                                                </button>
+                                            </small>
+                                        </h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th th:width="60"  style="text-align: center">序号</th>
+                                                <th>姓名</th>
+                                                <th>性别</th>
+                                                <th>年龄</th>
+                                                <th th:width="80" style="text-align: center">#</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td style="text-align: center">1</td>
+                                                <td>张三</td>
+                                                <td>男</td>
+                                                <td>23</td>
+                                                <td style="text-align: center">
+                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center">2</td>
+                                                <td>李四</td>
+                                                <td>男</td>
+                                                <td>27</td>
+                                                <td style="text-align: center">
+                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align: center">3</td>
+                                                <td>王麻子</td>
+                                                <td>男</td>
+                                                <td>65</td>
+                                                <td style="text-align: center">
+                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <!--layui组件-->
+                <div class="layui-tab-item">
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 60px;">
+                        <legend>常规时间线</legend>
+                    </fieldset>
+                    <ul class="layui-timeline">
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis"></i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月18日</h3>
+                                <p>
+                                    layui 2.0 的一切准备工作似乎都已到位。发布之弦，一触即发。
+                                    <br>不枉近百个日日夜夜与之为伴。因小而大，因弱而强。
+                                    <br>无论它能走多远，抑或如何支撑？至少我曾倾注全心，无怨无悔 <i class="layui-icon"></i>
+                                </p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis"></i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月16日</h3>
+                                <p>杜甫的思想核心是儒家的仁政思想，他有<em>“致君尧舜上，再使风俗淳”</em>的宏伟抱负。个人最爱的名篇有：</p>
+                                <ul>
+                                    <li>《登高》</li>
+                                    <li>《茅屋为秋风所破歌》</li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis"></i>
+                            <div class="layui-timeline-content layui-text">
+                                <h3 class="layui-timeline-title">8月15日</h3>
+                                <p>
+                                    中国人民抗日战争胜利日
+                                    <br>常常在想，尽管对这个国家有这样那样的抱怨，但我们的确生在了最好的时代
+                                    <br>铭记、感恩
+                                    <br>所有为中华民族浴血奋战的英雄将士
+                                    <br>永垂不朽
+                                </p>
+                            </div>
+                        </li>
+                        <li class="layui-timeline-item">
+                            <i class="layui-icon layui-timeline-axis"></i>
+                            <div class="layui-timeline-content layui-text">
+                                <div class="layui-timeline-title">过去</div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+                        <legend>手风琴折叠</legend>
+                    </fieldset>
+                    <div class="layui-collapse" lay-accordion="">
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">layui 更适合哪些开发者？</h2>
+                            <div class="layui-colla-content layui-show">
+                                <p>在前端技术快速变革的今天，layui 仍然坚持语义化的组织模式，甚至于模块理念都是采用类AMD组织形式，并非是有意与时代背道而驰。layui 认为以jQuery为核心的开发方式还没有到完全消亡的时候，而早期市面上基于jQuery的UI都普通做得差强人意，所以需要有一个新的UI去重新为这一领域注入活力，并采用一些更科学的架构方式。
+                                    <br>
+                                    因此准确地说，layui 更多是面向那些追求开发简单的前端工程师们，以及所有层次的服务端程序员。</p>
+                            </div>
+                        </div>
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">为什么JS社区大量采用未发布或者未广泛支持的语言特性？</h2>
+                            <div class="layui-colla-content">
+                                <p>有不少其他答案说是因为JS太差。我下面的答案已经说了，这不是根本性的原因。但除此之外，我还要纠正一些对JS具体问题的误解。JS当初是被作为脚本语言设计的，所以某些问题并不是JS设计得差或者是JS设计者的失误。比如var的作用域问题，并不是“错误”，而是当时绝大部分脚本语言都是这样的，如perl/php/sh等。模块的问题也是，脚本语言几乎都没有模块/命名空间功能。弱类型、for-in之类的问题也是，只不过现在用那些老的脚本语言的人比较少，所以很多人都误以为是JS才有的坑。另外有人说JS是半残语言，满足不了开发需求，1999年就该死。半残这个嘛，就夸张了。JS虽然有很多问题，但是设计总体还是优秀的。——来自知乎@贺师俊</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>半星效果</legend>
+                    </fieldset>
+
+                    <div id="test3"></div>
+                    <div><div id="test4"></div></div>
+
+                    <div class="layui-tab layui-tab-brief">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">网站设置</li>
+                            <li>用户管理<span class="layui-badge-dot"></span></li>
+                            <li>最新邮件<span class="layui-badge">99+</span></li>
+                        </ul>
+                        <div class="layui-tab-content"></div>
+                    </div>
+                </div>
+                <!--layui表单-->
+                <div class="layui-tab-item">
+                    <blockquote class="layui-elem-quote layui-text">
+                        鉴于小伙伴的普遍反馈，先温馨提醒两个常见“问题”：1. <a href="/doc/base/faq.html#form" target="_blank">为什么select/checkbox/radio没显示？</a> 2. <a href="/doc/modules/form.html#render" target="_blank">动态添加的表单元素如何更新？</a>
+                    </blockquote>
+
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                        <legend>表单集合演示</legend>
+                    </fieldset>
+
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单行输入框</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">验证必填项</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="username" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">验证手机</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="phone" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">验证邮箱</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">多规则验证</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="number" lay-verify="required|number" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">验证日期</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="date" id="date" lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">验证链接</label>
+                                <div class="layui-input-inline">
+                                    <input type="tel" name="url" lay-verify="url" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">验证身份证</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="identity" lay-verify="identity" placeholder="" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自定义验证</label>
+                            <div class="layui-input-inline">
+                                <input type="password" name="password" lay-verify="pass" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">请填写6到12位密码</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">范围</label>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="price_min" placeholder="￥" autocomplete="off" class="layui-input">
+                                </div>
+                                <div class="layui-form-mid">-</div>
+                                <div class="layui-input-inline" style="width: 100px;">
+                                    <input type="text" name="price_max" placeholder="￥" autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单行选择框</label>
+                            <div class="layui-input-block">
+                                <select name="interest" lay-filter="aihao">
+                                    <option value=""></option>
+                                    <option value="0">写作</option>
+                                    <option value="1" selected="">阅读</option>
+                                    <option value="2">游戏</option>
+                                    <option value="3">音乐</option>
+                                    <option value="4">旅行</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <div class="layui-form-item">
+                            <div class="layui-inline">
+                                <label class="layui-form-label">分组选择框</label>
+                                <div class="layui-input-inline">
+                                    <select name="quiz">
+                                        <option value="">请选择问题</option>
+                                        <optgroup label="城市记忆">
+                                            <option value="你工作的第一个城市">你工作的第一个城市</option>
+                                        </optgroup>
+                                        <optgroup label="学生时代">
+                                            <option value="你的工号">你的工号</option>
+                                            <option value="你最喜欢的老师">你最喜欢的老师</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">搜索选择框</label>
+                                <div class="layui-input-inline">
+                                    <select name="modules" lay-verify="required" lay-search="">
+                                        <option value="">直接选择或搜索选择</option>
+                                        <option value="1">layer</option>
+                                        <option value="2">form</option>
+                                        <option value="3">layim</option>
+                                        <option value="4">element</option>
+                                        <option value="5">laytpl</option>
+                                        <option value="6">upload</option>
+                                        <option value="7">laydate</option>
+                                        <option value="8">laypage</option>
+                                        <option value="9">flow</option>
+                                        <option value="10">util</option>
+                                        <option value="11">code</option>
+                                        <option value="12">tree</option>
+                                        <option value="13">layedit</option>
+                                        <option value="14">nav</option>
+                                        <option value="15">tab</option>
+                                        <option value="16">table</option>
+                                        <option value="17">select</option>
+                                        <option value="18">checkbox</option>
+                                        <option value="19">switch</option>
+                                        <option value="20">radio</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">联动选择框</label>
+                            <div class="layui-input-inline">
+                                <select name="quiz1">
+                                    <option value="">请选择省</option>
+                                    <option value="浙江" selected="">浙江省</option>
+                                    <option value="你的工号">江西省</option>
+                                    <option value="你最喜欢的老师">福建省</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="quiz2">
+                                    <option value="">请选择市</option>
+                                    <option value="杭州">杭州</option>
+                                    <option value="宁波" disabled="">宁波</option>
+                                    <option value="温州">温州</option>
+                                    <option value="温州">台州</option>
+                                    <option value="温州">绍兴</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="quiz3">
+                                    <option value="">请选择县/区</option>
+                                    <option value="西湖区">西湖区</option>
+                                    <option value="余杭区">余杭区</option>
+                                    <option value="拱墅区">临安市</option>
+                                </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">此处只是演示联动排版，并未做联动交互</div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">复选框</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="like[write]" title="写作">
+                                <input type="checkbox" name="like[read]" title="阅读" checked="">
+                                <input type="checkbox" name="like[game]" title="游戏">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item" pane="">
+                            <label class="layui-form-label">原始复选框</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="like1[write]" lay-skin="primary" title="写作" checked="">
+                                <input type="checkbox" name="like1[read]" lay-skin="primary" title="阅读">
+                                <input type="checkbox" name="like1[game]" lay-skin="primary" title="游戏" disabled="">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">开关-默认关</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="close" lay-skin="switch" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">开关-默认开</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单选框</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="sex" value="男" title="男" checked="">
+                                <input type="radio" name="sex" value="女" title="女">
+                                <input type="radio" name="sex" value="禁" title="禁用" disabled="">
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">普通文本域</label>
+                            <div class="layui-input-block">
+                                <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+                            </div>
+                        </div>
+                        <!--<div class="layui-form-item layui-form-text">
+                          <label class="layui-form-label">编辑器</label>
+                          <div class="layui-input-block">
+                            <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+                          </div>
+                        </div>-->
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>基本面板 <small class="m-l-sm">这是一个自定义面板</small></h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="tabs_panels.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="tabs_panels.html#">选项1</a>
+                                </li>
+                                <li><a href="tabs_panels.html#">选项2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <h2>
+                            Bootstrap<br/>
+                        </h2>
+                        <p>
+                            简洁、直观、强悍的前端开发框架，让web开发更迅速、简单。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="tabs-container">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 第一个选项卡</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">第二个选项卡</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                                <strong>HTML5 文档类型</strong>
+                                <p>Bootstrap 使用到的某些 HTML 元素和 CSS 属性需要将页面设置为 HTML5 文档类型。在你项目中的每个页面都要参照下面的格式进行设置。</p>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <strong>移动设备优先</strong>
+                                <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3 中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap 是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel blank-panel">
+
+                    <div class="panel-heading">
+                        <div class="panel-title m-b-md">
+                            <h4>图标选项卡</h4>
+                        </div>
+                        <div class="panel-options">
+
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a data-toggle="tab" href="tabs_panels.html#tab-4"><i class="fa fa-laptop"></i></a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-5"><i class="fa fa-desktop"></i></a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-6"><i class="fa fa-signal"></i></a>
+                                </li>
+                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-7"><i class="fa fa-bar-chart-o"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="tab-4" class="tab-pane active">
+                                <div id="vertical-timeline" class="vertical-container light-timeline">
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon navy-bg">
+                                            <i class="fa fa-briefcase"></i>
+                                        </div>
+
+                                        <div class="vertical-timeline-content">
+                                            <h2>会议</h2>
+                                            <p>上一年的销售业绩发布会。总结产品营销和销售趋势及销售的现状。
+                                            </p>
+                                            <a href="#" class="btn btn-sm btn-primary"> 更多信息</a>
+                                            <span class="vertical-date">
+                                        今天 <br>
+                                        <small>2月3日</small>
+                                    </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon blue-bg">
+                                            <i class="fa fa-file-text"></i>
+                                        </div>
+
+                                        <div class="vertical-timeline-content">
+                                            <h2>给张三发送文档</h2>
+                                            <p>发送上年度《销售业绩报告》</p>
+                                            <a href="#" class="btn btn-sm btn-success"> 下载文档 </a>
+                                            <span class="vertical-date">
+                                        今天 <br>
+                                        <small>2月3日</small>
+                                    </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon lazur-bg">
+                                            <i class="fa fa-coffee"></i>
+                                        </div>
+
+                                        <div class="vertical-timeline-content">
+                                            <h2>喝咖啡休息</h2>
+                                            <p>喝咖啡啦，啦啦啦~~</p>
+                                            <a href="#" class="btn btn-sm btn-info">更多</a>
+                                            <span class="vertical-date"> 昨天 <br><small>2月2日</small></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon yellow-bg">
+                                            <i class="fa fa-phone"></i>
+                                        </div>
+
+                                        <div class="vertical-timeline-content">
+                                            <h2>给李四打电话</h2>
+                                            <p>给李四打电话分配本月工作任务</p>
+                                            <span class="vertical-date">昨天 <br><small>2月2日</small></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="vertical-timeline-block">
+                                        <div class="vertical-timeline-icon lazur-bg">
+                                            <i class="fa fa-user-md"></i>
+                                        </div>
+
+                                        <div class="vertical-timeline-content">
+                                            <h2>公司年会</h2>
+                                            <p>发年终奖啦，啦啦啦~~</p>
+                                            <span class="vertical-date">前天 <br><small>2月1日</small></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="tab-5" class="tab-pane">
+
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="ibox">
+                                            <div class="ibox-content">
+                                                <h3>任务列表</h3>
+                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
+
+                                                <div class="input-group">
+                                                    <input type="text" placeholder="添加新任务" class="input input-sm form-control">
+                                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> 添加</button>
+                                </span>
+                                                </div>
+
+                                                <ul class="sortable-list connectList agile-list">
+                                                    <li class="warning-element">
+                                                        加强过程管理，及时统计教育经费使用情况，做到底码清楚，
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.01
+                                                        </div>
+                                                    </li>
+                                                    <li class="success-element">
+                                                        支持财会人员的继续培训工作。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.05.12
+                                                        </div>
+                                                    </li>
+                                                    <li class="info-element">
+                                                        协同教导处搞好助学金、减免教科书费的工作。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.10
+                                                        </div>
+                                                    </li>
+                                                    <li class="danger-element">
+                                                        要求会计、出纳人员严格执行财务制度，遵守岗位职责，按时上报各种资料。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.06.10
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        做好职工公费医疗工作，按时发放门诊费。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.09
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        有计划地把课本复习三至五遍。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.08.04
+                                                        </div>
+                                                    </li>
+                                                    <li class="success-element">
+                                                        看一本高质量的高中语法书
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.05.12
+                                                        </div>
+                                                    </li>
+                                                    <li class="info-element">
+                                                        选择一份较好的英语报纸，通过阅读提高英语学习效果。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.10
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="ibox">
+                                            <div class="ibox-content">
+                                                <h3>进行中</h3>
+                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
+                                                <ul class="sortable-list connectList agile-list">
+                                                    <li class="success-element">
+                                                        全面、较深入地掌握我们“产品”的功能、特色和优势并做到应用自如。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.01
+                                                        </div>
+                                                    </li>
+                                                    <li class="success-element">
+                                                        根据自己以前所了解的和从其他途径搜索到的信息，录入客户资料150家。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.05.12
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        锁定有意向客户20家。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.10
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        力争完成销售指标。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.09
+                                                        </div>
+                                                    </li>
+                                                    <li class="info-element">
+                                                        在总结和摸索中前进。
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.08.04
+                                                        </div>
+                                                    </li>
+                                                    <li class="success-element">
+                                                        不断学习行业知识、产品知识，为客户带来实用介绍内容
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.05.12
+                                                        </div>
+                                                    </li>
+                                                    <li class="danger-element">
+                                                        先友后单：与客户发展良好友谊，转换销售员角色，处处为客户着想
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.11.04
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div class="ibox">
+                                            <div class="ibox-content">
+                                                <h3>已完成</h3>
+                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
+                                                <ul class="sortable-list connectList agile-list">
+                                                    <li class="info-element">
+                                                        制定工作日程表
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.10
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        每天坚持打40个有效电话，挖掘潜在客户
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.09
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        拜访客户之前要对该客户做全面的了解(客户的潜在需求、职位、权限以及个人性格和爱好)
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.09.09
+                                                        </div>
+                                                    </li>
+                                                    <li class="warning-element">
+                                                        提高自己电话营销技巧，灵活专业地与客户进行电话交流
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.08.04
+                                                        </div>
+                                                    </li>
+                                                    <li class="success-element">
+                                                        通过电话销售过程中了解各盛市的设备仪器使用、采购情况及相关重要追踪人
+                                                        <div class="agile-detail">
+                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
+                                                            <i class="fa fa-clock-o"></i> 2015.05.12
+                                                        </div>
+                                                    </li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div id="tab-6" class="tab-pane">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="ibox float-e-margins">
+                                            <div class="ibox-title">
+                                                <h5>所有表单元素 <small>包括自定义样式的复选和单选按钮</small></h5>
+                                                <div class="ibox-tools">
+                                                    <a class="collapse-link">
+                                                        <i class="fa fa-chevron-up"></i>
+                                                    </a>
+                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                                        <i class="fa fa-wrench"></i>
+                                                    </a>
+                                                    <ul class="dropdown-menu dropdown-user">
+                                                        <li><a href="form_basic.html#">选项1</a>
+                                                        </li>
+                                                        <li><a href="form_basic.html#">选项2</a>
+                                                        </li>
+                                                    </ul>
+                                                    <a class="close-link">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="ibox-content">
+                                                <form method="get" class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">普通</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">带说明信息</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control"> <span class="help-block m-b-none">帮助文本，可能会超过一行，以块级元素显示</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">密码</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="password" class="form-control" name="password">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">提示</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" placeholder="提示信息" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">禁用</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" disabled="" placeholder="已被禁用" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">静态控制</label>
+
+                                                        <div class="col-sm-10">
+                                                            <p class="form-control-static">i@zi-han.net</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">复选框&amp;单选框
+                                                            <br/>
+                                                            <small class="text-navy">普通Bootstrap元素</small>
+                                                        </label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="checkbox">
+                                                                <label>
+                                                                    <input type="checkbox" value="">选项1</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios">选项1</label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <label>
+                                                                    <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">选项2</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">内联复选框</label>
+
+                                                        <div class="col-sm-10">
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="option1" id="inlineCheckbox1">a</label>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="option2" id="inlineCheckbox2">b</label>
+                                                            <label class="checkbox-inline">
+                                                                <input type="checkbox" value="option3" id="inlineCheckbox3">c</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">复选框&amp;单选框
+                                                            <br/><small class="text-navy">自定义样式</small>
+                                                        </label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="checkbox i-checks">
+                                                                <label>
+                                                                    <input type="checkbox" value=""> <i></i> 选项1</label>
+                                                            </div>
+                                                            <div class="checkbox i-checks">
+                                                                <label>
+                                                                    <input type="checkbox" value="" checked=""> <i></i> 选项2（选中）</label>
+                                                            </div>
+                                                            <div class="checkbox i-checks">
+                                                                <label>
+                                                                    <input type="checkbox" value="" disabled="" checked=""> <i></i> 选项3（选中并禁用）</label>
+                                                            </div>
+                                                            <div class="checkbox i-checks">
+                                                                <label>
+                                                                    <input type="checkbox" value="" disabled=""> <i></i> 选项4（禁用）</label>
+                                                            </div>
+                                                            <div class="radio i-checks">
+                                                                <label>
+                                                                    <input type="radio" value="option1" name="a"> <i></i> 选项1</label>
+                                                            </div>
+                                                            <div class="radio i-checks">
+                                                                <label>
+                                                                    <input type="radio" checked="" value="option2" name="a"> <i></i> 选项2（选中）</label>
+                                                            </div>
+                                                            <div class="radio i-checks">
+                                                                <label>
+                                                                    <input type="radio" disabled="" checked="" value="option2"> <i></i> 选项3（选中并禁用）</label>
+                                                            </div>
+                                                            <div class="radio i-checks">
+                                                                <label>
+                                                                    <input type="radio" disabled="" name="a"> <i></i> 选项4（禁用）</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">内联复选框</label>
+
+                                                        <div class="col-sm-10">
+                                                            <label class="checkbox-inline i-checks">
+                                                                <input type="checkbox" value="option1">a</label>
+                                                            <label class="checkbox-inline i-checks">
+                                                                <input type="checkbox" value="option2">b</label>
+                                                            <label class="checkbox-inline i-checks">
+                                                                <input type="checkbox" value="option3">c</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">Select</label>
+
+                                                        <div class="col-sm-10">
+                                                            <select class="form-control m-b" name="account">
+                                                                <option>选项 1</option>
+                                                                <option>选项 2</option>
+                                                                <option>选项 3</option>
+                                                                <option>选项 4</option>
+                                                            </select>
+
+                                                            <div class="col-sm-4 m-l-n">
+                                                                <select class="form-control" multiple="">
+                                                                    <option>选项 1</option>
+                                                                    <option>选项 2</option>
+                                                                    <option>选项 3</option>
+                                                                    <option>选项 4</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group has-success">
+                                                        <label class="col-sm-2 control-label">验证通过</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group has-warning">
+                                                        <label class="col-sm-2 control-label">未填写</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group has-error">
+                                                        <label class="col-sm-2 control-label">验证未通过</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">自定义尺寸</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" placeholder=".input-lg" class="form-control input-lg m-b">
+                                                            <input type="text" placeholder="Default input" class="form-control m-b">
+                                                            <input type="text" placeholder=".input-sm" class="form-control input-sm">
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">列尺寸</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="row">
+                                                                <div class="col-md-2">
+                                                                    <input type="text" placeholder=".col-md-2" class="form-control">
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" placeholder=".col-md-3" class="form-control">
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <input type="text" placeholder=".col-md-4" class="form-control">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">文本框组</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group m-b"><span class="input-group-addon">@</span>
+                                                                <input type="text" placeholder="用户名" class="form-control">
+                                                            </div>
+                                                            <div class="input-group m-b">
+                                                                <input type="text" class="form-control"> <span class="input-group-addon">.00</span>
+                                                            </div>
+                                                            <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
+                                                                <input type="text" class="form-control"> <span class="input-group-addon">.00</span>
+                                                            </div>
+                                                            <div class="input-group m-b"><span class="input-group-addon"> <input type="checkbox"> </span>
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="input-group"><span class="input-group-addon"> <input type="radio"> </span>
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">按钮插件</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group m-b"><span class="input-group-btn">
+                                            <button type="button" class="btn btn-primary">搜</button> </span>
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control"> <span class="input-group-btn"> <button type="button" class="btn btn-primary">搜索
+                                        </button> </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">带下拉框</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group m-b">
+                                                                <div class="input-group-btn">
+                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">操作 <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="form_basic.html#">选项1</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项2</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项3</a>
+                                                                        </li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="form_basic.html#">选项4</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control">
+
+                                                                <div class="input-group-btn">
+                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">操作 <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu pull-right">
+                                                                        <li><a href="form_basic.html#">选项1</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项2</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项3</a>
+                                                                        </li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="form_basic.html#">选项4</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <label class="col-sm-2 control-label">分段</label>
+
+                                                        <div class="col-sm-10">
+                                                            <div class="input-group m-b">
+                                                                <div class="input-group-btn">
+                                                                    <button tabindex="-1" class="btn btn-white" type="button">操作</button>
+                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="form_basic.html#">选项1</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项2</a>
+                                                                        </li>
+                                                                        <li><a href="form_basic.html#">选项3</a>
+                                                                        </li>
+                                                                        <li class="divider"></li>
+                                                                        <li><a href="form_basic.html#">选项4</a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control">
+
+                                                                <div class="input-group-btn">
+                                                                    <button tabindex="-1" class="btn btn-white" type="button">操作</button>
+                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu pull-right">
+                                                                        分段
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="hr-line-dashed"></div>
+                                                    <div class="form-group">
+                                                        <div class="col-sm-4 col-sm-offset-2">
+                                                            <button class="btn btn-primary" type="submit">保存内容</button>
+                                                            <button class="btn btn-white" type="submit">取消</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div id="tab-7" class="tab-pane">
+                                <strong>栅格系统</strong>
+
+                                <p>Bootstrap 提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口（viewport）尺寸的增加，系统会自动分为最多12列。它包含了易于使用的预定义类，还有强大的mixin 用于生成更具语义的布局。</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+	<div th:include="include::footer"></div>
+
+	<script type="text/javascript">
+
+        //页面控件初始化
+        initCtrl();
+
+        var formobj = $("#form-demo-add");
+
+        //表单验证
+        formobj.validate({
+            rules:{
+
+                Name:{
+                    required:true,
+                    minlength: 3,
+                    maxlength: 10
+                },
+
+                // email:{
+                //     required:true,
+                //     email:true,
+                //     remote: {
+                //         url: ctx + "system/user/checkEmailUnique",
+                //         type: "post",
+                //         dataType: "json",
+                //         data: {
+                //             name: function () {
+                //                 return $.common.trim($("#email").val());
+                //             }
+                //         },
+                //         dataFilter: function (data, type) {
+                //             return $.validate.unique(data);
+                //         }
+                //     }
+                // },
+
+            }
+		});
+
+        //表单提交事件Handler
+		function submitHandler() {
+	        if ($.validate.form()) {
+	        	submitAction(formobj);
+	        }
+	    }
+
+        layui.use('element', function(){
+            var $ = layui.jquery
+                ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+            //触发事件
+            var active = {
+                tabAdd: function(){
+                    //新增一个Tab项
+                    element.tabAdd('demo', {
+                        title: '新选项'+ (Math.random()*1000|0) //用于演示
+                        ,content: '内容'+ (Math.random()*1000|0)
+                        ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                    })
+                }
+                ,tabDelete: function(othis){
+                    //删除指定Tab项
+                    element.tabDelete('demo', '44'); //删除：“商品管理”
+
+
+                    othis.addClass('layui-btn-disabled');
+                }
+                ,tabChange: function(){
+                    //切换到指定Tab项
+                    element.tabChange('demo', '22'); //切换到：用户管理
+                }
+            };
+
+            $('.site-demo-active').on('click', function(){
+                var othis = $(this), type = othis.data('type');
+                active[type] ? active[type].call(this, othis) : '';
+            });
+
+
+
+        });
+
+        layui.use(['rate'], function(){
+            var rate = layui.rate;
+
+            //半星效果
+            rate.render({
+                elem: '#test3'
+                ,value: 2.5 //初始值
+                ,half: true //开启半星
+            })
+            rate.render({
+                elem: '#test4'
+                ,value: 3.5
+                ,half: true
+                ,text: true
+            })
+
+        });
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+.layui-elem-field legend {
+    width: auto !important;
+    border-bottom: none !important;
+    margin-bottom: 0px !important;
+}
+
+.layui-colla-title {
+    margin-top: 0px !important;
+}
