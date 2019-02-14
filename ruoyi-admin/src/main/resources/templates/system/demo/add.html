@@ -10,6 +10,10 @@
                 <li class="layui-this">表单提交</li>
                 <li>layui组件</li>
                 <li>layui表单</li>
+                <li>Http、邮件</li>
+                <li>二维码、条码</li>
+                <li>word、excel、pdf</li>
+                <li>上传、下载</li>
             </ul>
 
             <div class="layui-tab-content">
@@ -158,6 +162,7 @@
                                                 </div>
                                             </div>
 
+
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">备注：</label>
@@ -179,7 +184,7 @@
                                     <div class="ibox-title">
                                         <h5>明细数据
                                             <small style="margin-left: 10px">
-                                                <button class="btn btn-primary btn-xs" type="button" onclick="addrow($('#mytable tr:last'))"><i class="fa fa-plus"></i>
+                                                <button class="btn btn-primary btn-xs" type="button" onclick="addtr('mytable')"><i class="fa fa-plus"></i>
                                                 </button>
                                             </small>
                                         </h5>
@@ -193,46 +198,31 @@
                                     <div class="ibox-content">
                                         <table class="table table-bordered" id="mytable">
                                             <thead>
-                                            <tr>
-                                                <th th:width="60"  style="text-align: center">序号</th>
-                                                <th>姓名</th>
-                                                <th>性别</th>
-                                                <th>年龄</th>
-                                                <th th:width="80" style="text-align: center">#</th>
-                                            </tr>
+                                                <tr>
+                                                    <th>姓名</th>
+                                                    <th>性别</th>
+                                                    <th>年龄</th>
+                                                    <th th:width="80" style="text-align: center">操作</th>
+                                                </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr id="mytable_tr">
-                                                <td style="text-align: center">1</td>
-                                                <td>张三</td>
-                                                <td>男</td>
-                                                <td>23</td>
-                                                <td style="text-align: center">
-                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center">2</td>
-                                                <td>李四</td>
-                                                <td>男</td>
-                                                <td>27</td>
-                                                <td style="text-align: center">
-                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align: center">3</td>
-                                                <td>王麻子</td>
-                                                <td>男</td>
-                                                <td>65</td>
-                                                <td style="text-align: center">
-                                                    <button class="btn btn-danger btn-xs" type="button" onclick=""><i class="fa fa-times"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
+                                            <template>
 
+                                            </template>
+                                            <tbody>
+                                                <tr>
+                                                    <td><input type="text"  name="item_name"  class="form-control" placeholder="请输入姓名"></td>
+                                                    <td>
+                                                        <select name="status" class="form-control" th:with="type=${@dict.getType('sys_user_sex')}">
+                                                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                    <td><input type="text"  name="item_age"  class="form-control"></td>
+                                                    <td style="text-align: center">
+                                                        <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)"><i class="fa fa-times"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -319,8 +309,8 @@
                         <legend>半星效果</legend>
                     </fieldset>
 
-                    <div id="test3"></div>
-                    <div><div id="test4"></div></div>
+                    <div id="start1"></div>
+                    <div><div id="start2"></div></div>
 
                     <div class="layui-tab layui-tab-brief">
                         <ul class="layui-tab-title">
@@ -568,737 +558,164 @@
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>基本面板 <small class="m-l-sm">这是一个自定义面板</small></h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="tabs_panels.html#">
-                                <i class="fa fa-wrench"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-user">
-                                <li><a href="tabs_panels.html#">选项1</a>
-                                </li>
-                                <li><a href="tabs_panels.html#">选项2</a>
-                                </li>
-                            </ul>
-                            <a class="close-link">
-                                <i class="fa fa-times"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="ibox-content">
-                        <h2>
-                            Bootstrap<br/>
-                        </h2>
-                        <p>
-                            简洁、直观、强悍的前端开发框架，让web开发更迅速、简单。</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <!--Http、邮件-->
+                <div class="layui-tab-item">
 
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="tabs-container">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true"> 第一个选项卡</a>
-                        </li>
-                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">第二个选项卡</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div id="tab-1" class="tab-pane active">
-                            <div class="panel-body">
-                                <strong>HTML5 文档类型</strong>
-                                <p>Bootstrap 使用到的某些 HTML 元素和 CSS 属性需要将页面设置为 HTML5 文档类型。在你项目中的每个页面都要参照下面的格式进行设置。</p>
-                            </div>
-                        </div>
-                        <div id="tab-2" class="tab-pane">
-                            <div class="panel-body">
-                                <strong>移动设备优先</strong>
-                                <p>在 Bootstrap 2 中，我们对框架中的某些关键部分增加了对移动设备友好的样式。而在 Bootstrap 3 中，我们重写了整个框架，使其一开始就是对移动设备友好的。这次不是简单的增加一些可选的针对移动设备的样式，而是直接融合进了框架的内核中。也就是说，Bootstrap 是移动设备优先的。针对移动设备的样式融合进了框架的每个角落，而不是增加一个额外的文件。</p>
-                            </div>
-                        </div>
-                    </div>
+                    <form class="form-horizontal m" id="form-demo-http" >
+                        <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
 
-
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel blank-panel">
-
-                    <div class="panel-heading">
-                        <div class="panel-title m-b-md">
-                            <h4>图标选项卡</h4>
-                        </div>
-                        <div class="panel-options">
-
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="tabs_panels.html#tab-4"><i class="fa fa-laptop"></i></a>
-                                </li>
-                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-5"><i class="fa fa-desktop"></i></a>
-                                </li>
-                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-6"><i class="fa fa-signal"></i></a>
-                                </li>
-                                <li class=""><a data-toggle="tab" href="tabs_panels.html#tab-7"><i class="fa fa-bar-chart-o"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="tab-content">
-                            <div id="tab-4" class="tab-pane active">
-                                <div id="vertical-timeline" class="vertical-container light-timeline">
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon navy-bg">
-                                            <i class="fa fa-briefcase"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>会议</h2>
-                                            <p>上一年的销售业绩发布会。总结产品营销和销售趋势及销售的现状。
-                                            </p>
-                                            <a href="#" class="btn btn-sm btn-primary"> 更多信息</a>
-                                            <span class="vertical-date">
-                                        今天 <br>
-                                        <small>2月3日</small>
-                                    </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon blue-bg">
-                                            <i class="fa fa-file-text"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>给张三发送文档</h2>
-                                            <p>发送上年度《销售业绩报告》</p>
-                                            <a href="#" class="btn btn-sm btn-success"> 下载文档 </a>
-                                            <span class="vertical-date">
-                                        今天 <br>
-                                        <small>2月3日</small>
-                                    </span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon lazur-bg">
-                                            <i class="fa fa-coffee"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>喝咖啡休息</h2>
-                                            <p>喝咖啡啦，啦啦啦~~</p>
-                                            <a href="#" class="btn btn-sm btn-info">更多</a>
-                                            <span class="vertical-date"> 昨天 <br><small>2月2日</small></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon yellow-bg">
-                                            <i class="fa fa-phone"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>给李四打电话</h2>
-                                            <p>给李四打电话分配本月工作任务</p>
-                                            <span class="vertical-date">昨天 <br><small>2月2日</small></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon lazur-bg">
-                                            <i class="fa fa-user-md"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>公司年会</h2>
-                                            <p>发年终奖啦，啦啦啦~~</p>
-                                            <span class="vertical-date">前天 <br><small>2月1日</small></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="tab-5" class="tab-pane">
-
-                                <div class="row">
-                                    <div class="col-sm-4">
-                                        <div class="ibox">
-                                            <div class="ibox-content">
-                                                <h3>任务列表</h3>
-                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
-
-                                                <div class="input-group">
-                                                    <input type="text" placeholder="添加新任务" class="input input-sm form-control">
-                                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> 添加</button>
-                                </span>
-                                                </div>
-
-                                                <ul class="sortable-list connectList agile-list">
-                                                    <li class="warning-element">
-                                                        加强过程管理，及时统计教育经费使用情况，做到底码清楚，
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.01
-                                                        </div>
-                                                    </li>
-                                                    <li class="success-element">
-                                                        支持财会人员的继续培训工作。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.05.12
-                                                        </div>
-                                                    </li>
-                                                    <li class="info-element">
-                                                        协同教导处搞好助学金、减免教科书费的工作。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.10
-                                                        </div>
-                                                    </li>
-                                                    <li class="danger-element">
-                                                        要求会计、出纳人员严格执行财务制度，遵守岗位职责，按时上报各种资料。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.06.10
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        做好职工公费医疗工作，按时发放门诊费。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.09
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        有计划地把课本复习三至五遍。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.08.04
-                                                        </div>
-                                                    </li>
-                                                    <li class="success-element">
-                                                        看一本高质量的高中语法书
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.05.12
-                                                        </div>
-                                                    </li>
-                                                    <li class="info-element">
-                                                        选择一份较好的英语报纸，通过阅读提高英语学习效果。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.10
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="ibox">
-                                            <div class="ibox-content">
-                                                <h3>进行中</h3>
-                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
-                                                <ul class="sortable-list connectList agile-list">
-                                                    <li class="success-element">
-                                                        全面、较深入地掌握我们“产品”的功能、特色和优势并做到应用自如。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.01
-                                                        </div>
-                                                    </li>
-                                                    <li class="success-element">
-                                                        根据自己以前所了解的和从其他途径搜索到的信息，录入客户资料150家。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.05.12
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        锁定有意向客户20家。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.10
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        力争完成销售指标。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.09
-                                                        </div>
-                                                    </li>
-                                                    <li class="info-element">
-                                                        在总结和摸索中前进。
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.08.04
-                                                        </div>
-                                                    </li>
-                                                    <li class="success-element">
-                                                        不断学习行业知识、产品知识，为客户带来实用介绍内容
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.05.12
-                                                        </div>
-                                                    </li>
-                                                    <li class="danger-element">
-                                                        先友后单：与客户发展良好友谊，转换销售员角色，处处为客户着想
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.11.04
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="ibox">
-                                            <div class="ibox-content">
-                                                <h3>已完成</h3>
-                                                <p class="small"><i class="fa fa-hand-o-up"></i> 在列表之间拖动任务面板</p>
-                                                <ul class="sortable-list connectList agile-list">
-                                                    <li class="info-element">
-                                                        制定工作日程表
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.10
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        每天坚持打40个有效电话，挖掘潜在客户
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.09
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        拜访客户之前要对该客户做全面的了解(客户的潜在需求、职位、权限以及个人性格和爱好)
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标签</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.09.09
-                                                        </div>
-                                                    </li>
-                                                    <li class="warning-element">
-                                                        提高自己电话营销技巧，灵活专业地与客户进行电话交流
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-primary">确定</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.08.04
-                                                        </div>
-                                                    </li>
-                                                    <li class="success-element">
-                                                        通过电话销售过程中了解各盛市的设备仪器使用、采购情况及相关重要追踪人
-                                                        <div class="agile-detail">
-                                                            <a href="#" class="pull-right btn btn-xs btn-white">标记</a>
-                                                            <i class="fa fa-clock-o"></i> 2015.05.12
-                                                        </div>
-                                                    </li>
-
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <div id="tab-6" class="tab-pane">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="ibox float-e-margins">
-                                            <div class="ibox-title">
-                                                <h5>所有表单元素 <small>包括自定义样式的复选和单选按钮</small></h5>
-                                                <div class="ibox-tools">
-                                                    <a class="collapse-link">
-                                                        <i class="fa fa-chevron-up"></i>
-                                                    </a>
-                                                    <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
-                                                        <i class="fa fa-wrench"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-user">
-                                                        <li><a href="form_basic.html#">选项1</a>
-                                                        </li>
-                                                        <li><a href="form_basic.html#">选项2</a>
-                                                        </li>
-                                                    </ul>
-                                                    <a class="close-link">
-                                                        <i class="fa fa-times"></i>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="ibox-content">
-                                                <form method="get" class="form-horizontal">
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">普通</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">带说明信息</label>
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control"> <span class="help-block m-b-none">帮助文本，可能会超过一行，以块级元素显示</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">密码</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="password" class="form-control" name="password">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">提示</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" placeholder="提示信息" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">禁用</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" disabled="" placeholder="已被禁用" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">静态控制</label>
-
-                                                        <div class="col-sm-10">
-                                                            <p class="form-control-static">i@zi-han.net</p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">复选框&amp;单选框
-                                                            <br/>
-                                                            <small class="text-navy">普通Bootstrap元素</small>
-                                                        </label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox" value="">选项1</label>
-                                                            </div>
-                                                            <div class="radio">
-                                                                <label>
-                                                                    <input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios">选项1</label>
-                                                            </div>
-                                                            <div class="radio">
-                                                                <label>
-                                                                    <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios">选项2</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">内联复选框</label>
-
-                                                        <div class="col-sm-10">
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="option1" id="inlineCheckbox1">a</label>
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="option2" id="inlineCheckbox2">b</label>
-                                                            <label class="checkbox-inline">
-                                                                <input type="checkbox" value="option3" id="inlineCheckbox3">c</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">复选框&amp;单选框
-                                                            <br/><small class="text-navy">自定义样式</small>
-                                                        </label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="checkbox i-checks">
-                                                                <label>
-                                                                    <input type="checkbox" value=""> <i></i> 选项1</label>
-                                                            </div>
-                                                            <div class="checkbox i-checks">
-                                                                <label>
-                                                                    <input type="checkbox" value="" checked=""> <i></i> 选项2（选中）</label>
-                                                            </div>
-                                                            <div class="checkbox i-checks">
-                                                                <label>
-                                                                    <input type="checkbox" value="" disabled="" checked=""> <i></i> 选项3（选中并禁用）</label>
-                                                            </div>
-                                                            <div class="checkbox i-checks">
-                                                                <label>
-                                                                    <input type="checkbox" value="" disabled=""> <i></i> 选项4（禁用）</label>
-                                                            </div>
-                                                            <div class="radio i-checks">
-                                                                <label>
-                                                                    <input type="radio" value="option1" name="a"> <i></i> 选项1</label>
-                                                            </div>
-                                                            <div class="radio i-checks">
-                                                                <label>
-                                                                    <input type="radio" checked="" value="option2" name="a"> <i></i> 选项2（选中）</label>
-                                                            </div>
-                                                            <div class="radio i-checks">
-                                                                <label>
-                                                                    <input type="radio" disabled="" checked="" value="option2"> <i></i> 选项3（选中并禁用）</label>
-                                                            </div>
-                                                            <div class="radio i-checks">
-                                                                <label>
-                                                                    <input type="radio" disabled="" name="a"> <i></i> 选项4（禁用）</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">内联复选框</label>
-
-                                                        <div class="col-sm-10">
-                                                            <label class="checkbox-inline i-checks">
-                                                                <input type="checkbox" value="option1">a</label>
-                                                            <label class="checkbox-inline i-checks">
-                                                                <input type="checkbox" value="option2">b</label>
-                                                            <label class="checkbox-inline i-checks">
-                                                                <input type="checkbox" value="option3">c</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">Select</label>
-
-                                                        <div class="col-sm-10">
-                                                            <select class="form-control m-b" name="account">
-                                                                <option>选项 1</option>
-                                                                <option>选项 2</option>
-                                                                <option>选项 3</option>
-                                                                <option>选项 4</option>
-                                                            </select>
-
-                                                            <div class="col-sm-4 m-l-n">
-                                                                <select class="form-control" multiple="">
-                                                                    <option>选项 1</option>
-                                                                    <option>选项 2</option>
-                                                                    <option>选项 3</option>
-                                                                    <option>选项 4</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group has-success">
-                                                        <label class="col-sm-2 control-label">验证通过</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group has-warning">
-                                                        <label class="col-sm-2 control-label">未填写</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group has-error">
-                                                        <label class="col-sm-2 control-label">验证未通过</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" class="form-control">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">自定义尺寸</label>
-
-                                                        <div class="col-sm-10">
-                                                            <input type="text" placeholder=".input-lg" class="form-control input-lg m-b">
-                                                            <input type="text" placeholder="Default input" class="form-control m-b">
-                                                            <input type="text" placeholder=".input-sm" class="form-control input-sm">
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">列尺寸</label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="row">
-                                                                <div class="col-md-2">
-                                                                    <input type="text" placeholder=".col-md-2" class="form-control">
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <input type="text" placeholder=".col-md-3" class="form-control">
-                                                                </div>
-                                                                <div class="col-md-4">
-                                                                    <input type="text" placeholder=".col-md-4" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">文本框组</label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="input-group m-b"><span class="input-group-addon">@</span>
-                                                                <input type="text" placeholder="用户名" class="form-control">
-                                                            </div>
-                                                            <div class="input-group m-b">
-                                                                <input type="text" class="form-control"> <span class="input-group-addon">.00</span>
-                                                            </div>
-                                                            <div class="input-group m-b"><span class="input-group-addon">&yen;</span>
-                                                                <input type="text" class="form-control"> <span class="input-group-addon">.00</span>
-                                                            </div>
-                                                            <div class="input-group m-b"><span class="input-group-addon"> <input type="checkbox"> </span>
-                                                                <input type="text" class="form-control">
-                                                            </div>
-                                                            <div class="input-group"><span class="input-group-addon"> <input type="radio"> </span>
-                                                                <input type="text" class="form-control">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">按钮插件</label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="input-group m-b"><span class="input-group-btn">
-                                            <button type="button" class="btn btn-primary">搜</button> </span>
-                                                                <input type="text" class="form-control">
-                                                            </div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control"> <span class="input-group-btn"> <button type="button" class="btn btn-primary">搜索
-                                        </button> </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">带下拉框</label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="input-group m-b">
-                                                                <div class="input-group-btn">
-                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">操作 <span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li><a href="form_basic.html#">选项1</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项2</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项3</a>
-                                                                        </li>
-                                                                        <li class="divider"></li>
-                                                                        <li><a href="form_basic.html#">选项4</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <input type="text" class="form-control">
-                                                            </div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control">
-
-                                                                <div class="input-group-btn">
-                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button">操作 <span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu pull-right">
-                                                                        <li><a href="form_basic.html#">选项1</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项2</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项3</a>
-                                                                        </li>
-                                                                        <li class="divider"></li>
-                                                                        <li><a href="form_basic.html#">选项4</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <label class="col-sm-2 control-label">分段</label>
-
-                                                        <div class="col-sm-10">
-                                                            <div class="input-group m-b">
-                                                                <div class="input-group-btn">
-                                                                    <button tabindex="-1" class="btn btn-white" type="button">操作</button>
-                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu">
-                                                                        <li><a href="form_basic.html#">选项1</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项2</a>
-                                                                        </li>
-                                                                        <li><a href="form_basic.html#">选项3</a>
-                                                                        </li>
-                                                                        <li class="divider"></li>
-                                                                        <li><a href="form_basic.html#">选项4</a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                <input type="text" class="form-control">
-                                                            </div>
-                                                            <div class="input-group">
-                                                                <input type="text" class="form-control">
-
-                                                                <div class="input-group-btn">
-                                                                    <button tabindex="-1" class="btn btn-white" type="button">操作</button>
-                                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle" type="button"><span class="caret"></span>
-                                                                    </button>
-                                                                    <ul class="dropdown-menu pull-right">
-                                                                        分段
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="hr-line-dashed"></div>
-                                                    <div class="form-group">
-                                                        <div class="col-sm-4 col-sm-offset-2">
-                                                            <button class="btn btn-primary" type="submit">保存内容</button>
-                                                            <button class="btn btn-white" type="submit">取消</button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
+                                <div class="ibox-title">
+                                    <h5>邮件测试 <small>使用hutool，通过Ajax请求</small></h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
                                     </div>
                                 </div>
 
-                            </div>
-                            <div id="tab-7" class="tab-pane">
-                                <strong>栅格系统</strong>
+                                <div class="ibox-content">
 
-                                <p>Bootstrap 提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口（viewport）尺寸的增加，系统会自动分为最多12列。它包含了易于使用的预定义类，还有强大的mixin 用于生成更具语义的布局。</p>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">邮箱地址</label>
+                                            <div class="col-sm-10">
+                                                <input type="text"  name="mailto" id="mailto" class="form-control" placeholder="邮箱地址">
+                                                <span class="help-block m-b-none">邮箱地址为空，默认发送至fei.yu@51e.com.cn</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr-line-dashed"></div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">邮件内容</label>
+                                            <div class="col-sm-10">
+                                                <textarea id="mailtext" name="mailtext" class="form-control" rows="10"></textarea>
+                                            </div>
+                                        </div>
+
+                                    <div class="mail-body text-right tooltip-demo">
+                                        <a onclick="sendMail()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 发送（Ajax）</a>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+
+                <!--二维码、条码-->
+                <div class="layui-tab-item">
+
+                    <form class="form-horizontal m" id="form-demo-code" >
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+
+                                    <div class="ibox-title">
+                                        <h5>二维码 <small>使用hutool，生成在D:\ruoyi目录下</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="ibox-content">
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">二维码内容</label>
+                                            <div class="col-sm-10">
+                                                <input type="text"  name="qrcode" id="qrcode" class="form-control" placeholder="二维码内容">
+                                                <span class="help-block m-b-none">二维码内容为空，默认发送至www.baidu.com</span>
+                                            </div>
+                                        </div>
+
+                                        <div class="mail-body text-right tooltip-demo">
+                                            <a onclick="createQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成（Ajax）</a>
+                                            <a onclick="checkQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 识别（读取二维码图片中内容）</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!--word、excel、pdf-->
+                <div class="layui-tab-item">
+
+                    <form class="form-horizontal m" id="form-demo-file" >
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+                <!--上传、下载-->
+                <div class="layui-tab-item">
+
+                    <form class="form-horizontal m" id="form-demo-upload" >
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="layui-upload">
+                                    <button type="button" class="layui-btn" id="test1">上传图片</button>
+                                    <div class="layui-upload-list">
+                                        <img class="layui-upload-img" id="test1_img" style="width:200px; height:250px">
+                                        <input type="hidden" id="test1_val" name="test1_val"/>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                    </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <button type="button" class="layui-btn" id="test2"><i class="layui-icon"></i>上传文件</button>
+
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="layui-upload">
+
+                                    <button type="button" class="layui-btn" id="testList"><i class="layui-icon"></i>上传文件（多个）</button>
+                                    <div class="layui-upload-list">
+                                        <table class="layui-table">
+                                            <!--<thead>-->
+                                            <!--<tr><th>文件名</th>-->
+                                                <!--<th>大小</th>-->
+                                                <!--<th>状态</th>-->
+                                                <!--<th>操作</th>-->
+                                            <!--</tr></thead>-->
+                                            <tbody id="demoList"></tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </form>
 
                 </div>
+
             </div>
         </div>
+
+
 
     </div>
 
@@ -1349,18 +766,42 @@
 	        }
 	    }
 
-        function addrow(obj){
-            var tr=obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
-            var table=tr.parentNode; //tr.parentNode是<table>
-            var y=table.rows.length;
-            var oldRow=tr;
 
-            if(oldRow){
-                var newRow=oldRow.cloneNode(true); //拷贝一行项到另外一行
-                newRow.setAttribute("id","y-1");
+        function addtr(tableid,refreshIndex){
+            var tr = $("#" + tableid +" tr").eq(1).clone();
+            tr.appendTo("#" + tableid);
+            //添加完成后索引刷新 todo
+            if(refreshIndex == true) {
+                $("#" + tableid).find("tr").each(function () {
+                    var rowIndex = parseInt(this.sectionRowIndex);
+                });
             }
-            table.appendChild(newRow);	//把克隆的一行添加到table
+
         }
+
+        function deltr(obj) {
+            var tr=obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
+            tr.remove();
+        }
+
+
+        function sendMail() {
+            var url =ctx + "system/demo/sendMail";
+		    $.operate.post(url,$("#form-demo-http").serialize());
+        }
+
+        function createQRCode() {
+            var url =ctx + "system/demo/createQRCode";
+            $.operate.post(url,$("#form-demo-code").serialize());
+        }
+
+
+        function checkQRCode() {
+            var url =ctx + "system/demo/checkQRCode";
+            $.operate.get(url);
+        }
+
+
 
 
         layui.use('element', function(){
@@ -1404,12 +845,12 @@
 
             //半星效果
             rate.render({
-                elem: '#test3'
+                elem: '#start1'
                 ,value: 2.5 //初始值
                 ,half: true //开启半星
             })
             rate.render({
-                elem: '#test4'
+                elem: '#start2'
                 ,value: 3.5
                 ,half: true
                 ,text: true
@@ -1417,6 +858,124 @@
 
         });
 
+
+        layui.use('upload', function(){
+            var $ = layui.jquery
+                ,upload = layui.upload;
+
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#test1'
+                ,url: '/system/upload/uploadFile'
+                // ,size: 60 //限制文件大小，单位 KB
+                // ,multiple: true //是否允许同时上传多个
+                // ,accept: 'file' //允许上传文件类型
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#test1_img').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+
+                    if(res.code > 0){
+                        //上传失败
+                        return layer.msg('上传失败');
+                    } else {
+                        //上传成功
+                        $('#test1_val').val(res.msg);
+                        return layer.msg(res.msg);
+                    }
+
+                }
+                ,error: function(){
+                    //演示失败状态，并实现重传
+                    var demoText = $('#demoText');
+                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                    demoText.find('.demo-reload').on('click', function(){
+                        uploadInst.upload();
+                    });
+                }
+            });
+
+            //上传单个文件
+            upload.render({
+                elem: '#test2'
+                ,url: '/system/upload/uploadFile'
+                ,multiple: true
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                    });
+                }
+                ,done: function(res){
+                    //上传完毕
+                }
+            });
+
+
+            //多文件列表示例
+            var demoListView = $('#demoList')
+                ,uploadListIns = upload.render({
+                elem: '#testList'
+                ,url: '/system/upload/uploadFiles'
+                ,accept: 'file'
+                ,multiple: true
+                ,auto: true
+                ,bindAction: '#testListAction'
+                ,choose: function(obj){
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function(index, file, result){
+                        var tr = $(['<tr id="upload-'+ index +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td style="text-align:center">'+ (file.size/1014).toFixed(1) +'kb</td>'
+                            ,'<td style="text-align:center">等待上传</td>'
+                            ,'<td style="text-align:center">'
+                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" >删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function(){
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                }
+                ,done: function(res, index, upload){
+                    if(res.code == 0){ //上传成功 TODO
+                        var tr = demoListView.find('tr#upload-'+ index)
+                            ,tds = tr.children();
+                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                        //tds.eq(3).html('<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" onclick="deleteFile()">删除</button>');
+                        return delete this.files[index]; //删除文件队列已经上传成功的文件
+                    }
+                    this.error(index, upload);
+                }
+                ,error: function(index, upload){
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
+
+        });
+
+
 	</script>
+
 </body>
 </html>

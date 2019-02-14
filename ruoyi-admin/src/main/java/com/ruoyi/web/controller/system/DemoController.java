@@ -1,9 +1,15 @@
 package com.ruoyi.web.controller.system;
 
+import java.awt.*;
 import java.util.List;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.extra.mail.MailUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.extra.qrcode.QrConfig;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.page.PageDomain;
+import com.ruoyi.common.utils.StringUtils;
 import com.sun.jna.platform.win32.Guid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,5 +140,69 @@ public class DemoController extends BaseController
 	{		
 		return toAjax(demoService.deleteDemoByIds(ids));
 	}
-	
+
+
+    /**
+     * 发送邮件
+     */
+    @Log(title = "发送邮件", businessType = BusinessType.OTHER)
+    @PostMapping( "/sendMail")
+    @ResponseBody
+    public AjaxResult sendMail(HttpServletRequest request)
+    {
+        String mailto = StringUtils.isEmpty(request.getParameter("mailto"))?"fei.yu@51e.com.cn":request.getParameter("mailto");
+        String mailtext = StringUtils.isEmpty(request.getParameter("mailtext"))?"邮件来自Hutool测试":request.getParameter("mailtext");
+        MailUtil.send(mailto, "测试", mailtext, false);
+
+        return toAjax(1);
+    }
+
+
+    /**
+     * 生成二维码
+     */
+    @Log(title = "生成二维码", businessType = BusinessType.OTHER)
+    @PostMapping( "/createQRCode")
+    @ResponseBody
+    public AjaxResult createQRCode(HttpServletRequest request)
+    {
+
+        //自定义配置
+        QrConfig config = new QrConfig(300, 300);
+        // 设置边距，既二维码和背景之间的边距
+        config.setMargin(3);
+        // 设置前景色，既二维码颜色（青色）
+        config.setForeColor(Color.CYAN.getRGB());
+        // 设置背景色（灰色）
+        config.setBackColor(Color.GRAY.getRGB());
+        //二维码内容
+        String qrcode = StringUtils.isEmpty(request.getParameter("qrcode"))?"http://www.baidu.com":request.getParameter("qrcode");
+        // 生成二维码到文件，也可以到流
+        QrCodeUtil.generate(qrcode, config, FileUtil.file("/ruoyi/二维码.jpg"));
+
+        // 默认输出
+        //QrCodeUtil.generate(qrcode, 300,300, FileUtil.file("d:/ruoyi/二维码.jpg"));
+
+        return toAjax(1);
+    }
+
+
+    /**
+     * 识别二维码
+     */
+    @Log(title = "识别二维码", businessType = BusinessType.OTHER)
+    @GetMapping( "/checkQRCode")
+    @ResponseBody
+    public AjaxResult checkQRCode(HttpServletRequest request)
+    {
+
+        String decode = QrCodeUtil.decode(FileUtil.file("/ruoyi/二维码.jpg"));
+
+        return AjaxResult.success(decode);
+    }
+
+
+
+
+
 }

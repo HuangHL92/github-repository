@@ -1,0 +1,10 @@
+********************* 2019-02-14  修改人：俞菲 ************************
+1.hutool工具包集成
+2.邮件发送实现
+    ruoyi-admin\src\main\resources\config\mailAccount.setting
+    com/ruoyi/web/controller/system/DemoController.java
+3.二维码生成实现
+    com/ruoyi/web/controller/system/DemoController.java
+4.附件上传实现（部分）
+    com/ruoyi/web/controller/system/FileUploadController.java
+5.表单页面明细表格添加和删除行（部分）
