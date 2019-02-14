@@ -179,7 +179,7 @@
                                     <div class="ibox-title">
                                         <h5>明细数据
                                             <small style="margin-left: 10px">
-                                                <button class="btn btn-primary btn-xs" type="button"><i class="fa fa-plus"></i>
+                                                <button class="btn btn-primary btn-xs" type="button" onclick="addrow($('#mytable tr:last'))"><i class="fa fa-plus"></i>
                                                 </button>
                                             </small>
                                         </h5>
@@ -191,7 +191,7 @@
                                         </div>
                                     </div>
                                     <div class="ibox-content">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered" id="mytable">
                                             <thead>
                                             <tr>
                                                 <th th:width="60"  style="text-align: center">序号</th>
@@ -202,7 +202,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr>
+                                            <tr id="mytable_tr">
                                                 <td style="text-align: center">1</td>
                                                 <td>张三</td>
                                                 <td>男</td>
@@ -228,7 +228,7 @@
                                                 <td>男</td>
                                                 <td>65</td>
                                                 <td style="text-align: center">
-                                                    <button class="btn btn-danger btn-xs" type="button"><i class="fa fa-times"></i>
+                                                    <button class="btn btn-danger btn-xs" type="button" onclick=""><i class="fa fa-times"></i>
                                                     </button>
                                                 </td>
                                             </tr>
@@ -1348,6 +1348,20 @@
 	        	submitAction(formobj);
 	        }
 	    }
+
+        function addrow(obj){
+            var tr=obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
+            var table=tr.parentNode; //tr.parentNode是<table>
+            var y=table.rows.length;
+            var oldRow=tr;
+
+            if(oldRow){
+                var newRow=oldRow.cloneNode(true); //拷贝一行项到另外一行
+                newRow.setAttribute("id","y-1");
+            }
+            table.appendChild(newRow);	//把克隆的一行添加到table
+        }
+
 
         layui.use('element', function(){
             var $ = layui.jquery
