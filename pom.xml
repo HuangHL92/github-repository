@@ -10,7 +10,7 @@
 
     <name>ruoyi</name>
 	<url>http://www.ruoyi.vip</url>
-    <description>若依管理系统1</description>
+    <description>若依管理系统</description>
     
     <properties>
 	    <ruoyi.version>3.2</ruoyi.version>
@@ -19,7 +19,7 @@
 		<java.version>1.8</java.version>
 		<shiro.version>1.4.0</shiro.version>
 		<thymeleaf.extras.shiro.version>2.0.0</thymeleaf.extras.shiro.version>
-		<mybatis.boot.version>1.3.2</mybatis.boot.version>
+		<mybatis.plus.version>3.0.7.1</mybatis.plus.version>
 		<druid.version>1.1.10</druid.version>
 		<bitwalker.version>1.19</bitwalker.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
@@ -65,12 +65,12 @@
             <artifactId>spring-web</artifactId>
         </dependency>
 
-        <!-- SpringBoot集成mybatis框架 -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.boot.version}</version>
-        </dependency>
+        <!-- SpringBoot集成mybatis-plus框架 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+			<version>${mybatis.plus.version}</version>
+		</dependency>
 
         <!-- Mysql驱动包 -->
         <dependency>
