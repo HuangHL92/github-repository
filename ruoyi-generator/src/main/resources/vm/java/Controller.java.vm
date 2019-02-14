@@ -1,6 +1,10 @@
-package ${basePackage}.web.controller.${moduleName};
+package ${package}.web.controller;
 
+import java.util.Arrays;
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,7 +21,7 @@ import ${package}.service.I${className}Service;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
-import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.support.Convert;
 
 /**
  * ${tableComment} 信息操作处理
@@ -38,7 +42,7 @@ public class ${className}Controller extends BaseController
 	@GetMapping()
 	public String ${classname}()
 	{
-	    return prefix + "/${classname}";
+	    return prefix + "/list";
 	}
 	
 	/**
@@ -50,11 +54,10 @@ public class ${className}Controller extends BaseController
 	public TableDataInfo list(${className} ${classname})
 	{
 		startPage();
-        List<${className}> list = ${classname}Service.select${className}List(${classname});
-		return getDataTable(list);
+		return getDataTable(${classname}Service.selectList(${classname}));
 	}
-	
-	
+
+
 	/**
 	 * 导出${tableComment}列表
 	 */
@@ -63,11 +66,11 @@ public class ${className}Controller extends BaseController
     @ResponseBody
     public AjaxResult export(${className} ${classname})
     {
-    	List<${className}> list = ${classname}Service.select${className}List(${classname});
+    	List<${className}> list = ${classname}Service.selectList(${classname});
         ExcelUtil<${className}> util = new ExcelUtil<${className}>(${className}.class);
         return util.exportExcel(list, "${classname}");
     }
-	
+
 	/**
 	 * 新增${tableComment}
 	 */
@@ -86,7 +89,7 @@ public class ${className}Controller extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(${className} ${classname})
 	{		
-		return toAjax(${classname}Service.insert${className}(${classname}));
+		return toAjax(${classname}Service.save(${classname}));
 	}
 
 	/**
@@ -95,7 +98,7 @@ public class ${className}Controller extends BaseController
 	@GetMapping("/edit/{${primaryKey.attrname}}")
 	public String edit(@PathVariable("${primaryKey.attrname}") ${primaryKey.attrType} ${primaryKey.attrname}, ModelMap mmap)
 	{
-		${className} ${classname} = ${classname}Service.select${className}ById(${primaryKey.attrname});
+		${className} ${classname} = ${classname}Service.getById(${primaryKey.attrname});
 		mmap.put("${classname}", ${classname});
 	    return prefix + "/edit";
 	}
@@ -109,7 +112,7 @@ public class ${className}Controller extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(${className} ${classname})
 	{		
-		return toAjax(${classname}Service.update${className}(${classname}));
+		return toAjax(${classname}Service.updateById(${classname}));
 	}
 	
 	/**
@@ -121,7 +124,7 @@ public class ${className}Controller extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{		
-		return toAjax(${classname}Service.delete${className}ByIds(ids));
+		return toAjax(${classname}Service.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 	}
 	
 }

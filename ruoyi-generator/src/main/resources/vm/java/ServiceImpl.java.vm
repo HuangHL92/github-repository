@@ -1,12 +1,10 @@
 package ${package}.service.impl;
 
-import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ${package}.mapper.${className}Mapper;
 import ${package}.domain.${className};
 import ${package}.service.I${className}Service;
-import com.ruoyi.common.support.Convert;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 /**
  * ${tableComment} 服务层实现
@@ -15,69 +13,13 @@ import com.ruoyi.common.support.Convert;
  * @date ${datetime}
  */
 @Service
-public class ${className}ServiceImpl implements I${className}Service 
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}> implements I${className}Service 
 {
-	@Autowired
-	private ${className}Mapper ${classname}Mapper;
-
-	/**
-     * 查询${tableComment}信息
-     * 
-     * @param ${primaryKey.attrname} ${tableComment}ID
-     * @return ${tableComment}信息
-     */
     @Override
-	public ${className} select${className}ById(${primaryKey.attrType} ${primaryKey.attrname})
-	{
-	    return ${classname}Mapper.select${className}ById(${primaryKey.attrname});
-	}
-	
-	/**
-     * 查询${tableComment}列表
-     * 
-     * @param ${classname} ${tableComment}信息
-     * @return ${tableComment}集合
-     */
-	@Override
-	public List<${className}> select${className}List(${className} ${classname})
-	{
-	    return ${classname}Mapper.select${className}List(${classname});
-	}
-	
-    /**
-     * 新增${tableComment}
-     * 
-     * @param ${classname} ${tableComment}信息
-     * @return 结果
-     */
-	@Override
-	public int insert${className}(${className} ${classname})
-	{
-	    return ${classname}Mapper.insert${className}(${classname});
-	}
-	
-	/**
-     * 修改${tableComment}
-     * 
-     * @param ${classname} ${tableComment}信息
-     * @return 结果
-     */
-	@Override
-	public int update${className}(${className} ${classname})
-	{
-	    return ${classname}Mapper.update${className}(${classname});
-	}
+    public List<${className}> selectList(${className} ${classname}) {
+        QueryWrapper<${className}> query = new QueryWrapper<>();
+        // 查询条件
 
-	/**
-     * 删除${tableComment}对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
-	@Override
-	public int delete${className}ByIds(String ids)
-	{
-		return ${classname}Mapper.delete${className}ByIds(Convert.toStrArray(ids));
-	}
-	
+        return list(query);
+    }
 }

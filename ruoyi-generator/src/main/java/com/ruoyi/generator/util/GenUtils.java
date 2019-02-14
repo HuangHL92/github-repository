@@ -159,7 +159,8 @@ public class GenUtils
 
         if (template.contains("list.html.vm"))
         {
-            return htmlPath + "/" + classname + ".html";
+            // 列表页面统一为list
+            return htmlPath + "/" + "list.html";
         }
         if (template.contains("add.html.vm"))
         {
