@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+
+<head th:include="include :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+
+
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-success pull-right">月</span>
+                    <h5>收入</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">40 886,200</h1>
+                    <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i>
+                    </div>
+                    <small>总收入</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-info pull-right">全年</span>
+                    <h5>订单</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">275,800</h1>
+                    <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i>
+                    </div>
+                    <small>新订单</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-primary pull-right">今天</span>
+                    <h5>访客</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">106,120</h1>
+                    <div class="stat-percent font-bold text-navy">44% <i class="fa fa-level-up"></i>
+                    </div>
+                    <small>新访客</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <span class="label label-danger pull-right">最近一个月</span>
+                    <h5>活跃用户</h5>
+                </div>
+                <div class="ibox-content">
+                    <h1 class="no-margins">80,600</h1>
+                    <div class="stat-percent font-bold text-danger">38% <i class="fa fa-level-down"></i>
+                    </div>
+                    <small>12月</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            <div class="layui-card">
+                <div class="layui-card-header">饼图实例</div>
+                <div class="layui-card-body">
+                    <div id="container1" style="height:400px"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="layui-card">
+                <div class="layui-card-header">折线图实例</div>
+                <div class="layui-card-body">
+                    <div id="container2" style="height:400px"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div th:include="include :: footer"></div>
+
+
+<script type="text/javascript">
+
+    var dom = document.getElementById("container1");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    option = {
+        title : {
+            text: '',
+            subtext: '纯属虚构',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        },
+        series : [
+            {
+                name: '访问来源',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {value:335, name:'直接访问'},
+                    {value:310, name:'邮件营销'},
+                    {value:234, name:'联盟广告'},
+                    {value:135, name:'视频广告'},
+                    {value:1548, name:'搜索引擎'}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+
+
+    var dom = document.getElementById("container2");
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = null;
+    option = {
+        title: {
+            text: ''
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['邮件营销','联盟广告','视频广告','直接访问','搜索引擎']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['周一','周二','周三','周四','周五','周六','周日']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name:'邮件营销',
+                type:'line',
+                stack: '总量',
+                data:[120, 132, 101, 134, 90, 230, 210]
+            },
+            {
+                name:'联盟广告',
+                type:'line',
+                stack: '总量',
+                data:[220, 182, 191, 234, 290, 330, 310]
+            },
+            {
+                name:'视频广告',
+                type:'line',
+                stack: '总量',
+                data:[150, 232, 201, 154, 190, 330, 410]
+            },
+            {
+                name:'直接访问',
+                type:'line',
+                stack: '总量',
+                data:[320, 332, 301, 334, 390, 330, 320]
+            },
+            {
+                name:'搜索引擎',
+                type:'line',
+                stack: '总量',
+                data:[820, 932, 901, 934, 1290, 1330, 1320]
+            }
+        ]
+    };
+    ;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+</script>
+
+</body>
+
+</html>

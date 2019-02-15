@@ -27,6 +27,9 @@
 		<pagehelper.boot.version>1.2.5</pagehelper.boot.version>
 		<oshi.version>3.9.1</oshi.version>
         <hutool.version>4.4.5</hutool.version>
+        <weixin-java-mp.version>3.3.0</weixin-java-mp.version>
+        <zxing.version>3.3.1</zxing.version>
+        <javax.mail.version>1.4.7</javax.mail.version>
 	</properties>
 	
     <dependencyManagement>
@@ -116,17 +119,25 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.7</version>
+            <version>${javax.mail.version}</version>
         </dependency>
 
         <!--zxing 二维码相关-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
-            <version>3.3.1</version>
+            <version>${zxing.version}</version>
         </dependency>
 
-	</dependencies>
+        <!-- 微信开发包 https://mvnrepository.com/artifact/com.github.binarywang/weixin-java-mp -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>${weixin-java-mp.version}</version>
+        </dependency>
+
+
+    </dependencies>
 
 	<build>
         <plugins>
