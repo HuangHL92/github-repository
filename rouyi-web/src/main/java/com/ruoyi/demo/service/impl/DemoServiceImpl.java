@@ -1,12 +1,13 @@
-package com.ruoyi.system.service.impl;
+package com.ruoyi.demo.service.impl;
 
-import java.util.List;
+import com.ruoyi.demo.domain.Demo;
+import com.ruoyi.demo.mapper.DemoMapper;
+import com.ruoyi.demo.service.IDemoService;
+import com.ruoyi.common.support.Convert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.DemoMapper;
-import com.ruoyi.system.domain.Demo;
-import com.ruoyi.system.service.IDemoService;
-import com.ruoyi.common.support.Convert;
+
+import java.util.List;
 
 /**
  * 测试 服务层实现
@@ -15,7 +16,7 @@ import com.ruoyi.common.support.Convert;
  * @date 2019-01-18
  */
 @Service
-public class DemoServiceImpl implements IDemoService 
+public class DemoServiceImpl implements IDemoService
 {
 	@Autowired
 	private DemoMapper demoMapper;

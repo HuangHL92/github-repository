@@ -1,9 +1,9 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.demo.domain;
 
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.base.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.base.BaseEntity;
 
 /**
  * 测试表 sys_demo

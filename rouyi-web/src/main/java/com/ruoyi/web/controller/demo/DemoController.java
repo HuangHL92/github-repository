@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.system;
+package com.ruoyi.web.controller.demo;
 
 import java.awt.*;
 import java.util.List;
@@ -8,7 +8,8 @@ import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.github.pagehelper.PageHelper;
-import com.ruoyi.common.page.PageDomain;
+import com.ruoyi.demo.domain.Demo;
+import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
 import com.sun.jna.platform.win32.Guid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -23,8 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.Demo;
-import com.ruoyi.system.service.IDemoService;
+
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
@@ -40,25 +40,25 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2019-01-18
  */
 @Controller
-@RequestMapping("/system/demo")
+@RequestMapping("/demo/all")
 public class DemoController extends BaseController
 {
-    private String prefix = "system/demo";
+    private String prefix = "demo/all";
 	
 	@Autowired
 	private IDemoService demoService;
 	
-	@RequiresPermissions("system:demo:view")
+	@RequiresPermissions("demo:all:view")
 	@GetMapping()
 	public String demo()
 	{
-	    return prefix + "/demo";
+	    return prefix + "/all";
 	}
 	
 	/**
 	 * 查询测试列表
 	 */
-	@RequiresPermissions("system:demo:list")
+	@RequiresPermissions("demo:all:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(Demo demo)
@@ -72,7 +72,7 @@ public class DemoController extends BaseController
 	/**
 	 * 导出测试列表
 	 */
-	@RequiresPermissions("system:demo:export")
+	@RequiresPermissions("demo:all:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(Demo demo)
@@ -96,7 +96,7 @@ public class DemoController extends BaseController
 	/**
 	 * 新增保存测试
 	 */
-	@RequiresPermissions("system:demo:add")
+	@RequiresPermissions("demo:all:add")
 	@Log(title = "测试", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -120,7 +120,7 @@ public class DemoController extends BaseController
 	/**
 	 * 修改保存测试
 	 */
-	@RequiresPermissions("system:demo:edit")
+	@RequiresPermissions("demo:all:edit")
 	@Log(title = "测试", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -132,7 +132,7 @@ public class DemoController extends BaseController
 	/**
 	 * 删除测试
 	 */
-	@RequiresPermissions("system:demo:remove")
+	@RequiresPermissions("demo:all:remove")
 	@Log(title = "测试", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

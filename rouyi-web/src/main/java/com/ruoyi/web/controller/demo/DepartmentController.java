@@ -1,9 +1,10 @@
-package com.ruoyi.web.controller.system;
+package com.ruoyi.web.controller.demo;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.demo.domain.Department;
+import com.ruoyi.demo.service.IDepartmentService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.Department;
-import com.ruoyi.system.service.IDepartmentService;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
@@ -30,15 +29,15 @@ import com.ruoyi.common.support.Convert;
  * @date 2019-02-14
  */
 @Controller
-@RequestMapping("/system/department")
+@RequestMapping("/demo/department")
 public class DepartmentController extends BaseController
 {
-    private String prefix = "system/department";
+    private String prefix = "demo/department";
 	
 	@Autowired
 	private IDepartmentService departmentService;
 	
-	@RequiresPermissions("system:department:view")
+	@RequiresPermissions("demo:department:view")
 	@GetMapping()
 	public String department()
 	{
@@ -48,7 +47,7 @@ public class DepartmentController extends BaseController
 	/**
 	 * 查询练习_部门列表
 	 */
-	@RequiresPermissions("system:department:list")
+	@RequiresPermissions("demo:department:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(Department department)
@@ -61,7 +60,7 @@ public class DepartmentController extends BaseController
 	/**
 	 * 导出练习_部门列表
 	 */
-	@RequiresPermissions("system:department:export")
+	@RequiresPermissions("demo:department:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(Department department)
@@ -83,7 +82,7 @@ public class DepartmentController extends BaseController
 	/**
 	 * 新增保存练习_部门
 	 */
-	@RequiresPermissions("system:department:add")
+	@RequiresPermissions("demo:department:add")
 	@Log(title = "练习_部门", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -106,7 +105,7 @@ public class DepartmentController extends BaseController
 	/**
 	 * 修改保存练习_部门
 	 */
-	@RequiresPermissions("system:department:edit")
+	@RequiresPermissions("demo:department:edit")
 	@Log(title = "练习_部门", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -118,7 +117,7 @@ public class DepartmentController extends BaseController
 	/**
 	 * 删除练习_部门
 	 */
-	@RequiresPermissions("system:department:remove")
+	@RequiresPermissions("demo:department:remove")
 	@Log(title = "练习_部门", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

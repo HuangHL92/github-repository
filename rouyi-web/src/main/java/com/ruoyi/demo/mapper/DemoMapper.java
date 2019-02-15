@@ -1,15 +1,16 @@
-package com.ruoyi.system.service;
+package com.ruoyi.demo.mapper;
 
-import com.ruoyi.system.domain.Demo;
+import com.ruoyi.demo.domain.Demo;
+
 import java.util.List;
 
 /**
- * 测试 服务层
+ * 测试 数据层
  * 
  * @author ruoyi
  * @date 2019-01-18
  */
-public interface IDemoService 
+public interface DemoMapper 
 {
 	/**
      * 查询测试信息
@@ -42,13 +43,21 @@ public interface IDemoService
      * @return 结果
      */
 	public int updateDemo(Demo demo);
-		
+	
 	/**
-     * 删除测试信息
+     * 删除测试
+     * 
+     * @param id 测试ID
+     * @return 结果
+     */
+	public int deleteDemoById(String id);
+	
+	/**
+     * 批量删除测试
      * 
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteDemoByIds(String ids);
+	public int deleteDemoByIds(String[] ids);
 	
 }

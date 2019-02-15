@@ -17,8 +17,10 @@
 	<link th:href="@{/ruoyi/css/ry-ui.css}" rel="stylesheet"/>
     <link th:href="@{/ajax/libs/layui/css/layui.css}" rel="stylesheet"/>
     <link th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet"/>
-    <link th:href="@{/ajax/libs/layui/css/modules/laydate/default/laydate.css}" rel="stylesheet"/>
+    <!--<link th:href="@{/ajax/libs/layui/css/modules/laydate/default/laydate.css}" rel="stylesheet"/>-->
     <link th:href="@{/css/my.css}" rel="stylesheet"/>
+
+
 </head>
 <div th:fragment="footer">
 	<script th:src="@{/js/jquery.min.js}"></script>
@@ -43,12 +45,15 @@
 	<script th:src="@{/ajax/libs/blockUI/jquery.blockUI.js}"></script>
 	<script th:src="@{/ajax/libs/iCheck/icheck.min.js}"></script>
 	<script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-	<!--<script th:src="@{/ajax/libs/layui/layui.js}"></script>-->
+	<script th:src="@{/ajax/libs/layui/layui.js}"></script>
+    <script th:src="@{/ajax/libs/echarts/echarts.js}"></script>
+    <script th:src="@{/ajax/libs/echarts/echarts-gl.js}"></script>
     <script th:src="@{/ajax/libs/layui/lay/modules/laydate.js}"></script>
-    <script th:src="@{/ajax/libs/layui/layui.all.js}"></script>
+    <!--<script th:src="@{/ajax/libs/layui/layui.all.js}"></script>-->
 	<script th:src="@{/ruoyi/js/common.js?v=3.2.0}"></script>
 	<script th:src="@{/ruoyi/js/ry-ui.js?v=3.2.0}"></script>
 	<script src="http://tajs.qq.com/stats?sId=62048022"></script>
 	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
     <script th:src="@{/js/my.js}"></script>
+
 </div>
