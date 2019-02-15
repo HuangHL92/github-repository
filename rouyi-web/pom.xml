@@ -11,6 +11,9 @@
 
     <artifactId>rouyi-web</artifactId>
 
+    <description>
+        项目工程模块
+    </description>
 
     <dependencies>
 

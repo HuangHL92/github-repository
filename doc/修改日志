@@ -8,3 +8,7 @@
 4.附件上传实现（部分）
     com/ruoyi/web/controller/system/FileUploadController.java
 5.表单页面明细表格添加和删除行（部分）
+
+********************* 2019-02-15  修改人：俞菲 ************************
+1.echarts集成
+2.rouyi-web 加入（业务代码写在此model里面）

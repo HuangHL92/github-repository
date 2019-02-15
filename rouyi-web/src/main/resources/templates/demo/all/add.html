@@ -719,6 +719,14 @@
 
     </div>
 
+
+    <div class="btn_tool">
+
+        <button class="btn btn-primary" type="button">
+            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存</span>
+        </button>
+
+    </div>
 	<div th:include="include::footer"></div>
 
 	<script type="text/javascript">
@@ -802,8 +810,6 @@
         }
 
 
-
-
         layui.use('element', function(){
             var $ = layui.jquery
                 ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
@@ -821,8 +827,6 @@
                 ,tabDelete: function(othis){
                     //删除指定Tab项
                     element.tabDelete('demo', '44'); //删除：“商品管理”
-
-
                     othis.addClass('layui-btn-disabled');
                 }
                 ,tabChange: function(){
@@ -973,6 +977,8 @@
 
 
         });
+
+
 
 
 	</script>

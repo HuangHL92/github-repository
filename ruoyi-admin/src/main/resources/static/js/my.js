@@ -1,3 +1,4 @@
+
 //表单提交事件
 function submitAction(formobj) {
 
@@ -18,6 +19,7 @@ function submitAction(formobj) {
 
 //页面控件初始化入口方法
 function initCtrl() {
+
 
     //折叠控件初始化
     $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function () {
@@ -40,5 +42,12 @@ function initCtrl() {
         checkboxClass: 'icheckbox_square-green',
         radioClass: 'iradio_square-green',
     });
+
+    ///$.modal.alertSuccess("ddd");
+
+    // if($(".btn_tool").size()>0){
+    //
+    //     $(".layui-layer-btn").append($(".btn_tool"))
+    // }
 
 }
