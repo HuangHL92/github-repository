@@ -282,6 +282,10 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/logout", "logout");
         // 不需要拦截的访问
         filterChainDefinitionMap.put("/login", "anon,captchaValidate");
+        // TODO 业务接口不需要拦截
+        filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/screen/**", "anon");
+
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 
