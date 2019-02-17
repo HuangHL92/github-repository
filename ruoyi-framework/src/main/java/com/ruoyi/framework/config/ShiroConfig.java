@@ -285,6 +285,8 @@ public class ShiroConfig
         // TODO 业务接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/screen/**", "anon");
+        filterChainDefinitionMap.put("/pad/**", "anon");
+        filterChainDefinitionMap.put("/wap/**", "anon");
 
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());

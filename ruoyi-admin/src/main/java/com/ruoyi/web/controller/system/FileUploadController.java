@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.json.JSONUtil;
 import com.ruoyi.common.base.AjaxResult;
@@ -75,7 +76,7 @@ public class FileUploadController extends BaseController {
                 // 上传物理文件
                 String path = FileUploadUtils.upload(filePath,file,fileName);
                 //TODO 插入附件表
-                attids.add(RandomUtil.randomUUID());
+                attids.add(IdUtil.randomUUID());
             } catch (Exception e) {
                 // TODO: handle exception
                 return error(e.getMessage());
