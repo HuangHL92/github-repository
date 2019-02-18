@@ -51,7 +51,7 @@
 		<module>ruoyi-quartz</module>
 		<module>ruoyi-generator</module>
         <module>ruoyi-common</module>
-        <module>rouyi-web</module>
+        <module>ruoyi-web</module>
     </modules>
     <packaging>pom</packaging>
 
