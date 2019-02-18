@@ -30,6 +30,7 @@
         <weixin-java-mp.version>3.3.0</weixin-java-mp.version>
         <zxing.version>3.3.1</zxing.version>
         <javax.mail.version>1.4.7</javax.mail.version>
+        <jedis.version>2.9.0</jedis.version>
 	</properties>
 	
     <dependencyManagement>

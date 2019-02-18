@@ -22,3 +22,6 @@ com/ruoyi/framework/config/ShiroConfig.java
 ********************* 2019-02-18  修改人：俞菲 ************************
 1.页面自定义按钮添加实现
 例子：templates/demo/all/add.html    <span class="toolbar-btn"></span>
+2、redis集成
+配置文件：ruoyi-admin/src/mian/resources/config/redis.setting
+例子：
