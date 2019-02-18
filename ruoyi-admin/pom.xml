@@ -25,24 +25,10 @@
 			<optional>true</optional> <!-- 表示依赖不会传递 -->
 		</dependency>
 
-		<!-- swagger2-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-		
-		<!-- swagger2-UI-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-
 		<!-- 核心模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-framework</artifactId>
+            <artifactId>ruoyi-web</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
         
