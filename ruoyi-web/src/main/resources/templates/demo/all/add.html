@@ -76,7 +76,7 @@
                                                 <label class="col-sm-2 control-label">密码</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="password" id="pw"  class="form-control" name="password">
+                                                    <input type="password" id="pw"  class="form-control required" name="password" >
                                                 </div>
                                             </div>
 
@@ -722,11 +722,11 @@
 
     <!--自定义按钮区域-->
     <span class="toolbar-btn">
-        <button class="btn btn-primary" type="button">
+        <button class="btn btn-primary" type="button" id="btn1">
             <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存1</span>
         </button>
 
-        <button class="btn btn-danger" type="button">
+        <button class="btn btn-danger" type="button" onclick="alert('这是一个简单的Alert');">
             <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存2</span>
         </button>
     </span>
@@ -735,10 +735,16 @@
 
 	<script type="text/javascript">
 
+        //自定义按钮事件
+        $('#btn1', $.modal.currentWindow()).click(function(){
+            alert("这个是一个自定义按钮方法。记得需要动态绑定方法哦！");
+        });
+
         //页面控件初始化
         initCtrl();
 
         var formobj = $("#form-demo-add");
+
 
         //表单验证
         formobj.validate({
@@ -773,11 +779,11 @@
 
         //表单提交事件Handler
 		function submitHandler() {
+
 	        if ($.validate.form()) {
 	        	submitAction(formobj);
 	        }
 	    }
-
 
         function addtr(tableid,refreshIndex){
             var tr = $("#" + tableid +" tr").eq(1).clone();
@@ -795,7 +801,6 @@
             var tr=obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
             tr.remove();
         }
-
 
         function sendMail() {
             var url =ctx + "demo/all/sendMail";
@@ -981,8 +986,6 @@
 
 
         });
-
-
 
 
 	</script>

@@ -394,13 +394,21 @@
             		btn: ['确定', '关闭'],
             	    // 弹层外区域关闭
             		shadeClose: true,
-            		yes: function(index, layero) {
-            	        var iframeWin = layero.find('iframe')[0];
-            	        iframeWin.contentWindow.submitHandler();
-            	    },
+                    btn1: function(index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler();
+                    },
+                    btn2: function(index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler();
+                    },
             	    cancel: function(index) {
             	        return true;
-            	    }
+            	    },
+                    success:function (layero,index) {
+                        var body = layer.getChildFrame('body', index);
+                        layero.find(".layui-layer-btn").prepend(body.find(".toolbar-btn"));
+            		}
             	});
             },
             // 弹出层指定参数选项
@@ -457,7 +465,11 @@
             		btn: ['确定', '关闭'],
             		// 弹层外区域关闭
             		shadeClose: true,
-            		yes: function(index, layero) {
+                    btn1: function(index, layero) {
+                        var iframeWin = layero.find('iframe')[0];
+                        iframeWin.contentWindow.submitHandler();
+                    },
+            		btn2: function(index, layero) {
             	        var iframeWin = layero.find('iframe')[0];
             	        iframeWin.contentWindow.submitHandler();
             	    },
@@ -465,7 +477,6 @@
             	        return true;
             	    },
                     success:function (layero,index) {
-                       // $(".layui-layer-btn").append("<button class=\"btn btn-primary btn-small\" type=\"button\">暂存</button>");
                         var body = layer.getChildFrame('body', index);
                         layero.find(".layui-layer-btn").prepend(body.find(".toolbar-btn"));
                     }
@@ -493,6 +504,10 @@
             // 重新加载
             reload: function () {
             	parent.location.reload();
+            },
+            //获得当前窗体 TODO add by yufei 2019-02-18  注意：
+            currentWindow:function () {
+                window.parent.frames[parent.layer.getFrameIndex(window.name)];
             }
         },
         // 操作封装处理
