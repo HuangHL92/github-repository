@@ -464,8 +464,10 @@
             	    cancel: function(index) {
             	        return true;
             	    },
-                    success:function (index) {
+                    success:function (layero,index) {
                        // $(".layui-layer-btn").append("<button class=\"btn btn-primary btn-small\" type=\"button\">暂存</button>");
+                        var body = layer.getChildFrame('body', index);
+                        layero.find(".layui-layer-btn").prepend(body.find(".toolbar-btn"));
                     }
             	});
                 layer.full(index);

@@ -29,6 +29,10 @@ com.ruoyi
     PAD页面地址：    http://localhost/pad
     手机端地址：     http://localhost/wap
     大屏幕地址：     http://localhost/screen
+    平台私有JS       ruoyi-admin/static/js/my.js
+    平台私有CSS      ruoyi-admin/static/css/my.css（由于框架采用iframe方式打开页面，所以需要在index页面引用）
+    项目私有JS       ruoyi-web/static/js/private.js
+    项目私有CSS      ruoyi-web/static/css/private.css
 
 功能规划：
 	1. word、excel、pdf 处理（ POI）

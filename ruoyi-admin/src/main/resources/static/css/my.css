@@ -7,3 +7,9 @@
 .layui-colla-title {
     margin-top: 0px !important;
 }
+
+/*表单页面自定义按钮样式*/
+ .toolbar-btn  {margin-right: -3px; }
+ .toolbar-btn button {margin-left: 5px; margin-right: 5px; }
+ .layer-ext-moon .layui-layer-btn a {height: 32px !important; line-height: 32px !important; font-size:14px}
+
