@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.demo;
 import java.util.Arrays;
 import java.util.List;
 
+import cn.hutool.db.nosql.redis.RedisDS;
 import com.ruoyi.demo.domain.Department;
 import com.ruoyi.demo.service.IDepartmentService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -21,6 +22,7 @@ import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.support.Convert;
+import redis.clients.jedis.Jedis;
 
 /**
  * 练习_部门 信息操作处理
@@ -41,6 +43,9 @@ public class DepartmentController extends BaseController
 	@GetMapping()
 	public String department()
 	{
+		Jedis jedis = RedisDS.create().getJedis();
+		// NX是不存在时才set， XX是存在时才set， EX是秒，PX是毫秒
+		jedis.set("aaa", "你好啊", "NX", "EX", 10);
 	    return prefix + "/department";
 	}
 	
