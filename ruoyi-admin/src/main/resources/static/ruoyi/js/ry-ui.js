@@ -398,10 +398,6 @@
                         var iframeWin = layero.find('iframe')[0];
                         iframeWin.contentWindow.submitHandler();
                     },
-                    btn2: function(index, layero) {
-                        var iframeWin = layero.find('iframe')[0];
-                        iframeWin.contentWindow.submitHandler();
-                    },
             	    cancel: function(index) {
             	        return true;
             	    },
@@ -469,10 +465,7 @@
                         var iframeWin = layero.find('iframe')[0];
                         iframeWin.contentWindow.submitHandler();
                     },
-            		btn2: function(index, layero) {
-            	        var iframeWin = layero.find('iframe')[0];
-            	        iframeWin.contentWindow.submitHandler();
-            	    },
+
             	    cancel: function(index) {
             	        return true;
             	    },
