@@ -69,6 +69,13 @@
 		    <groupId>org.yaml</groupId>
 		    <artifactId>snakeyaml</artifactId>
 		</dependency>
+
+		<!-- jedis -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
+		</dependency>
 		
     </dependencies>
   
