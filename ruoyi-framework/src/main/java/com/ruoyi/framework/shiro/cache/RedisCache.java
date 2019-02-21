@@ -1,5 +1,6 @@
 package com.ruoyi.framework.shiro.cache;
 
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,7 +22,7 @@ public class RedisCache<K, V> implements Cache<K, V>
     /**
      * 用于shiro的cache的名字
      */
-    private String cacheName = "shiro_redis_session";
+    private String cacheName;
 
     private RedisTemplate<K, V> redisTemplate; // 通过构造方法注入该对象
 
@@ -30,9 +31,10 @@ public class RedisCache<K, V> implements Cache<K, V>
         super();
     }
 
-    public RedisCache(long expireTime, RedisTemplate<K, V> redisTemplate)
+    public RedisCache(String cacheName, long expireTime, RedisTemplate<K, V> redisTemplate)
     {
         super();
+        this.cacheName = cacheName;
         this.expireTime = expireTime;
         this.redisTemplate = redisTemplate;
     }
@@ -62,13 +64,13 @@ public class RedisCache<K, V> implements Cache<K, V>
     @Override
     public V put(K key, V value) throws CacheException
     {
-        if ("loginRecordCache".equals(cacheName))
+        if (CacheUtils.LOGIN_RECORD_CACHE.equals(cacheName))
         {
             redisTemplate.opsForValue().set((K) cacheKey(cacheName, key), value, 600, TimeUnit.SECONDS);
-        }
-        else
-        {
-            redisTemplate.opsForValue().set((K) cacheKey(cacheName, key), value, expireTime, TimeUnit.SECONDS);
+        } else if (CacheUtils.SHIRO_ACTIVE_SESSION_CACHE.equals(cacheName)) {
+            redisTemplate.opsForValue().set((K) cacheKey(cacheName, key), value, 1800, TimeUnit.SECONDS);
+        } else {
+            redisTemplate.opsForValue().set((K) cacheKey(cacheName, key), value);
         }
         return value;
     }

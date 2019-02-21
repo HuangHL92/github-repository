@@ -1,13 +1,12 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.support.Convert;
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -31,11 +30,9 @@ import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 
-import javax.annotation.PostConstruct;
-
 /**
  * 用户信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -56,17 +53,8 @@ public class SysUserController extends BaseController
     @Autowired
     private SysPasswordService passwordService;
 
-
     @Autowired
-    private CacheManager cacheManager;
-
-    private Cache<String, AtomicInteger> authorizationCache;
-
-    @PostConstruct
-    public void init()
-    {
-        authorizationCache = cacheManager.getCache("authorization");
-    }
+    private CacheUtils cacheUtils;
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
@@ -176,7 +164,8 @@ public class SysUserController extends BaseController
             return error("不允许修改超级管理员用户");
         }
         user.setUpdateBy(ShiroUtils.getLoginName());
-        authorizationCache.remove("authorization:" + userService.selectUserById(user.getUserId()).getLoginName());
+        // 清空用户缓存
+        cacheUtils.getUserCache().remove(user.getLoginName());
         return toAjax(userService.updateUser(user));
     }
 
@@ -197,6 +186,8 @@ public class SysUserController extends BaseController
     {
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        // 清空用户缓存
+        cacheUtils.getUserCache().remove(user.getLoginName());
         return toAjax(userService.resetUserPwd(user));
     }
 
@@ -208,6 +199,16 @@ public class SysUserController extends BaseController
     {
         try
         {
+            // 循环获取用户清空缓存（暂未实现更好的方法）
+            Long[] userIds = Convert.toLongArray(ids);
+            for (Long userId : userIds)
+            {
+                if (SysUser.isAdmin(userId))
+                {
+                    throw new BusinessException("不允许删除超级管理员用户");
+                }
+                cacheUtils.getUserCache().remove(userService.selectUserById(userId).getLoginName());
+            }
             return toAjax(userService.deleteUserByIds(ids));
         }
         catch (Exception e)
@@ -255,6 +256,8 @@ public class SysUserController extends BaseController
     @ResponseBody
     public AjaxResult changeStatus(SysUser user)
     {
+        // 清空用户缓存
+        cacheUtils.getUserCache().remove(user.getLoginName());
         return toAjax(userService.changeStatus(user));
     }
 }

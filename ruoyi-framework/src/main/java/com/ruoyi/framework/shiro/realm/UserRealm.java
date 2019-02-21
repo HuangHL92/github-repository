@@ -56,7 +56,8 @@ public class UserRealm extends AuthorizingRealm
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0)
     {
-        SysUser user = ShiroUtils.getSysUser();
+        String loginName = (String)SecurityUtils.getSubject().getPrincipal();
+        SysUser user = ShiroUtils.getSysUser(loginName);
         // 角色列表
         Set<String> roles = new HashSet<String>();
         // 功能列表
@@ -128,7 +129,7 @@ public class UserRealm extends AuthorizingRealm
             log.info("对用户[" + username + "]进行登录验证..验证未通过{}", e.getMessage());
             throw new AuthenticationException(e.getMessage(), e);
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getLoginName(), password, getName());
         return info;
     }
 
@@ -140,18 +141,4 @@ public class UserRealm extends AuthorizingRealm
         this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
     }
 
-    @Override
-    protected Object getAuthorizationCacheKey(PrincipalCollection principals) {
-
-        Object obj = principals.getPrimaryPrincipal();
-        StringBuilder key;
-        if(obj instanceof SysUser){
-            SysUser user = (SysUser)obj;
-            key = new StringBuilder(user.getLoginName());
-        }else{
-            key = new StringBuilder(ShiroUtils.getSysUser().getLoginName());
-        }
-
-        return "authorization:" + key;
-    }
 }

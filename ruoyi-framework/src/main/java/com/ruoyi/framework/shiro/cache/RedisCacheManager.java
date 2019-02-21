@@ -39,7 +39,7 @@ public class RedisCacheManager implements CacheManager
         {
             synchronized (this)
             {
-                cache = new RedisCache<>(3600, redisTemplate);
+                cache = new RedisCache<>(name, 3600, redisTemplate);
                 caches.put(name, cache);
             }
         }

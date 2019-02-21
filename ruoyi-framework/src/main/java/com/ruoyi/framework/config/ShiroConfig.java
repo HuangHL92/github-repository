@@ -9,6 +9,7 @@ import javax.servlet.Filter;
 
 import com.ruoyi.framework.shiro.cache.RedisCacheManager;
 import com.ruoyi.framework.shiro.session.RedisSessionDAO;
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
@@ -153,10 +154,14 @@ public class ShiroConfig
      * 自定义Realm
      */
     @Bean
-    public UserRealm userRealm(CacheManager cacheManager)
+    public UserRealm userRealm()
     {
         UserRealm userRealm = new UserRealm();
-        userRealm.setCacheManager(cacheManager);
+        userRealm.setCachingEnabled(true);
+        userRealm.setAuthenticationCachingEnabled(true);
+        userRealm.setAuthenticationCacheName(CacheUtils.AUTHENTICATION_CACHE);
+        userRealm.setAuthorizationCachingEnabled(true);
+        userRealm.setAuthorizationCacheName(CacheUtils.AUTHORIZATION_CACHE);
         return userRealm;
     }
 
@@ -178,7 +183,9 @@ public class ShiroConfig
     public RedisSessionDAO redisSessionDAO()
     {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
-        redisSessionDAO.setExpireTime(expireTime * 60);
+        // 设置authorizationCache名称
+        redisSessionDAO.setActiveSessionsCacheName(CacheUtils.SHIRO_ACTIVE_SESSION_CACHE);
+//        redisSessionDAO.setExpireTime(expireTime * 60);
         return redisSessionDAO;
     }
 

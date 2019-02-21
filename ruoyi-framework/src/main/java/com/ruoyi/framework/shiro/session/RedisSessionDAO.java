@@ -5,15 +5,11 @@ import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.impl.SysUserOnlineServiceImpl;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 针对自定义的ShiroSession的redis操作
@@ -32,10 +28,10 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
     /**
      * session 在redis过期时间
      */
-    private int expireTime;
+//    private int expireTime;
 
-    @Autowired
-    private RedisTemplate redisTemplate;
+//    @Autowired
+//    private RedisTemplate redisTemplate;
 
     @Autowired
     private SysUserOnlineServiceImpl onlineService;
@@ -43,32 +39,33 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
     /**
      * shiro redis 前缀
      */
-    private final static String SYS_SHIRO_SESSION_ID = "shiro_redis_session:";
+//    private final static String SYS_SHIRO_SESSION_ID = "shiro_redis_session:";
 
     /**
      * 上次同步数据库的时间戳
      */
     private static final String LAST_SYNC_DB_TIMESTAMP = RedisSessionDAO.class.getName() + "LAST_SYNC_DB_TIMESTAMP";
 
-    public void setExpireTime(int expireTime)
+    /*public void setExpireTime(int expireTime)
     {
         this.expireTime = expireTime;
-    }
+    }*/
 
     /**
      * 根据会话ID获取会话 先从缓存中获取session
      * @param sessionId 会话ID
      * @return Session
      */
-    @Override
+    /*@Override
     public Session readSession(Serializable sessionId)
     {
-        String key = SYS_SHIRO_SESSION_ID + sessionId;
+        *//*String key = SYS_SHIRO_SESSION_ID + sessionId;
         System.out.println("key:::"+key);
-        Object obj = redisTemplate.opsForValue().get(key);
+        Object obj = redisTemplate.opsForValue().get(key);*//*
+        Object obj = super.readSession(sessionId);
         OnlineSession session = (OnlineSession)obj ;
         return session;
-    }
+    }*/
 
     /**
      * 创建会话
@@ -76,7 +73,7 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
      * @param session 会话信息
      * @return Serializable
      */
-    @Override
+    /*@Override
     protected Serializable doCreate(Session session)
     {
         Serializable sessionId = generateSessionId(session);
@@ -85,10 +82,10 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
         redisTemplate.opsForValue().set(key, session);
         redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
         return sessionId;
-    }
+    }*/
 
     // 更新session
-    @Override
+    /*@Override
     protected void doUpdate(Session session)
     {
         // 如果会话过期/停止 没必要更新
@@ -103,7 +100,7 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
             redisTemplate.opsForValue().set(key, session);
             redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
         }
-    }
+    }*/
 
     /**
      * 当会话过期/停止（如用户退出时）属性等会调用
@@ -116,13 +113,13 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
         {
             return;
         }
-        String key = SYS_SHIRO_SESSION_ID + session.getId();
-        boolean result = redisTemplate.delete(key);
-        if (result)
-        {
+//        String key = SYS_SHIRO_SESSION_ID + session.getId();
+//        boolean result = redisTemplate.delete(key);
+//        if (result)
+//        {
             onlineSession.setStatus(OnlineStatus.off_line);
             onlineService.deleteOnlineById(String.valueOf(onlineSession.getId()));
-        }
+//        }
     }
 
     /**
@@ -160,8 +157,5 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
             onlineSession.resetAttributeChanged();
         }
         AsyncManager.me().execute(AsyncFactory.syncSessionToDb(onlineSession));
-        String key = SYS_SHIRO_SESSION_ID + onlineSession.getId();
-        redisTemplate.opsForValue().set(key, onlineSession);
-        redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
     }
 }
