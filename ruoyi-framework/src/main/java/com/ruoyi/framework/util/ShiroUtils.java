@@ -76,7 +76,7 @@ public class ShiroUtils
     {
         RealmSecurityManager rsm = (RealmSecurityManager) SecurityUtils.getSecurityManager();
         UserRealm realm = (UserRealm) rsm.getRealms().iterator().next();
-        realm.clearCachedAuthorizationInfo();
+        realm.clearAllCachedAuthorizationInfo();
     }
 
     public static Long getUserId()

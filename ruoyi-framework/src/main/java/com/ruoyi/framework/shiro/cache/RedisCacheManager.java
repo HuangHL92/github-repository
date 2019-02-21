@@ -1,9 +1,13 @@
 package com.ruoyi.framework.shiro.cache;
 
 import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.framework.redis.RedisManager;
+import com.ruoyi.framework.util.CacheType;
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.apache.shiro.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +19,8 @@ import java.util.concurrent.ConcurrentMap;
  * 
  * @author ruoyi
  */
-@Service
-@SuppressWarnings(value = { "unchecked", "rawtypes" })
+//@Service
+//@SuppressWarnings(value = { "unchecked", "rawtypes" })
 public class RedisCacheManager implements CacheManager
 {
     /**
@@ -27,9 +31,7 @@ public class RedisCacheManager implements CacheManager
     /**
      * redis cache 工具类
      */
-    private RedisTemplate redisTemplate = SpringUtils.getBean("redisTemplate");
-//    @Autowired
-//    private RedisTemplate redisTemplate;
+    private RedisManager redisManager = SpringUtils.getBean(RedisManager.class);
 
     @Override
     public <K, V> Cache<K, V> getCache(String name) throws CacheException
@@ -39,7 +41,23 @@ public class RedisCacheManager implements CacheManager
         {
             synchronized (this)
             {
-                cache = new RedisCache<>(name, 3600, redisTemplate);
+                // 登录记录缓存：10分钟
+                if (CacheType.LOGIN_RECORD_CACHE.equals(name))
+                {
+                    cache = new RedisCache<>(name, 600, redisManager);
+                }
+                // session缓存：30分钟
+                else if (CacheType.SHIRO_ACTIVE_SESSION_CACHE.equals(name)) {
+                    cache = new RedisCache<>(name, 1800, redisManager);
+                }
+                // 授权缓存：60分钟
+                else if (CacheType.AUTHORIZATION_CACHE.equals(name)) {
+                    cache = new RedisCache<>(name, 3600, redisManager);
+                }
+                // 默认缓存：持久
+                else {
+                    cache = new RedisCache<>(name, -1, redisManager);
+                }
                 caches.put(name, cache);
             }
         }

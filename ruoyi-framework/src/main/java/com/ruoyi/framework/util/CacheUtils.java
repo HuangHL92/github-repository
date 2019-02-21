@@ -19,49 +19,23 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jeeplus
  * @version 2017-1-19
  */
-@Component
 public class CacheUtils {
 
-	/**
-	 * Redis缓存前缀，用于区分不同的项目
-	 */
-	private static final String SPRING_REDIS_PREFIX = "jy_basic:";
-
-	@Autowired
 	private CacheManager cacheManager;
+
+	public void setCacheManager(CacheManager cacheManager) {
+		this.cacheManager = cacheManager;
+	}
 
 	private Cache<String, AtomicInteger> loginRecordCache;
 
 	private Cache<String, SysUser> userCache;
 
-	/**
-	 * session缓存
-	 */
-	public static final String SHIRO_ACTIVE_SESSION_CACHE = SPRING_REDIS_PREFIX + "shiro_redis_session";
-
-	/**
-	 * 登录记录缓存
-	 */
-	public static final String LOGIN_RECORD_CACHE = SPRING_REDIS_PREFIX + "loginRecordCache";
-
-	/**
-	 * 登录记录缓存
-	 */
-	public static final String AUTHENTICATION_CACHE = SPRING_REDIS_PREFIX + "authenticationcache";
-	/**
-	 * 登录记录缓存
-	 */
-	public static final String AUTHORIZATION_CACHE = SPRING_REDIS_PREFIX + "authorizationcache";
-	/**
-	 * 登录记录缓存
-	 */
-	public static final String USER_CACHE = SPRING_REDIS_PREFIX + "userCache";
-
 	@PostConstruct
 	public void init()
 	{
-		loginRecordCache = cacheManager.getCache(LOGIN_RECORD_CACHE);
-		userCache = cacheManager.getCache(USER_CACHE);
+		loginRecordCache = cacheManager.getCache(CacheType.LOGIN_RECORD_CACHE);
+		userCache = cacheManager.getCache(CacheType.USER_CACHE);
 	}
 
 	public Cache<String, AtomicInteger> getLoginRecordCache() {

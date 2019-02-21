@@ -164,8 +164,10 @@ public class SysUserController extends BaseController
             return error("不允许修改超级管理员用户");
         }
         user.setUpdateBy(ShiroUtils.getLoginName());
-        // 清空用户缓存
-        cacheUtils.getUserCache().remove(user.getLoginName());
+        // 清空用户缓存,需要先根据用户id获取用户
+        cacheUtils.getUserCache().remove(userService.selectUserById(user.getUserId()).getLoginName());
+        // 清空用户认证权限缓存（修改了角色的情况）
+        ShiroUtils.clearCachedAuthorizationInfo();
         return toAjax(userService.updateUser(user));
     }
 
@@ -209,6 +211,8 @@ public class SysUserController extends BaseController
                 }
                 cacheUtils.getUserCache().remove(userService.selectUserById(userId).getLoginName());
             }
+            // 清空用户认证权限缓存
+            ShiroUtils.clearCachedAuthorizationInfo();
             return toAjax(userService.deleteUserByIds(ids));
         }
         catch (Exception e)

@@ -9,9 +9,9 @@ import javax.servlet.Filter;
 
 import com.ruoyi.framework.shiro.cache.RedisCacheManager;
 import com.ruoyi.framework.shiro.session.RedisSessionDAO;
+import com.ruoyi.framework.util.CacheType;
 import com.ruoyi.framework.util.CacheUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.config.ConfigurationException;
@@ -22,10 +22,11 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.context.annotation.*;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.shiro.realm.UserRealm;
 import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
@@ -37,6 +38,8 @@ import com.ruoyi.framework.shiro.web.filter.sync.SyncOnlineSessionFilter;
 import com.ruoyi.framework.shiro.web.session.OnlineWebSessionManager;
 import com.ruoyi.framework.shiro.web.session.SpringSessionValidationScheduler;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
  * 权限配置加载
@@ -96,6 +99,7 @@ public class ShiroConfig
      * 缓存管理器 使用Ehcache实现
      */
 //    @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:false}")
     public EhCacheManager getEhCacheManager()
     {
         net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("ruoyi");
@@ -143,11 +147,18 @@ public class ShiroConfig
      * @return
      */
 //    @Bean
-//    @ConditionalOnMissingBean(name = "redisTemplate")
+//    @ConditionalOnExpression("${spring.redis.enabled:true}")
     public RedisCacheManager getRedisCacheManager()
     {
         RedisCacheManager redisCacheManager = new RedisCacheManager();
         return redisCacheManager;
+    }
+
+    @Bean
+    public CacheUtils cacheUtils() {
+        CacheUtils cacheUtils = new CacheUtils();
+        cacheUtils.setCacheManager(redisEnabled ? getRedisCacheManager() : getEhCacheManager());
+        return cacheUtils;
     }
 
     /**
@@ -158,10 +169,10 @@ public class ShiroConfig
     {
         UserRealm userRealm = new UserRealm();
         userRealm.setCachingEnabled(true);
-        userRealm.setAuthenticationCachingEnabled(true);
-        userRealm.setAuthenticationCacheName(CacheUtils.AUTHENTICATION_CACHE);
+//        userRealm.setAuthenticationCachingEnabled(true);
+//        userRealm.setAuthenticationCacheName(CacheUtils.AUTHENTICATION_CACHE);
         userRealm.setAuthorizationCachingEnabled(true);
-        userRealm.setAuthorizationCacheName(CacheUtils.AUTHORIZATION_CACHE);
+        userRealm.setAuthorizationCacheName(CacheType.AUTHORIZATION_CACHE);
         return userRealm;
     }
 
@@ -169,6 +180,7 @@ public class ShiroConfig
      * 自定义sessionDAO会话
      */
     @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:false}")
     public OnlineSessionDAO sessionDAO()
     {
         OnlineSessionDAO sessionDAO = new OnlineSessionDAO();
@@ -179,12 +191,12 @@ public class ShiroConfig
      * 自定义RedisSessionDAO会话
      */
     @Bean
-//    @ConditionalOnMissingBean(name = "redisTemplate")
+//    @ConditionalOnExpression("${spring.redis.enabled:true}")
     public RedisSessionDAO redisSessionDAO()
     {
         RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
         // 设置authorizationCache名称
-        redisSessionDAO.setActiveSessionsCacheName(CacheUtils.SHIRO_ACTIVE_SESSION_CACHE);
+        redisSessionDAO.setActiveSessionsCacheName(CacheType.SHIRO_ACTIVE_SESSION_CACHE);
 //        redisSessionDAO.setExpireTime(expireTime * 60);
         return redisSessionDAO;
     }
