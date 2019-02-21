@@ -25,3 +25,10 @@ com/ruoyi/framework/config/ShiroConfig.java
 2、redis集成 修改人：梁涛
 配置文件：ruoyi-admin/src/mian/resources/config/redis.setting
 例子：DemoController.java，综合实例add画面里面
+********************* 2019-02-21  修改人：梁涛 ************************
+1、整合ehcache及redis缓存
+    开关：application-druid.yml中 spring.redis.enabled属性(true:redis；false:ehcache)
+    配置文件    ehcache：ehcache-shiro.xml
+                redis: RedisCacheManager.java->getCache()方法
+    获取缓存工具类: CacheUtils.java 注：注入的方式使用；新增缓存类型需要增加配置
+    目前实现缓存： session(30分钟)、shiro授权缓存(60分钟)、登录记录缓存(10分钟)、用户缓存（持久化）
