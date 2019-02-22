@@ -11,5 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface I${className}Service extends IService<${className}>
 {
-    List<${className}> selectList(${className} ${classname})
+    List<${className}> selectList(${className} ${classname});
 }
