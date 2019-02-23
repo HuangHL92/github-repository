@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.demo;
 
 import com.ruoyi.framework.web.base.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -10,7 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/demo/map")
+@RequestMapping("/demo/baidu")
 public class MapController extends BaseController {
 
+    private String prefix = "demo";
+
+    @GetMapping()
+    public String baidu()
+    {
+        return prefix + "/baidu";
+    }
 }
