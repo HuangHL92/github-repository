@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.monitor;
 
 import java.util.List;
+
+import com.ruoyi.framework.shiro.session.SessionDao;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +38,8 @@ public class SysUserOnlineController extends BaseController
     private ISysUserOnlineService userOnlineService;
 
     @Autowired
-    private OnlineSessionDAO onlineSessionDAO;
+//    private OnlineSessionDAO onlineSessionDAO;
+    private SessionDao sessionDao;
 
     @RequiresPermissions("monitor:online:view")
     @GetMapping()
@@ -68,7 +71,7 @@ public class SysUserOnlineController extends BaseController
             {
                 return error("用户已下线");
             }
-            OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+            OnlineSession onlineSession = (OnlineSession) sessionDao.readSession(online.getSessionId());
             if (onlineSession == null)
             {
                 return error("用户已下线");
@@ -79,6 +82,7 @@ public class SysUserOnlineController extends BaseController
             }
             onlineSession.setStatus(OnlineStatus.off_line);
             online.setStatus(OnlineStatus.off_line);
+            sessionDao.deleteSession(onlineSession);
             userOnlineService.saveOnline(online);
         }
         return success();
@@ -99,7 +103,7 @@ public class SysUserOnlineController extends BaseController
         {
             return error("用户已下线");
         }
-        OnlineSession onlineSession = (OnlineSession) onlineSessionDAO.readSession(online.getSessionId());
+        OnlineSession onlineSession = (OnlineSession) sessionDao.readSession(online.getSessionId());
         if (onlineSession == null)
         {
             return error("用户已下线");
@@ -107,6 +111,7 @@ public class SysUserOnlineController extends BaseController
         onlineSession.setStatus(OnlineStatus.off_line);
         online.setStatus(OnlineStatus.off_line);
         userOnlineService.saveOnline(online);
+        sessionDao.deleteSession(onlineSession);
         return success();
     }
 }

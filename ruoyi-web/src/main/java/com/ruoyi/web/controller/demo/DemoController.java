@@ -8,6 +8,7 @@ import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.demo.domain.Demo;
 import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
@@ -199,6 +200,42 @@ public class DemoController extends BaseController
         String decode = QrCodeUtil.decode(FileUtil.file("/ruoyi/二维码.jpg"));
 
         return AjaxResult.success(decode);
+    }
+
+
+    /**
+     * redis存入操作
+     */
+    @Log(title = "redis存入操作", businessType = BusinessType.OTHER)
+    @PostMapping( "/saveRedis")
+    @ResponseBody
+    public AjaxResult saveRedis(HttpServletRequest request)
+    {
+
+		String key = request.getParameter("key");
+		String value = request.getParameter("value");
+		if (StringUtils.isAnyBlank(key, value)) {
+			return error("请输入key和value!");
+		}
+		// 默认15s过期；0为不过期
+		JedisUtils.set(key, value, 15);
+		return success();
+    }
+
+
+    /**
+     * redis获取操作
+     */
+    @Log(title = "redis获取操作", businessType = BusinessType.OTHER)
+    @GetMapping( "/getRedis/{key}")
+    @ResponseBody
+    public AjaxResult getRedis(@PathVariable("key") String key)
+    {
+		String value = JedisUtils.get(key);
+		if (StringUtils.isBlank(value)) {
+			return error("该key对应的值不存在或者已过期");
+		}
+        return success(value);
     }
 
 

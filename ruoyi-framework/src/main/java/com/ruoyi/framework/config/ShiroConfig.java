@@ -6,6 +6,10 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.Filter;
+
+import com.ruoyi.framework.shiro.cache.RedisCacheManager;
+import com.ruoyi.framework.shiro.session.RedisSessionDAO;
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.codec.Base64;
@@ -17,10 +21,11 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.context.annotation.*;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.shiro.realm.UserRealm;
 import com.ruoyi.framework.shiro.session.OnlineSessionDAO;
@@ -32,6 +37,8 @@ import com.ruoyi.framework.shiro.web.filter.sync.SyncOnlineSessionFilter;
 import com.ruoyi.framework.shiro.web.session.OnlineWebSessionManager;
 import com.ruoyi.framework.shiro.web.session.SpringSessionValidationScheduler;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
+import org.springframework.core.env.Environment;
+import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
  * 权限配置加载
@@ -83,10 +90,15 @@ public class ShiroConfig
     @Value("${shiro.user.unauthorizedUrl}")
     private String unauthorizedUrl;
 
+    // redis缓存开关
+    @Value("${spring.redis.enabled}")
+    private boolean redisEnabled = false;
+
     /**
      * 缓存管理器 使用Ehcache实现
      */
-    @Bean
+//    @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:false}")
     public EhCacheManager getEhCacheManager()
     {
         net.sf.ehcache.CacheManager cacheManager = net.sf.ehcache.CacheManager.getCacheManager("ruoyi");
@@ -129,13 +141,37 @@ public class ShiroConfig
     }
 
     /**
+     * 缓存管理器 使用redis实现
+     *
+     * @return
+     */
+//    @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:true}")
+    public RedisCacheManager getRedisCacheManager()
+    {
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        return redisCacheManager;
+    }
+
+    @Bean
+    public CacheUtils cacheUtils() {
+        CacheUtils cacheUtils = new CacheUtils();
+        cacheUtils.setCacheManager(redisEnabled ? getRedisCacheManager() : getEhCacheManager());
+        return cacheUtils;
+    }
+
+    /**
      * 自定义Realm
      */
     @Bean
-    public UserRealm userRealm(EhCacheManager cacheManager)
+    public UserRealm userRealm()
     {
         UserRealm userRealm = new UserRealm();
-        userRealm.setCacheManager(cacheManager);
+        userRealm.setCachingEnabled(true);
+//        userRealm.setAuthenticationCachingEnabled(true);
+//        userRealm.setAuthenticationCacheName(CacheUtils.AUTHENTICATION_CACHE);
+        userRealm.setAuthorizationCachingEnabled(true);
+        userRealm.setAuthorizationCacheName(CacheUtils.AUTHORIZATION_CACHE);
         return userRealm;
     }
 
@@ -143,10 +179,26 @@ public class ShiroConfig
      * 自定义sessionDAO会话
      */
     @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:false}")
     public OnlineSessionDAO sessionDAO()
     {
         OnlineSessionDAO sessionDAO = new OnlineSessionDAO();
+        sessionDAO.setActiveSessionsCacheName(CacheUtils.SHIRO_ACTIVE_SESSION_CACHE);
         return sessionDAO;
+    }
+
+    /**
+     * 自定义RedisSessionDAO会话
+     */
+    @Bean
+//    @ConditionalOnExpression("${spring.redis.enabled:true}")
+    public RedisSessionDAO redisSessionDAO()
+    {
+        RedisSessionDAO redisSessionDAO = new RedisSessionDAO();
+        // 设置authorizationCache名称
+        redisSessionDAO.setActiveSessionsCacheName(CacheUtils.SHIRO_ACTIVE_SESSION_CACHE);
+//        redisSessionDAO.setExpireTime(expireTime * 60);
+        return redisSessionDAO;
     }
 
     /**
@@ -181,7 +233,7 @@ public class ShiroConfig
     {
         OnlineWebSessionManager manager = new OnlineWebSessionManager();
         // 加入缓存管理器
-        manager.setCacheManager(getEhCacheManager());
+        manager.setCacheManager(redisEnabled ? getRedisCacheManager() : getEhCacheManager());
         // 删除过期的session
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
@@ -191,7 +243,7 @@ public class ShiroConfig
         // 是否定时检查session
         manager.setSessionValidationSchedulerEnabled(true);
         // 自定义SessionDao
-        manager.setSessionDAO(sessionDAO());
+        manager.setSessionDAO(redisEnabled ? redisSessionDAO() : sessionDAO());
         // 自定义sessionFactory
         manager.setSessionFactory(sessionFactory());
         return manager;
@@ -205,7 +257,7 @@ public class ShiroConfig
     {
         OnlineWebSessionManager manager = new OnlineWebSessionManager();
         // 加入缓存管理器
-        manager.setCacheManager(getEhCacheManager());
+        manager.setCacheManager(redisEnabled ? getRedisCacheManager() : getEhCacheManager());
         // 删除过期的session
         manager.setDeleteInvalidSessions(true);
         // 设置全局session超时时间
@@ -217,7 +269,7 @@ public class ShiroConfig
         // 是否定时检查session
         manager.setSessionValidationSchedulerEnabled(true);
         // 自定义SessionDao
-        manager.setSessionDAO(sessionDAO());
+        manager.setSessionDAO(redisEnabled ? redisSessionDAO() : sessionDAO());
         // 自定义sessionFactory
         manager.setSessionFactory(sessionFactory());
         return manager;
@@ -235,7 +287,7 @@ public class ShiroConfig
         // 记住我
         securityManager.setRememberMeManager(rememberMeManager());
         // 注入缓存管理器;
-        securityManager.setCacheManager(getEhCacheManager());
+        securityManager.setCacheManager(redisEnabled ? getRedisCacheManager() : getEhCacheManager());
         // session管理器
         securityManager.setSessionManager(sessionManager());
         return securityManager;
@@ -285,6 +337,8 @@ public class ShiroConfig
         // TODO 业务接口不需要拦截
         filterChainDefinitionMap.put("/api/**", "anon");
         filterChainDefinitionMap.put("/screen/**", "anon");
+        filterChainDefinitionMap.put("/pad/**", "anon");
+        filterChainDefinitionMap.put("/wap/**", "anon");
 
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());

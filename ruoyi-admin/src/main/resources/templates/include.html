@@ -18,8 +18,10 @@
     <link th:href="@{/ajax/libs/layui/css/layui.css}" rel="stylesheet"/>
     <link th:href="@{/ajax/libs/iCheck/custom.css}" rel="stylesheet"/>
     <!--<link th:href="@{/ajax/libs/layui/css/modules/laydate/default/laydate.css}" rel="stylesheet"/>-->
+    <!--平台私有样式-->
     <link th:href="@{/css/my.css}" rel="stylesheet"/>
-
+    <!--项目私有样式-->
+    <link th:href="@{/css/private.css}" rel="stylesheet"/>
 
 </head>
 <div th:fragment="footer">
@@ -54,6 +56,8 @@
 	<script th:src="@{/ruoyi/js/ry-ui.js?v=3.2.0}"></script>
 	<script src="http://tajs.qq.com/stats?sId=62048022"></script>
 	<script th:inline="javascript"> var ctx = [[@{/}]]; </script>
+    <!--平台私有JS-->
     <script th:src="@{/js/my.js}"></script>
-
+    <!--项目私有JS-->
+    <script th:src="@{/js/private.js}"></script>
 </div>

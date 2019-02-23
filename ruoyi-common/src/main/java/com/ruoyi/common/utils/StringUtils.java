@@ -1,5 +1,6 @@
 package com.ruoyi.common.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.Map;
 import com.ruoyi.common.support.StrFormatter;
@@ -16,6 +17,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
 
     /** 下划线 */
     private static final char SEPARATOR = '_';
+
+    private static final String CHARSET_NAME = "UTF-8";
 
     /**
      * 获取参数不为空值
@@ -361,5 +364,35 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils
             result.append(camel.substring(1).toLowerCase());
         }
         return result.toString();
+    }
+
+    /**
+     * 转换为字节数组
+     * @param str
+     * @return
+     */
+    public static byte[] getBytes(String str){
+        if (str != null){
+            try {
+                return str.getBytes(CHARSET_NAME);
+            } catch (UnsupportedEncodingException e) {
+                return null;
+            }
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 转换为字节数组
+     * @param str
+     * @return
+     */
+    public static String toString(byte[] bytes){
+        try {
+            return new String(bytes, CHARSET_NAME);
+        } catch (UnsupportedEncodingException e) {
+            return EMPTY;
+        }
     }
 }

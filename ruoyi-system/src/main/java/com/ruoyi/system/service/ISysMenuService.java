@@ -3,9 +3,12 @@ package com.ruoyi.system.service;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import com.ruoyi.common.base.BaseEntity;
 import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
+import org.springframework.cache.annotation.Cacheable;
 
 /**
  * 菜单 业务层
@@ -20,6 +23,7 @@ public interface ISysMenuService
      * @param user 用户信息
      * @return 菜单列表
      */
+//    @Cacheable(value = BaseEntity.NOOO, key = "#root.targetClass.simpleName+':'+#root.methodName+':'+#user.userId")
     public List<SysMenu> selectMenusByUser(SysUser user);
 
     /**

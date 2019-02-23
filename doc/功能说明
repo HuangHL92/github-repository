@@ -24,6 +24,16 @@ com.ruoyi
 ├── ruoyi-admin       // 后台服务
 ├── ruoyi-xxxxxx      // 其他模块
 
+注意：
+    pad、screen、api、wap  这几个关键字已做特殊路径排除在shiro监控范围之外，新建requestmapping不要使用这几个关键词
+    PAD页面地址：    http://localhost/pad
+    手机端地址：     http://localhost/wap
+    大屏幕地址：     http://localhost/screen
+    平台私有JS       ruoyi-admin/static/js/my.js
+    平台私有CSS      ruoyi-admin/static/css/my.css（由于框架采用iframe方式打开页面，所以需要在index页面引用）
+    项目私有JS       ruoyi-web/static/js/private.js
+    项目私有CSS      ruoyi-web/static/css/private.css
+
 功能规划：
 	1. word、excel、pdf 处理（ POI）
 	2.hutool等类似工具类集成
@@ -43,6 +53,8 @@ com.ruoyi
 	16.微信开发包
 	17.echart集成（饼图、柱状图、折线图、雷达图）
 	18.websocket
+	19.大屏管理模块（板块ID、名称、刷新频率、默认数据JSON）
+	20.select2、二级联动、标签
 
 API接口说明：
 @RequestMapping("/api/*")  为api开头的请求方法不会进行shiro验证

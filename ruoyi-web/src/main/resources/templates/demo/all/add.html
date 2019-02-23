@@ -2,6 +2,8 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+
+
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 
@@ -12,6 +14,7 @@
                 <li>layui表单</li>
                 <li>Http、邮件</li>
                 <li>二维码、条码</li>
+                <li>Redis操作</li>
                 <li>word、excel、pdf</li>
                 <li>上传、下载</li>
             </ul>
@@ -74,7 +77,7 @@
                                                 <label class="col-sm-2 control-label">密码</label>
 
                                                 <div class="col-sm-10">
-                                                    <input type="password" id="pw"  class="form-control" name="password">
+                                                    <input type="password" id="pw"  class="form-control required" name="password" >
                                                 </div>
                                             </div>
 
@@ -646,6 +649,48 @@
                     </form>
                 </div>
 
+                <!--Redis操作-->
+                <div class="layui-tab-item">
+
+                    <form class="form-horizontal m" id="form-demo-redis" >
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="ibox float-e-margins">
+
+                                    <div class="ibox-title">
+                                        <h5>Redis <small>本实例默认过期时间为15s</small></h5>
+                                        <div class="ibox-tools">
+                                            <a class="collapse-link">
+                                                <i class="fa fa-chevron-up"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="ibox-content">
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">key</label>
+                                            <div class="col-sm-4">
+                                                <input type="text"  name="key" id="redisKey" class="form-control" placeholder="key">
+                                            </div>
+                                            <label class="col-sm-2 control-label">value</label>
+                                            <div class="col-sm-4">
+                                                <input type="text"  name="value" id="redisValue" class="form-control" placeholder="value">
+                                            </div>
+                                        </div>
+
+                                        <div class="mail-body text-right tooltip-demo">
+                                            <a onclick="saveRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 存入redis</a>
+                                            <a onclick="getRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 获取指定key的值</a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
 
                 <!--word、excel、pdf-->
                 <div class="layui-tab-item">
@@ -700,26 +745,34 @@
             </div>
         </div>
 
-
-
     </div>
 
 
-    <div class="btn_tool">
-
-        <button class="btn btn-primary" type="button">
-            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存</span>
+    <!--自定义按钮区域-->
+    <span class="toolbar-btn">
+        <button class="btn btn-primary" type="button" id="btn1">
+            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存1</span>
         </button>
 
-    </div>
+        <button class="btn btn-danger" type="button" onclick="alert('这是一个简单的Alert');">
+            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存2</span>
+        </button>
+    </span>
+
 	<div th:include="include::footer"></div>
 
 	<script type="text/javascript">
+
+        //自定义按钮事件
+        $('#btn1', $.modal.currentWindow()).click(function(){
+            alert("这个是一个自定义按钮方法。记得需要动态绑定方法哦！");
+        });
 
         //页面控件初始化
         initCtrl();
 
         var formobj = $("#form-demo-add");
+
 
         //表单验证
         formobj.validate({
@@ -754,11 +807,11 @@
 
         //表单提交事件Handler
 		function submitHandler() {
+
 	        if ($.validate.form()) {
 	        	submitAction(formobj);
 	        }
 	    }
-
 
         function addtr(tableid,refreshIndex){
             var tr = $("#" + tableid +" tr").eq(1).clone();
@@ -777,7 +830,6 @@
             tr.remove();
         }
 
-
         function sendMail() {
             var url =ctx + "demo/all/sendMail";
 		    $.operate.post(url,$("#form-demo-http").serialize());
@@ -791,6 +843,22 @@
 
         function checkQRCode() {
             var url =ctx + "demo/all/checkQRCode";
+            $.operate.get(url);
+        }
+
+        function saveRedis() {
+            var url =ctx + "demo/all/saveRedis";
+            $.operate.post(url,$("#form-demo-redis").serialize());
+        }
+
+
+        function getRedis() {
+		    var redisKey = $('#redisKey').val();
+		    if ($.common.isEmpty(redisKey)) {
+                $.modal.alertError("请填写key值!");
+		        return;
+            }
+            var url =ctx + "demo/all/getRedis/" + redisKey;
             $.operate.get(url);
         }
 
@@ -892,8 +960,6 @@
 
 
         });
-
-
 
 
 	</script>
