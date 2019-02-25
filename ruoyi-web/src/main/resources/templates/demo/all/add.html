@@ -166,6 +166,54 @@
                                             </div>
 
 
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">suggest：</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="test">
+                                                    <div class="input-group-btn">
+                                                        <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                                            <span class="caret"></span>
+                                                        </button>
+                                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">人员下拉多选：</label>
+                                                <div class="col-sm-10">
+                                                    <select id="userid" name="userid" class="form-control select2-hidden-accessible" multiple="" th:with="users=${@user.getList()}">
+                                                        <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName}" ></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">部门下拉多选：</label>
+                                                <div class="col-sm-10">
+                                                    <select id="deptid" name="deptid" class="form-control select2-hidden-accessible" multiple="" th:with="depts=${@dept.getList()}">
+                                                        <option value="">请选择</option>
+                                                        <!--<optgroup th:label="${dept.deptName}">-->
+                                                            <!---->
+                                                        <!--</optgroup>-->
+                                                        <option th:each="dept:${depts}" th:value="${dept.deptId}" th:text="${dept.deptName}" ></option>
+                                                        <!--<optgroup label="城市记忆">-->
+                                                            <!--<option value="你工作的第一个城市">你工作的第一个城市？</option>-->
+                                                        <!--</optgroup>-->
+                                                        <!--<optgroup label="学生时代">-->
+                                                            <!--<option value="你的工号">你的工号？</option>-->
+                                                            <!--<option value="你最喜欢的老师">你最喜欢的老师？</option>-->
+                                                        <!--</optgroup>-->
+                                                    </select>
+                                                </div>
+                                            </div>
+
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">备注：</label>
@@ -707,54 +755,39 @@
 
                 <!--上传、下载-->
                 <div class="layui-tab-item">
-
-                    <form class="form-horizontal m" id="form-demo-upload" >
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="layui-upload">
-                                    <button type="button" class="layui-btn" id="test1">上传图片</button>
-                                    <div class="layui-upload-list">
-                                        <img class="layui-upload-img" id="test1_img" style="width:200px; height:250px">
-                                        <input type="hidden" id="test1_val" name="test1_val"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>单文件上传</legend>
+                    </fieldset>
 
                         <div class="row">
                             <div class="col-sm-12">
-                                <button type="button" class="layui-btn" id="test2"><i class="layui-icon"></i>上传文件</button>
-
+                                <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no" data-btn-text="上传文件" />
                             </div>
                         </div>
-
-                        <div class="hr-line-dashed"></div>
-
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>多文件上传</legend>
+                    </fieldset>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="layui-upload">
-
-                                    <button type="button" class="layui-btn" id="testList"><i class="layui-icon"></i>上传文件（多个）</button>
-                                    <div class="layui-upload-list">
-                                        <table class="layui-table">
-                                            <!--<thead>-->
-                                            <!--<tr><th>文件名</th>-->
-                                                <!--<th>大小</th>-->
-                                                <!--<th>状态</th>-->
-                                                <!--<th>操作</th>-->
-                                            <!--</tr></thead>-->
-                                            <tbody id="demoList"></tbody>
-                                        </table>
-                                    </div>
-
-                                </div>
+                                <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""  data-btn-text="上传文件（多个）"/>
                             </div>
                         </div>
-
-
-
-                    </form>
-
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>图片上传</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="hidden" data-toggle="fileupload" data-multiple="false" value=""   data-back-type="no" data-btn-text="" data-accept="image"/>
+                        </div>
+                    </div>
+                    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                        <legend>多图片上传</legend>
+                    </fieldset>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""   data-back-type="no" data-btn-text="" data-accept="image"/>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -931,123 +964,29 @@
         });
 
 
-        layui.use('upload', function(){
-            var $ = layui.jquery
-                ,upload = layui.upload;
 
-            //普通图片上传
-            var uploadInst = upload.render({
-                elem: '#test1'
-                ,url: '/system/upload/uploadFile'
-                // ,size: 60 //限制文件大小，单位 KB
-                // ,multiple: true //是否允许同时上传多个
-                // ,accept: 'file' //允许上传文件类型
-                ,before: function(obj){
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#test1_img').attr('src', result); //图片链接（base64）
-                    });
-                }
-                ,done: function(res){
-
-                    if(res.code > 0){
-                        //上传失败
-                        return layer.msg('上传失败');
-                    } else {
-                        //上传成功
-                        $('#test1_val').val(res.msg);
-                        return layer.msg(res.msg);
-                    }
-
-                }
-                ,error: function(){
-                    //演示失败状态，并实现重传
-                    var demoText = $('#demoText');
-                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                    demoText.find('.demo-reload').on('click', function(){
-                        uploadInst.upload();
-                    });
-                }
-            });
-
-            //上传单个文件
-            upload.render({
-                elem: '#test2'
-                ,url: '/system/upload/uploadFile'
-                ,multiple: true
-                ,before: function(obj){
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
-                    });
-                }
-                ,done: function(res){
-                    //上传完毕
-                }
-            });
-
-
-            //多文件列表示例
-            var demoListView = $('#demoList')
-                ,uploadListIns = upload.render({
-                elem: '#testList'
-                ,url: '/system/upload/uploadFiles'
-                ,accept: 'file'
-                ,multiple: true
-                ,auto: true
-                ,bindAction: '#testListAction'
-                ,choose: function(obj){
-                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                    //读取本地文件
-                    obj.preview(function(index, file, result){
-                        var tr = $(['<tr id="upload-'+ index +'">'
-                            ,'<td>'+ file.name +'</td>'
-                            ,'<td style="text-align:center">'+ (file.size/1014).toFixed(1) +'kb</td>'
-                            ,'<td style="text-align:center">等待上传</td>'
-                            ,'<td style="text-align:center">'
-                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" >删除</button>'
-                            ,'</td>'
-                            ,'</tr>'].join(''));
-
-                        //单个重传
-                        tr.find('.demo-reload').on('click', function(){
-                            obj.upload(index, file);
-                        });
-
-                        //删除
-                        tr.find('.demo-delete').on('click', function(){
-                            delete files[index]; //删除对应的文件
-                            tr.remove();
-                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                        });
-
-                        demoListView.append(tr);
-                    });
-                }
-                ,done: function(res, index, upload){
-                    if(res.code == 0){ //上传成功 TODO
-                        var tr = demoListView.find('tr#upload-'+ index)
-                            ,tds = tr.children();
-                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                        //tds.eq(3).html('<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" onclick="deleteFile()">删除</button>');
-                        return delete this.files[index]; //删除文件队列已经上传成功的文件
-                    }
-                    this.error(index, upload);
-                }
-                ,error: function(index, upload){
-                    var tr = demoListView.find('tr#upload-'+ index)
-                        ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-                }
-            });
-
-
+        $("#test").bsSuggest('init', {
+            clearable: true,
+            // showHeader: true, //显示 header
+            // showBtn: false, //不显示下拉按钮
+            url: "/json/data.json",
+            idField: "userId",
+            keyField: "userName"
+        }).on('onDataRequestSuccess', function (e, result) {
+            console.log('onDataRequestSuccess: ', result);
+        }).on('onSetSelectValue', function (e, keyword, data) {
+            console.log('onSetSelectValue: ', keyword, data);
+        }).on('onUnsetSelectValue', function () {
+            console.log('onUnsetSelectValue');
+        }).on('onShowDropdown', function (e, data) {
+            console.log('onShowDropdown', e.target.value, data);
+        }).on('onHideDropdown', function (e, data) {
+            console.log('onHideDropdown', e.target.value, data);
         });
 
 
 	</script>
+
 
 </body>
 </html>

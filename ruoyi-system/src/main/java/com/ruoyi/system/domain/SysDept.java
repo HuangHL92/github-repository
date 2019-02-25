@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.base.BaseEntity;
@@ -45,6 +46,21 @@ public class SysDept extends BaseEntity
 
     /** 父部门名称 */
     private String parentName;
+
+
+    /** 部门层级(画面显示用) */
+    @TableField(exist = false)
+    private int levels;
+
+
+
+    public int getLevels() {
+        return levels;
+    }
+
+    public void setLevels(int levels) {
+        this.levels = levels;
+    }
 
     public Long getDeptId()
     {

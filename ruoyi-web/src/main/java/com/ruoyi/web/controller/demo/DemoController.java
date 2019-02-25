@@ -11,11 +11,13 @@ import cn.hutool.extra.qrcode.QrConfig;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
+import com.google.gson.JsonObject;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.demo.domain.Demo;
 import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
 import com.sun.jna.platform.win32.Guid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -56,6 +58,9 @@ public class DemoController extends BaseController
 
     @Autowired
     private ISysUserService userService;
+
+    @Autowired
+    private ISysPostService postService;
 	
 	@RequiresPermissions("demo:all:view")
 	@GetMapping()
@@ -97,9 +102,10 @@ public class DemoController extends BaseController
 	 * 新增测试
 	 */
 	@GetMapping("/add")
-	public String add()
+	public String add(ModelMap mmap)
 	{
-	    return prefix + "/add";
+        mmap.put("posts", postService.selectPostAll());
+        return prefix + "/add";
 	}
 	
 	/**
@@ -249,12 +255,20 @@ public class DemoController extends BaseController
 
     @GetMapping( "/getJson/{name}")
     @ResponseBody
-    public AjaxResult getJson(@PathVariable("name") String name)
+    public JsonObject getJson(@PathVariable("name") String name)
     {
         SysUser user = new SysUser();
         user.setUserName(name);
         List<SysUser> users = userService.selectUserList(user);
-        return success(JSONUtil.parseArray(users).toString());
+
+
+        JsonObject json = new JsonObject();
+        json.addProperty("code", 0);
+        json.addProperty("redirect", "");
+        json.addProperty("message", "");
+        json.addProperty("value", "");
+
+        return json;
     }
 
 }
