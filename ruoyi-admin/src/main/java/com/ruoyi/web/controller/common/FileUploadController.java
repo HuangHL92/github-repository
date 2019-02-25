@@ -201,8 +201,7 @@ public class FileUploadController extends BaseController {
             if(StrUtil.isNotEmpty(id)){
                 //Hutool读取文件
                 SysAttachment att= sysAttachmentService.getById(id);
-                FileReader fileReader = new FileReader(Global.getUploadPath()+att.getPath());
-                FileUtil.del(fileReader.getFile());
+                FileUtil.del(Global.getUploadPath()+att.getPath());
                 sysAttachmentService.removeById(id);
             }else if(StrUtil.isNotEmpty(attno)){
                // sysAttachmentService.selectList(new SysAttachment());
@@ -283,13 +282,14 @@ public class FileUploadController extends BaseController {
     public AjaxResult getFileList(SysAttachment attachment,String path) {
         List<SysAttachment> list=new ArrayList<SysAttachment>();
         if(StrUtil.isNotEmpty(path)){
+            try{
             FileReader fileReader = new FileReader(Global.getUploadPath()+path);
             String fileName="";
             fileName=FileUtil.getName(fileReader.getFile());
             SysAttachment att=new SysAttachment();
             att.setFileName(fileName);
             att.setPath(path);
-            list.add(att);
+            list.add(att);}catch (Exception ex){}
         }else if(StrUtil.isNotEmpty(attachment.getAttachmentNo())){
             list=sysAttachmentService.selectList(attachment);
         }
@@ -301,9 +301,14 @@ public class FileUploadController extends BaseController {
             m.put("path",att.getPath());
             m.put("id",att.getId());
             String ext=FileUtil.extName(att.getFileName());
-            if("png".equals(ext)||"jpg".equals(ext)||"jpeg".equals(ext)||"bmp".equals(ext)){
-            byte[] b=FileUtil.readBytes(Global.getUploadPath()+att.getPath());
-            m.put("byte",Base64.encode(b));}
+            if("png".equals(ext)||"jpg".equals(ext)||"jpeg".equals(ext)||"bmp".equals(ext)) {
+                try {
+                    byte[] b = FileUtil.readBytes(Global.getUploadPath() + att.getPath());
+                    m.put("byte", Base64.encode(b));
+                } catch (Exception ex) {
+                    m.put("byte", "");
+                }
+            }
             rlist.add(m);
         }
         AjaxResult json =AjaxResult.success();
