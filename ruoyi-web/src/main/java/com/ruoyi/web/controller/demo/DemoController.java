@@ -1,17 +1,22 @@
 package com.ruoyi.web.controller.demo;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.List;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.demo.domain.Demo;
 import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import com.sun.jna.platform.win32.Guid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +53,9 @@ public class DemoController extends BaseController
 	
 	@Autowired
 	private IDemoService demoService;
+
+    @Autowired
+    private ISysUserService userService;
 	
 	@RequiresPermissions("demo:all:view")
 	@GetMapping()
@@ -239,7 +247,14 @@ public class DemoController extends BaseController
     }
 
 
-
-
+    @GetMapping( "/getJson/{name}")
+    @ResponseBody
+    public AjaxResult getJson(@PathVariable("name") String name)
+    {
+        SysUser user = new SysUser();
+        user.setUserName(name);
+        List<SysUser> users = userService.selectUserList(user);
+        return success(JSONUtil.parseArray(users).toString());
+    }
 
 }

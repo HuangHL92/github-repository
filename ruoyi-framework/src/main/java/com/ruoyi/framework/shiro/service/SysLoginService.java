@@ -69,7 +69,7 @@ public class SysLoginService
         }
 
         // 查询用户信息
-        SysUser user = userService.selectUserByLoginName(username);
+        SysUser user = ShiroUtils.getSysUser(username);
 
         if (user == null && maybeMobilePhoneNumber(username))
         {

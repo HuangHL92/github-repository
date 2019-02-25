@@ -56,7 +56,8 @@ public class UserRealm extends AuthorizingRealm
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0)
     {
-        SysUser user = ShiroUtils.getSysUser();
+        String loginName = (String)SecurityUtils.getSubject().getPrincipal();
+        SysUser user = ShiroUtils.getSysUser(loginName);
         // 角色列表
         Set<String> roles = new HashSet<String>();
         // 功能列表
@@ -128,15 +129,53 @@ public class UserRealm extends AuthorizingRealm
             log.info("对用户[" + username + "]进行登录验证..验证未通过{}", e.getMessage());
             throw new AuthenticationException(e.getMessage(), e);
         }
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getLoginName(), password, getName());
         return info;
     }
 
     /**
-     * 清理缓存权限
+     * 重写方法,清除当前用户的的 授权缓存
+     * @param principals
      */
-    public void clearCachedAuthorizationInfo()
-    {
-        this.clearCachedAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+    @Override
+    public void clearCachedAuthorizationInfo(PrincipalCollection principals) {
+        super.clearCachedAuthorizationInfo(principals);
     }
+
+    /**
+     * 重写方法，清除当前用户的 认证缓存
+     * @param principals
+     */
+    @Override
+    public void clearCachedAuthenticationInfo(PrincipalCollection principals) {
+        super.clearCachedAuthenticationInfo(principals);
+    }
+
+    @Override
+    public void clearCache(PrincipalCollection principals) {
+        super.clearCache(principals);
+    }
+
+    /**
+     * 自定义方法：清除所有 授权缓存
+     */
+    public void clearAllCachedAuthorizationInfo() {
+        getAuthorizationCache().clear();
+    }
+
+    /**
+     * 自定义方法：清除所有 认证缓存
+     */
+    public void clearAllCachedAuthenticationInfo() {
+        getAuthenticationCache().clear();
+    }
+
+    /**
+     * 自定义方法：清除所有的  认证缓存  和 授权缓存
+     */
+    public void clearAllCache() {
+        clearAllCachedAuthenticationInfo();
+        clearAllCachedAuthorizationInfo();
+    }
+
 }

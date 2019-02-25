@@ -2,6 +2,8 @@ package com.ruoyi.framework.shiro.service;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.PostConstruct;
+
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -24,30 +26,33 @@ import com.ruoyi.system.domain.SysUser;
 @Component
 public class SysPasswordService
 {
+//    @Autowired
+//    private CacheManager cacheManager;
+//
     @Autowired
-    private CacheManager cacheManager;
+    private CacheUtils cacheUtils;
 
-    private Cache<String, AtomicInteger> loginRecordCache;
+//    private Cache<String, AtomicInteger> loginRecordCache = cacheUtils.getLoginRecordCache();
 
     @Value(value = "${user.password.maxRetryCount}")
     private String maxRetryCount;
 
-    @PostConstruct
-    public void init()
-    {
-        loginRecordCache = cacheManager.getCache("loginRecordCache");
-    }
+//    @PostConstruct
+//    public void init()
+//    {
+//        loginRecordCache = cacheManager.getCache("loginRecordCache");
+//    }
 
     public void validate(SysUser user, String password)
     {
         String loginName = user.getLoginName();
 
-        AtomicInteger retryCount = loginRecordCache.get(loginName);
+        AtomicInteger retryCount = cacheUtils.getLoginRecordCache().get(loginName);
 
         if (retryCount == null)
         {
             retryCount = new AtomicInteger(0);
-            loginRecordCache.put(loginName, retryCount);
+            cacheUtils.getLoginRecordCache().put(loginName, retryCount);
         }
         if (retryCount.incrementAndGet() > Integer.valueOf(maxRetryCount).intValue())
         {
@@ -58,7 +63,7 @@ public class SysPasswordService
         if (!matches(user, password))
         {
             AsyncManager.me().execute(AsyncFactory.recordLogininfor(loginName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.retry.limit.count", retryCount)));
-            loginRecordCache.put(loginName, retryCount);
+            cacheUtils.getLoginRecordCache().put(loginName, retryCount);
             throw new UserPasswordNotMatchException();
         }
         else
@@ -74,7 +79,7 @@ public class SysPasswordService
 
     public void clearLoginRecordCache(String username)
     {
-        loginRecordCache.remove(username);
+        cacheUtils.getLoginRecordCache().remove(username);
     }
 
     public String encryptPassword(String username, String password, String salt)

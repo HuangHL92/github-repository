@@ -8,7 +8,7 @@
         <version>3.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-	
+    <packaging>jar</packaging>
     <artifactId>ruoyi-framework</artifactId>
 	
 	<description>
@@ -147,6 +147,16 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${swagger.version}</version>
+		</dependency>
+
+		<!-- spring-boot-starter-data-redis 加入redis缓存 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
 		</dependency>
 
     </dependencies>
