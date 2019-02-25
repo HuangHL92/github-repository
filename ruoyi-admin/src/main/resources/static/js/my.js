@@ -145,8 +145,6 @@ UploadFile.prototype.init = function () {
                 if(!config.multiple){
                     data={"attachmentNo":gid,"single":"true"};
                 }
-
-                console.log(data);
             }
             upload.render({
                 elem: config.btn
@@ -237,8 +235,11 @@ UploadFile.prototype.init = function () {
                     }else{
                         if(file.byte){
                         ap.find('img').attr("src","data:image/jpg;base64,"+file.byte)
-                        config.appendArea.prepend(ap)}
-                        config.appendArea.find('.upload-btn').addClass('layui-hide');
+                        }else{
+                            ap.find('img').attr("src","/img/no.jpg")
+                        }
+                        config.appendArea.prepend(ap)
+                        if(!config.multiple){config.appendArea.find('.upload-btn').addClass('layui-hide');}
                     }
                     if(config.multiple||"no"===config.backType){
                         deldata={"id":file.id};
