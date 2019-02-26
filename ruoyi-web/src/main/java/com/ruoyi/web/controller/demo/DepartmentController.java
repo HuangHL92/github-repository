@@ -6,6 +6,7 @@ import java.util.List;
 import com.ruoyi.demo.domain.Department;
 import com.ruoyi.demo.service.IDepartmentService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.web.websocket.SocketServer;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,8 +88,10 @@ public class DepartmentController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(Department department)
-	{		
-		return toAjax(departmentService.save(department));
+	{
+		boolean flag = departmentService.save(department);
+		sendRefreshMsg(flag);
+		return toAjax(flag);
 	}
 
 	/**
@@ -110,8 +113,10 @@ public class DepartmentController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(Department department)
-	{		
-		return toAjax(departmentService.updateById(department));
+	{
+		boolean flag = departmentService.updateById(department);
+		sendRefreshMsg(flag);
+		return toAjax(flag);
 	}
 	
 	/**
@@ -122,8 +127,19 @@ public class DepartmentController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
-		return toAjax(departmentService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
+	{
+		boolean flag = departmentService.removeByIds(Arrays.asList(Convert.toStrArray(ids)));
+		sendRefreshMsg(flag);
+		return toAjax(flag);
 	}
-	
+
+	/**
+	 * 给前台发送刷新指令
+	 * @param flag
+	 */
+	private void sendRefreshMsg(boolean flag) {
+		if (flag) {
+			SocketServer.sendMessage("model2", "websocketDemo");
+		}
+	}
 }

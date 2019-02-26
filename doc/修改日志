@@ -32,3 +32,8 @@ com/ruoyi/framework/config/ShiroConfig.java
                 redis: RedisCacheManager.java->getCache()方法
     获取缓存工具类: CacheUtils.java 注：注入的方式使用；新增缓存类型需要增加配置
     目前实现缓存： session(30分钟)、shiro授权缓存(60分钟)、登录记录缓存(10分钟)、用户缓存（持久化）
+********************* 2019-02-26  修改人：梁涛 ************************
+1、websocket集成优化
+    demo:WebSocketController；触发刷新：DepartmentController、DemoController
+    websocket的url配置：application-druid.yml中jiyun.websocket.url
+    注：前台画面使用reconnecting-websocket.min.js，可以在websocket连接出错后重试连接

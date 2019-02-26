@@ -1,138 +1,161 @@
 package com.ruoyi.web.websocket;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArraySet;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
-import org.springframework.stereotype.Component;
-import cn.hutool.log.Log;
-import cn.hutool.log.LogFactory;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-
-@ServerEndpoint(value = "/socketServer/{userid}")
+/**
+ * websocket链接
+ * 注：本websocket服务断无需建立websocket链接
+ * 服务端无需接收客户端消息
+ * 用户后台代码指定画面刷新
+ */
+@ServerEndpoint(value = "/socketServer/{code}")
 @Component
+@Slf4j
 public class SocketServer {
 
     private Session session;
-    private static Map<String,Session> sessionPool = new HashMap<String,Session>();
-    private static Map<String,String> sessionIds = new HashMap<String,String>();
+    private String code;
+    /**
+     * 使用CopyOnWriteArraySet线程安全
+     */
+    private static ConcurrentMap<String, CopyOnWriteArraySet<SocketServer>> map = new ConcurrentHashMap<>();
 
     /**
-     * 用户连接时触发
+     * 创建链接-触发
+     *
+     * @param code
      * @param session
-     * @param userid
      */
     @OnOpen
-    public void open(Session session,@PathParam(value="userid")String userid){
+    public void open(@PathParam("code") String code, Session session) {
+        this.code = code;
         this.session = session;
-        sessionPool.put(userid, session);
-        sessionIds.put(session.getId(), userid);
+
+        if (map.containsKey(code)) {
+            map.get(code).add(this);
+        } else {
+            CopyOnWriteArraySet<SocketServer> sets = new CopyOnWriteArraySet<>();
+            sets.add(this);
+            map.put(code, sets);
+        }
     }
 
     /**
      * 收到信息时触发
+     *
      * @param message
      */
     @OnMessage
-    public void onMessage(String message){
-        sendMessage(sessionIds.get(session.getId())+"<--"+message,"niezhiliang9595");
-        System.out.println("发送人:"+sessionIds.get(session.getId())+"内容:"+message);
+    public void onMessage(String message) {
+        log.info("接收到客户端发送消息为:{}" , message);
     }
 
     /**
      * 连接关闭触发
      */
     @OnClose
-    public void onClose(){
-        sessionPool.remove(sessionIds.get(session.getId()));
-        sessionIds.remove(session.getId());
+    public void onClose() {
+        if (map.containsKey(code)) {
+            map.get(code).remove(this);
+            if (map.get(code) == null || map.get(code).size() == 0) {
+                map.remove(code);
+            }
+        }
     }
 
     /**
      * 发生错误时触发
+     *
      * @param session
      * @param error
      */
     @OnError
     public void onError(Session session, Throwable error) {
         error.printStackTrace();
+        log.error("websocket发生错误!sessionid:{}； message:{}" , session.getId(), error.getMessage());
     }
 
     /**
-     *信息发送的方法
-     * @param message
-     * @param userId
+     * 信息发送的方法
+     *
+     * @param message 发送的消息
+     * @param code  消息接收页面的连接code
      */
-    public synchronized static void sendMessage(String message,String userId){
-        Session s = sessionPool.get(userId);
-        if(s!=null){
-            try {
-                s.getBasicRemote().sendText(message);
-            } catch (IOException e) {
-                e.printStackTrace();
+    public synchronized static void sendMessage(String message, String code) {
+        try {
+            CopyOnWriteArraySet<SocketServer> set = map.get(code);
+            if (set != null) {
+                for (SocketServer socketServer : map.get(code)) {
+                    socketServer.session.getBasicRemote().sendText(message);
+                }
             }
+        } catch (IOException e) {
+            System.out.println("发送消息出错:" + e.getMessage());
+            log.error("发送消息出错:{}" , e.getMessage());
         }
     }
 
     /**
      * 获取当前连接数
+     * 一个code可以链接多个
+     *
      * @return
      */
-    public synchronized static int getOnlineNum(){
-        if(sessionIds.values().contains("niezhiliang9595")) {
-
-            return sessionPool.size()-1;
+    public synchronized static int getOnlineNum() {
+        //keySet获取map集合key的集合  然后在遍历key即可
+        int count = 0;
+        for (String key : map.keySet()) {
+            CopyOnWriteArraySet<SocketServer> arraySet = map.get(key);
+            if (arraySet != null) {
+                count += arraySet.size();
+            }
         }
-        return sessionPool.size();
+        return count;
     }
 
     /**
-     * 获取在线用户名以逗号隔开
+     * 获取在线连接code以逗号隔开
+     *
      * @return
      */
-    public synchronized static String getOnlineUsers(){
-        StringBuffer users = new StringBuffer();
-        for (String key : sessionIds.keySet()) {//niezhiliang9595是服务端自己的连接，不能算在线人数
-            if (!"niezhiliang9595".equals(sessionIds.get(key)))
-            {
-                users.append(sessionIds.get(key)+",");
-            }
+    public synchronized static String getOnlineUsers() {
+        StringBuffer codes = new StringBuffer();
+        for (String key : map.keySet()) {
+            codes.append(key + ",");
         }
-        return users.toString();
+        return codes.toString();
     }
 
     /**
      * 信息群发
+     *
      * @param msg
      */
     public synchronized static void sendAll(String msg) {
-        for (String key : sessionIds.keySet()) {
-            if (!"niezhiliang9595".equals(sessionIds.get(key)))
-            {
-                sendMessage(msg, sessionIds.get(key));
-            }
+        for (String code : map.keySet()) {
+            sendMessage(msg, code);
         }
     }
 
     /**
-     * 多个人发送给指定的几个用户
+     * 批量发送消息
+     *
      * @param msg
-     * @param persons  用户s
+     * @param codes
      */
 
-    public synchronized static void SendMany(String msg,String [] persons) {
-        for (String userid : persons) {
-            sendMessage(msg, userid);
+    public synchronized static void SendMany(String msg, String[] codes) {
+        for (String code : codes) {
+            sendMessage(msg, code);
         }
-
     }
 }

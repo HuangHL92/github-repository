@@ -1,17 +1,13 @@
 package com.ruoyi.web.controller.demo;
 
-import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.web.websocket.SocketServer;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,13 +20,14 @@ import java.util.List;
 @Controller
 @RequestMapping("/demo/websocket")
 public class WebSocketController {
-    @Autowired
-    private SocketServer socketServer;
 
-    
+    @Value("${jiyun.websocket.url}")
+    private String wsUrl;
+
     @GetMapping()
-    public String websocket()
+    public String websocket(Model model)
     {
+        model.addAttribute("wsUrl", wsUrl);
         return "demo/websocket/websocket";
     }
 
@@ -43,8 +40,8 @@ public class WebSocketController {
 
     @RequestMapping(value = "/server")
     public String server(Model model) {
-        int num = socketServer.getOnlineNum();
-        String str = socketServer.getOnlineUsers();
+        int num = SocketServer.getOnlineNum();
+        String str = SocketServer.getOnlineUsers();
         List<String> list = null;
         if (str.length() > 2) {
             str = str.substring(0,str.length()-1);
