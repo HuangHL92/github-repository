@@ -108,6 +108,13 @@ public class SysDeptServiceImpl implements ISysDeptService
                 {
                     deptMap.put("checked", false);
                 }
+
+                //TODO 判断是否为最后一级 此处未完美解决
+                if(dept.getAncestors().split(",").length>=3) {
+                    deptMap.put("type", "");
+                } else {
+                    deptMap.put("type", "optgroup");
+                }
                 trees.add(deptMap);
             }
         }
@@ -260,4 +267,19 @@ public class SysDeptServiceImpl implements ISysDeptService
         }
         return UserConstants.DEPT_NAME_UNIQUE;
     }
+
+
+    /**
+     * 查询部门管理数据
+     *
+     * @param dept 部门信息
+     * @return 部门信息集合
+     */
+    @Override
+    @DataScope(tableAlias = "d")
+    public List<SysDept> selectTopList(SysDept dept)
+    {
+        return deptMapper.selectTopList(dept);
+    }
+
 }

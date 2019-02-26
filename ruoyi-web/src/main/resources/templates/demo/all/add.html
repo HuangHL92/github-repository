@@ -183,36 +183,93 @@
                                             </div>
 
 
+                                            <!--<div class="hr-line-dashed"></div>-->
+                                            <!--<div class="form-group">-->
+                                                <!--<label class="col-sm-2 control-label">人员下拉多选：</label>-->
+                                                <!--<div class="col-sm-10">-->
+                                                    <!--<select id="userid" name="userid" class="form-control select2-hidden-accessible" multiple="" th:with="users=${@user.getList()}">-->
+                                                        <!--<option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName}" ></option>-->
+                                                    <!--</select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                            <!--<div class="hr-line-dashed"></div>-->
+                                            <!--<div class="form-group">-->
+                                                <!--<label class="col-sm-2 control-label">部门下拉多选：</label>-->
+                                                <!--<div class="col-sm-10">-->
+                                                    <!--<select id="deptid" name="deptid" class="form-control select2-hidden-accessible" multiple="" th:with="depts=${@dept.getList()}">-->
+                                                        <!--<option value="">请选择</option>-->
+                               <!---->
+                                                        <!--<option th:each="dept:${depts}" th:value="${dept.deptId}" th:text="${dept.deptName}" ></option>-->
+                                    <!---->
+                                                    <!--</select>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label">人员下拉多选：</label>
+                                                <label class="col-sm-2 control-label">用户(多选)：</label>
                                                 <div class="col-sm-10">
-                                                    <select id="userid" name="userid" class="form-control select2-hidden-accessible" multiple="" th:with="users=${@user.getList()}">
-                                                        <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName}" ></option>
+                                                    <select name="st1"  data-toggle="select" data-id="st1" data-type="user" data-value="100">
                                                     </select>
                                                 </div>
                                             </div>
 
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
-                                                <label class="col-sm-2 control-label">部门下拉多选：</label>
+                                                <label class="col-sm-2 control-label">用户(单选)：</label>
                                                 <div class="col-sm-10">
-                                                    <select id="deptid" name="deptid" class="form-control select2-hidden-accessible" multiple="" th:with="depts=${@dept.getList()}">
-                                                        <option value="">请选择</option>
-                                                        <!--<optgroup th:label="${dept.deptName}">-->
-                                                            <!---->
-                                                        <!--</optgroup>-->
-                                                        <option th:each="dept:${depts}" th:value="${dept.deptId}" th:text="${dept.deptName}" ></option>
-                                                        <!--<optgroup label="城市记忆">-->
-                                                            <!--<option value="你工作的第一个城市">你工作的第一个城市？</option>-->
-                                                        <!--</optgroup>-->
-                                                        <!--<optgroup label="学生时代">-->
-                                                            <!--<option value="你的工号">你的工号？</option>-->
-                                                            <!--<option value="你最喜欢的老师">你最喜欢的老师？</option>-->
-                                                        <!--</optgroup>-->
+                                                    <select name="st2"  data-toggle="select" data-id="st2" data-skin="warm" data-radio="true" data-type="user">
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">部门(分组、自定义回调)：</label>
+                                                <div class="col-sm-10">
+                                                    <select name="st3"  data-toggle="select" data-id="st3" data-click="callback_select" data-type="dept-group">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">部门（树形）：</label>
+                                                <div class="col-sm-10">
+                                                    <select name="st4"  data-toggle="select" data-id="st4" data-type="dept" data-click="callback_select" data-value="105,109" >
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">部门（树形,指定父级部门）：</label>
+                                                <div class="col-sm-10">
+                                                    <select name="st5"  data-toggle="select" data-id="st5" data-type="dept" data-pid="102" data-radio="true">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="hr-line-dashed"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">本地搜索（原生）：</label>
+                                                <div class="col-sm-10">
+                                                    <select name="city" data-id="city" xm-select="select7_1" xm-select-search="" th:with="users=${@user.getList()}" >
+                                                        <!--<option value="1" disabled="disabled">北京</option>-->
+                                                        <!--<option value="2" selected="selected">上海</option>-->
+                                                        <!--<option value="3">广州</option>-->
+                                                        <!--<option value="4" selected="selected">深圳</option>-->
+                                                        <!--<option value="5">天津</option>-->
+                                                        <option value="">请选择</option>
+                                                        <option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName}" ></option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+
 
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
@@ -814,6 +871,7 @@
         //自定义按钮事件
         $('#btn1', $.modal.currentWindow()).click(function(){
             alert("这个是一个自定义按钮方法。记得需要动态绑定方法哦！");
+            //console.log($("input[name='city']").val());
         });
 
         //页面控件初始化
@@ -984,6 +1042,10 @@
             console.log('onHideDropdown', e.target.value, data);
         });
 
+
+        function  callback_select(val) {
+            alert("这里回调，点击了：" + val.value + "(" + val.name + ")");
+        }
 
 	</script>
 

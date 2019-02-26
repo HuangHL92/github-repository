@@ -2,6 +2,11 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import java.util.Map;
+
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +25,8 @@ import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.framework.web.base.BaseController;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 部门信息
@@ -162,5 +169,97 @@ public class SysDeptController extends BaseController
     {
         List<Map<String, Object>> tree = deptService.roleDeptTreeData(role);
         return tree;
+    }
+
+
+    /**
+     * 用户下拉框
+     */
+    @GetMapping("/getList4Select")
+    @ResponseBody
+    public JSONObject getList4Select(String deptid)
+    {
+        SysUser user = new SysUser();
+        if(!StringUtils.isEmpty(deptid)) {
+            user.setDeptId(Long.parseLong(deptid));
+        }
+
+        JSONObject robj = new JSONObject();
+        robj.put("code",0);
+        robj.put("msg","success");
+        //TODO 取得用户，此处可以优化（1.放入缓存 2.数据库读取sql优化）
+        //TODO 理想方案是前端直接读JSON文件
+        List<Map<String, Object>> tree = deptService.selectDeptTree(new SysDept());
+        JSONArray rList = new JSONArray();
+        for (Map<String, Object> u: tree) {
+            JSONObject o = new JSONObject();
+            o.put("name",u.get("name"));
+            o.put("value",u.get("id"));
+            o.put("type",u.get("type"));
+
+            rList.add(o);
+        }
+
+        robj.put("data",rList);
+        return robj;
+    }
+
+
+    /**
+     * 用户下拉框
+     */
+    @GetMapping("/getTree4Select")
+    @ResponseBody
+    public JSONArray getTree4Select(HttpServletRequest request)
+    {
+        String deptid  =request.getParameter("deptid");
+        String keyword  =request.getParameter("keyword");
+
+        JSONObject robj = new JSONObject();
+        robj.put("code",0);
+        robj.put("msg","success");
+
+        JSONArray rList = new JSONArray();
+        SysDept parent = new SysDept();
+        List<SysDept> parents = deptService.selectTopList(parent);
+        for (SysDept d: parents) {
+            JSONObject o = new JSONObject();
+            o.put("name",d.getDeptName());
+            o.put("value",d.getDeptId());
+            createTree(d,o,deptid);
+            rList.add(o);
+        }
+        return rList;
+    }
+
+    private void createTree(SysDept d,JSONObject o, String pid) {
+
+        SysDept dept = new SysDept();
+        dept.setParentId(d.getDeptId());
+        List<SysDept> childrens = deptService.selectDeptList(dept);
+
+        if (childrens.size() > 0)
+        {
+            JSONArray cobj = new JSONArray();
+            for (SysDept s: childrens) {
+                JSONObject sb = new JSONObject();
+                sb.put("name",s.getDeptName());
+                sb.put("value",s.getDeptId());
+                createTree(s,sb,pid);
+
+                if(StringUtils.isNotEmpty(pid) ) {
+                    //只显示指定部门下的子部门
+                    if( pid.equals(s.getParentId().toString()) || pid.equals(s.getDeptId().toString())) {
+                        cobj.add(sb);
+                        //sb.put("disabled","true");
+                    }
+                } else {
+                    cobj.add(sb);
+                }
+
+
+            }
+            o.put("children",cobj);
+        }
     }
 }

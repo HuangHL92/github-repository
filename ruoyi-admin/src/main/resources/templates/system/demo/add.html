@@ -163,6 +163,10 @@
                                             </div>
 
 
+
+
+
+
                                             <div class="hr-line-dashed"></div>
                                             <div class="form-group">
                                                 <label class="col-sm-2 control-label">备注：</label>
@@ -859,121 +863,25 @@
         });
 
 
-        layui.use('upload', function(){
-            var $ = layui.jquery
-                ,upload = layui.upload;
 
-            //普通图片上传
-            var uploadInst = upload.render({
-                elem: '#test1'
-                ,url: '/system/upload/uploadFile'
-                // ,size: 60 //限制文件大小，单位 KB
-                // ,multiple: true //是否允许同时上传多个
-                // ,accept: 'file' //允许上传文件类型
-                ,before: function(obj){
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#test1_img').attr('src', result); //图片链接（base64）
-                    });
-                }
-                ,done: function(res){
-
-                    if(res.code > 0){
-                        //上传失败
-                        return layer.msg('上传失败');
-                    } else {
-                        //上传成功
-                        $('#test1_val').val(res.msg);
-                        return layer.msg(res.msg);
-                    }
-
-                }
-                ,error: function(){
-                    //演示失败状态，并实现重传
-                    var demoText = $('#demoText');
-                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                    demoText.find('.demo-reload').on('click', function(){
-                        uploadInst.upload();
-                    });
-                }
-            });
-
-            //上传单个文件
-            upload.render({
-                elem: '#test2'
-                ,url: '/system/upload/uploadFile'
-                ,multiple: true
-                ,before: function(obj){
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#demo2').append('<img src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
-                    });
-                }
-                ,done: function(res){
-                    //上传完毕
-                }
-            });
-
-
-            //多文件列表示例
-            var demoListView = $('#demoList')
-                ,uploadListIns = upload.render({
-                elem: '#testList'
-                ,url: '/system/upload/uploadFiles'
-                ,accept: 'file'
-                ,multiple: true
-                ,auto: true
-                ,bindAction: '#testListAction'
-                ,choose: function(obj){
-                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
-                    //读取本地文件
-                    obj.preview(function(index, file, result){
-                        var tr = $(['<tr id="upload-'+ index +'">'
-                            ,'<td>'+ file.name +'</td>'
-                            ,'<td style="text-align:center">'+ (file.size/1014).toFixed(1) +'kb</td>'
-                            ,'<td style="text-align:center">等待上传</td>'
-                            ,'<td style="text-align:center">'
-                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
-                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" >删除</button>'
-                            ,'</td>'
-                            ,'</tr>'].join(''));
-
-                        //单个重传
-                        tr.find('.demo-reload').on('click', function(){
-                            obj.upload(index, file);
-                        });
-
-                        //删除
-                        tr.find('.demo-delete').on('click', function(){
-                            delete files[index]; //删除对应的文件
-                            tr.remove();
-                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
-                        });
-
-                        demoListView.append(tr);
-                    });
-                }
-                ,done: function(res, index, upload){
-                    if(res.code == 0){ //上传成功 TODO
-                        var tr = demoListView.find('tr#upload-'+ index)
-                            ,tds = tr.children();
-                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
-                        //tds.eq(3).html('<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete" onclick="deleteFile()">删除</button>');
-                        return delete this.files[index]; //删除文件队列已经上传成功的文件
-                    }
-                    this.error(index, upload);
-                }
-                ,error: function(index, upload){
-                    var tr = demoListView.find('tr#upload-'+ index)
-                        ,tds = tr.children();
-                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
-                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
-                }
-            });
-
-
+        layui.formSelects.data('example11_1', 'local', {
+            arr: [
+                {name: '分组1', type: 'optgroup'},
+                {name: '北京', value: 1, xslkdf: '123', children: [{name: '朝阳', disabled: true, value: 11}, {name: '海淀', value: 12}]},
+                {name: '分组2', type: 'optgroup'},
+                {name: '深圳', value: 2, children: [{name: '龙岗', value: 21}]},
+            ],
+            tree: {
+                //在点击节点的时候, 如果没有子级数据, 会触发此事件
+                nextClick: function(id, item, callback){
+                    //需要在callback中给定一个数组结构, 用来展示子级数据
+                    callback([
+                        {name: 'test1', value: Math.random()},
+                        {name: 'test2', value: Math.random()}
+                    ])
+                },
+            }
         });
-
 
 	</script>
 

@@ -43,17 +43,18 @@ function initCtrl() {
         radioClass: 'iradio_square-green',
     });
 
-    ///$.modal.alertSuccess("ddd");
-
-    // if($(".btn_tool").size()>0){
-    //
-    //     $(".layui-layer-btn").append($(".btn_tool"))
-    // }
-
+    //上传控件
     $("[data-toggle='fileupload']").each(function () {
         var _c=$(this);
-        var up=new UploadFile(_c)
+        var up=new UploadFile(_c);
     })
+
+    //选择控件
+    $("[data-toggle='select']").each(function () {
+        var _c=$(this);
+        var up=new Select(_c);
+    })
+
 }
 
 <!--UploadFile开始-->
@@ -298,6 +299,142 @@ UploadFile.prototype.init = function () {
 <!--FileUpload结束-->
 
 
+<!--Select开始-->
+var Select = function (obj) {
+    var that = this;
+    var id= obj.data("id")
+        ,skin=obj.data("skin")||"primary"
+        ,radio=obj.data("radio")||"false"
+        ,callback=obj.data("click")||""
+        ,search=obj.data("search")||""
+        ,type=obj.data("type")||""  //user,user-tree,dept,dept-tree
+        ,pid=obj.data("pid")||""  // 父ID，解决只显示某个层级下数据问题
+        ,value=obj.data("value")||""  // 选中的项
+    var option={
+        id:id
+        ,callback:callback //回调方法
+        ,type:type
+        ,pid:pid
+        ,value:value
+    }
+    that.config = $.extend({}, that.config, option)
+
+    if(type=="user") {
+        search = ctx + 'system/user/getList4Select/';
+    }
+    //添加属性
+    obj.attr("xm-select",id);
+    obj.attr("xm-select-skin",skin);  //样式 default，primary，normal，warm，danger
+    obj.attr("xm-select-search",search); //支持搜索
+    if(radio==true) {
+        obj.attr("xm-select-radio","");  //单选
+    }
+
+
+    return that.init();
+}
+
+
+Select.prototype.init=function () {
+
+    var config=this.config
+
+    var url = "";
+    if(config.type=="user") {
+        url =ctx + 'system/user/getList4Select/';
+    } else if (config.type=="user-tree") {
+        url = "";
+    } else if(config.type=="dept") {
+        url = ctx + 'system/dept/getTree4Select?deptid='+ config.pid;
+    }else if(config.type=="dept-group") {
+        url = ctx + 'system/dept/getList4Select/';
+    }  else {
+        layui.formSelects.data(config.id, 'local', {
+                arr: [
+                    // {name: '分组1', type: 'optgroup'},
+                    // {name: '北京', value: 1,  children: [{name: '朝阳', disabled: true, value: 11}, {name: '海淀', value: 12}]},
+                    // {name: '分组2', type: 'optgroup'},
+                    // {name: '深圳', value: 2, children: [{name: '龙岗', value: 21}]},
+                    {
+                        "name": "北京",
+                        "value": 1,
+                        "children": [
+                            {
+                                "name": "朝阳",
+                                "value": 11,
+                                "children": [
+                                    {"name": "酒仙桥", "value": 111},
+                                    {"name": "望京东", "value": 121}
+                                ]
+                            },
+                            {"name": "海淀", "value": 12}
+                        ]
+                    },
+                    {
+                        "name": "深圳",
+                        "value": 2,
+                        "children": [
+                            {"name": "龙岗", "value": 21}
+                        ]
+                    }
+                ],
+                tree: {
+                    //在点击节点的时候, 如果没有子级数据, 会触发此事件
+                    nextClick: function(id, item, callback){
+                        //需要在callback中给定一个数组结构, 用来展示子级数据
+                        // callback([
+                        //     {name: 'test1', value: Math.random()},
+                        //     {name: 'test2', value: Math.random()}
+                        // ])
+                    },
+                }
+            });
+    }
+
+    //动态绑定
+    if(url) {
+        layui.formSelects.config(config.id, {
+            searchUrl: url,
+            success: function(id, url, searchVal, result){
+                if(config.value) {
+                    var selected = ("" + config.value).split(",");
+                    layui.formSelects.value(config.id, selected); //绑定已选中的值
+                }
+
+            }
+        });
+
+
+    }
+
+    //模板定义
+    if(config.type=="user-tree" || config.type=="user" )
+    {
+        layui.formSelects.render(config.id, {
+            template: function(name, value, selected, disabled){
+                return value.name + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 14px;">' + value.deptname + '</span>';
+            }
+        });
+    }
+
+
+    //点击事件
+    layui.formSelects.on(config.id, function(id, vals, val, isAdd, isDisabled){
+        //id:           点击select的id
+        //vals:         当前select已选中的值
+        //val:          当前select点击的值
+        //isAdd:        当前操作选中or取消
+        //isDisabled:   当前选项是否是disabled
+        //alert("选择了: " + val.value);
+        if(config.callback!="") {
+            var f = eval(config.callback);
+            f(val);
+        }
+
+    });
+
+}
+<!--Select结束-->
 
 function GUID() {
     this.date = new Date();   /* 判断是否初始化过，如果初始化过以下代码，则以下代码将不再执行，实际中只执行一次 */

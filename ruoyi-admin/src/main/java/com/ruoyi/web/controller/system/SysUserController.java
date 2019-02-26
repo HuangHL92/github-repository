@@ -2,11 +2,16 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.framework.util.CacheUtils;
+import com.ruoyi.framework.web.domain.server.Sys;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -29,6 +34,8 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户信息
@@ -263,5 +270,46 @@ public class SysUserController extends BaseController
         // 清空用户缓存
         cacheUtils.getUserCache().remove(user.getLoginName());
         return toAjax(userService.changeStatus(user));
+    }
+
+
+
+    /**
+     * 用户下拉框
+     */
+    @GetMapping("/getList4Select")
+    @ResponseBody
+    public JSONObject getList4Select(HttpServletRequest request)
+    {
+        String deptid  =request.getParameter("deptid");
+        String keyword  =request.getParameter("keyword");
+        SysUser user = new SysUser();
+        if(!StringUtils.isEmpty(deptid)) {
+            user.setDeptId(Long.parseLong(deptid));
+        }
+        if(!StringUtils.isEmpty(keyword)) {
+            user.setUserName(keyword);
+        }
+
+        JSONObject robj = new JSONObject();
+        robj.put("code",0);
+        robj.put("msg","success");
+        //TODO 取得用户，此处可以优化（1.放入缓存 2.数据库读取sql优化）
+        //TODO 理想方案是前端直接读JSON文件
+        List<SysUser> list = userService.selectUserList(user);
+        JSONArray rList = new JSONArray();
+        for (SysUser u: list) {
+            JSONObject o = new JSONObject();
+//            o.put("name",u.getUserName()+ "<" + u.getDept().getDeptName() + ">");
+            o.put("name",u.getUserName());
+            o.put("value",u.getUserId());
+            o.put("deptname",u.getDept().getDeptName());
+//            o.put("disabled",u.getUserId());
+//            o.put("type",u.getUserId());
+            rList.add(o);
+        }
+
+        robj.put("data",rList);
+        return robj;
     }
 }
