@@ -37,3 +37,12 @@ com/ruoyi/framework/config/ShiroConfig.java
     demo:WebSocketController；触发刷新：DepartmentController、DemoController
     websocket的url配置：application-druid.yml中jiyun.websocket.url
     注：前台画面使用reconnecting-websocket.min.js，可以在websocket连接出错后重试连接
+2、微信开发demo：网页授权
+    demo：WechatController；授权分：snsapi_base、snsapi_userinfo（demo）
+    应用授权作用域  snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid），
+                    snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且， 即使在未关注的情况下，只要用户授权，也能获取其信息 ）
+    配置文件：application.yml下配置
+    注：项目需要内网穿透外网路径（配置文件中配置以及在公众号[网页授权获取用户基本信息]中设置该路径）；配置文件需要配置自己的微信公众号信息
+    访问路径：{内网穿透项目地址}/wap/wechat/authorize?returnUrl=/wap/wechat/index
+    效果：/doc/authorize.jpg
+3、集成weui+前端框架
