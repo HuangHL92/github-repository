@@ -55,7 +55,8 @@ public class FileUploadController extends BaseController {
                                 HttpServletRequest request) {
 
         String contentType = file.getContentType();   //图片文件类型
-        String fileName = file.getOriginalFilename();  //图片名字
+        String fileName=file.getOriginalFilename();
+        String fileExt = "."+FileUtil.extName(fileName);//后缀名
         Double fileSize=(double)file.getSize()/1024;
         //文件存放路径
         String filePath = Global.getUploadPath();
@@ -64,7 +65,7 @@ public class FileUploadController extends BaseController {
         AjaxResult json =AjaxResult.success();
         //调用文件处理类FileUtil，处理文件，将文件写入指定位置
         try {
-            path=  FileUploadUtils.upload(filePath,file,fileName);
+            path=  FileUploadUtils.upload(filePath,file,fileExt);
 
             if(attachmentNo!=null){
                 if(StrUtil.isBlank(attachmentNo)){

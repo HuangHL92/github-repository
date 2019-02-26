@@ -19,6 +19,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.web.websocket.SocketServer;
 import com.sun.jna.platform.win32.Guid;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -140,8 +141,12 @@ public class DemoController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(Demo demo)
-	{		
-		return toAjax(demoService.updateDemo(demo));
+	{
+		int count = demoService.updateDemo(demo);
+		if (count > 0) {
+			SocketServer.sendMessage("model3", "websocketDemo");
+		}
+		return toAjax(count);
 	}
 	
 	/**

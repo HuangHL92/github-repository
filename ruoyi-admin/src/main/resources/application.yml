@@ -153,3 +153,8 @@ gen:
   autoRemovePre: true
   # 表前缀(类名不会包含表前缀)
   tablePrefix: biz_
+
+# websocket
+jiyun:
+  websocket:
+    url: ws://localhost/socketServer
