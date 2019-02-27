@@ -46,7 +46,8 @@
         			showExport: $.common.visible(options.showExport),   // 是否支持导出文件
                     queryParams: $.table._params,                       // 传递参数（*）
                     columns: options.columns,                           // 显示列信息（*）
-                    responseHandler: $.table.responseHandler            // 回调函数
+                    responseHandler: $.table.responseHandler,            // 回调函数
+                    onLoadSuccess: $.table.onLoadSuccess
                 });
             },
             // 查询条件
@@ -59,6 +60,23 @@
         			orderByColumn:  params.sort,
         			isAsc:          params.order
         		}; 
+            },
+            // 当所有数据被加载时触发
+            onLoadSuccess: function(data) {
+                // 浮动提示框特效
+                $("[data-toggle='tooltip']").tooltip();
+            },
+            // 列超出指定长度浮动提示
+            tooltip: function (value, length) {
+                var _length = $.common.isEmpty(length) ? 20 : length;
+                var _text = "";
+                var _value = $.common.nullToStr(value);
+                if (_value.length > _length) {
+                    _text = _value.substr(0, _length) + "...";
+                } else {
+                    _text = _value;
+                }
+                return '<a href="#" class="tooltip-show" data-toggle="tooltip" title="' + _value + '">' + _text +'</a>';
             },
             // 请求获取数据后处理回调函数
             responseHandler: function(res) {
@@ -889,6 +907,13 @@
             // 判断一个字符串是否为非空串
             isNotEmpty: function (value) {
             	return !$.common.isEmpty(value);
+            },
+            // 空对象转字符串
+            nullToStr: function(value) {
+                if ($.common.isEmpty(value)) {
+                    return "-";
+                }
+                return value;
             },
             // 是否显示数据 为空默认为显示
             visible: function (value) {
