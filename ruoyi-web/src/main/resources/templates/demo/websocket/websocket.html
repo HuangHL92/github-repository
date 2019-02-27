@@ -16,6 +16,13 @@
         </blockquote>
         <hr>
     </div>
+
+    <div class="col-sm-12">
+        <div class="alert alert-success" id="notice1">
+        </div>
+    </div>
+
+
     <div class="col-sm-4">
         <h2>WebSocket画面刷新Demo</h2>
         <br/>
@@ -28,6 +35,9 @@
         <ol>
             <li>code：未每个画面的唯一编码。</li>
             <li>同一个code可以打开多个画面，都可以实现实时刷新</li>
+            <li>
+
+            </li>
         </ol>
     </div>
 </div>
@@ -105,6 +115,8 @@
             ws = new ReconnectingWebSocket(wsUrl + "/websocketDemo");
         } else{
             alert("该浏览器不支持websocket");
+            $('#notice1').css("alert alert-danger");
+            $('#notice1').html("该浏览器不支持websocket");
         }
 
         ws.onmessage = function(evt) {
@@ -121,10 +133,14 @@
 
         ws.onclose = function(evt) {
             console.log("websocket连接中断...");
+            $('#notice1').css("alert alert-danger");
+            $('#notice1').html("websocket连接中断");
         };
 
         ws.onopen = function(evt) {
             console.log("websocket连接成功...");
+            $('#notice1').css("alert alert-success");
+            $('#notice1').html("websocket连接成功");
         };
 
     }

@@ -426,7 +426,7 @@ Select.prototype.init=function () {
         //isAdd:        当前操作选中or取消
         //isDisabled:   当前选项是否是disabled
         //alert("选择了: " + val.value);
-        if(config.callback!="") {
+        if(config.callback) {
             var f = eval(config.callback);
             f(val);
         }
