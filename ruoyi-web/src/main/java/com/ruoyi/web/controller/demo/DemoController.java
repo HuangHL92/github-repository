@@ -258,22 +258,22 @@ public class DemoController extends BaseController
     }
 
 
-    @GetMapping( "/getJson/{name}")
-    @ResponseBody
-    public JsonObject getJson(@PathVariable("name") String name)
+
+    /**
+     * layui页面
+     */
+    @GetMapping("/layui")
+    public String layui(ModelMap mmap)
     {
-        SysUser user = new SysUser();
-        user.setUserName(name);
-        List<SysUser> users = userService.selectUserList(user);
-
-
-        JsonObject json = new JsonObject();
-        json.addProperty("code", 0);
-        json.addProperty("redirect", "");
-        json.addProperty("message", "");
-        json.addProperty("value", "");
-
-        return json;
+        return prefix + "/layui";
     }
 
+    /**
+     * 其他实例页面
+     */
+    @GetMapping("/other")
+    public String other(ModelMap mmap)
+    {
+        return prefix + "/other";
+    }
 }

@@ -20,7 +20,6 @@ function submitAction(formobj) {
 //页面控件初始化入口方法
 function initCtrl() {
 
-
     //折叠控件初始化
     $(".modal").appendTo("body"), $("[data-toggle=popover]").popover(), $(".collapse-link").click(function () {
         var div_ibox = $(this).closest("div.ibox"),
@@ -54,6 +53,40 @@ function initCtrl() {
         var _c=$(this);
         var up=new Select(_c);
     })
+
+    layui.use('element', function(){
+        var $ = layui.jquery
+            ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+
+        //触发事件
+        var active = {
+            tabAdd: function(){
+                //新增一个Tab项
+                element.tabAdd('demo', {
+                    title: '新选项'+ (Math.random()*1000|0) //用于演示
+                    ,content: '内容'+ (Math.random()*1000|0)
+                    ,id: new Date().getTime() //实际使用一般是规定好的id，这里以时间戳模拟下
+                })
+            }
+            ,tabDelete: function(othis){
+                //删除指定Tab项
+                element.tabDelete('demo', '44'); //删除：“商品管理”
+                othis.addClass('layui-btn-disabled');
+            }
+            ,tabChange: function(){
+                //切换到指定Tab项
+                element.tabChange('demo', '22'); //切换到：用户管理
+            }
+        };
+
+        $('.site-demo-active').on('click', function(){
+            var othis = $(this), type = othis.data('type');
+            active[type] ? active[type].call(this, othis) : '';
+        });
+
+
+
+    });
 
 }
 
@@ -330,8 +363,6 @@ var Select = function (obj) {
     return that.init();
 
 }
-
-
 Select.prototype.init=function () {
 
     var config=this.config
@@ -392,26 +423,78 @@ Select.prototype.init=function () {
     if(url) {
         layui.formSelects.config(config.id, {
             searchUrl: url,
+            // type: 'get',                //请求方式: post, get, put, delete...
+            // header: {},                 //自定义请求头
+            // data: {},                   //自定义除搜索内容外的其他数据
+            // searchUrl: '',              //搜索地址, 默认使用xm-select-search的值, 此参数优先级高
+            // searchName: 'keyword',      //自定义搜索内容的key值
+            // searchVal: '',              //自定义搜索内容, 搜素一次后失效, 优先级高于搜索框中的值
+            // keyName: 'name',            //自定义返回数据中name的key, 默认 name
+            // keyVal: 'value',            //自定义返回数据中value的key, 默认 value
+            // keySel: 'selected',         //自定义返回数据中selected的key, 默认 selected
+            // keyDis: 'disabled',         //自定义返回数据中disabled的key, 默认 disabled
+            // keyChildren: 'children',    //联动多选自定义children
+            // delay: 500,                 //搜索延迟时间, 默认停止输入500m
+
             success: function(id, url, searchVal, result){
 
                 //绑定之前选中的
-                if(config.value && !searchVal) {
+                if(config.value) {
                     var selected = ("" + config.value).split(",");
-                    console.log(selected);
-                    layui.formSelects.value(config.id, selected); //绑定已选中的值
+                    layui.formSelects.value(config.id, selected,true); //绑定已选中的值
+
+                    // layui.formSelects.value('example2_2', []);          //赋值空数组, 清空所有
+                    // layui.formSelects.value('example2_2', [1, 2]);      //赋值 北京,上海
+                    // layui.formSelects.value('example2_2', [5], true);   //追加赋值 天津
+                    // layui.formSelects.value('example2_2', [1], false);  //删除 已选择 [北京]
                 }
 
             },
-            clearInput: false          //当有搜索内容时, 点击选项是否清空搜索内容, 默认不清空
+            // error: function(id, url, searchVal, err){           //使用远程方式的error回调
+            //     // //同上
+            //     // console.log(err);   //err对象
+            // },
+            // beforeSuccess: function(id, url, searchVal, result){        //success之前的回调, 干嘛呢? 处理数据的, 如果后台不想修改数据, 你也不想修改源码, 那就用这种方式处理下数据结构吧
+            //     // console.log(id);        //组件ID xm-select
+            //     // console.log(url);       //URL
+            //     // console.log(searchVal); //搜索的value
+            //     // console.log(result);    //返回的结果
+            //     //
+            //     // return result;  //必须return一个结果, 这个结果要符合对应的数据结构
+            // },
+            // beforeSearch: function(id, url, searchVal){         //搜索前调用此方法, return true将触发搜索, 否则不触发
+            //     // if(!searchVal){//如果搜索内容为空,就不触发搜索
+            //     //     return false;
+            //     // }
+            //     // return true;
+            // },
+            // clearInput: false          //当有搜索内容时, 点击选项是否清空搜索内容, 默认不清空
         });
     }
 
     //模板定义
     if(config.type=="user-tree" || config.type=="user" )
     {
-        layui.formSelects.render(config.id, {
-            template: function(name, value, selected, disabled){
 
+
+        layui.formSelects.render(config.id, {
+            // init: ["100", "109"],           //默认值
+            // skin: "danger",                 //多选皮肤
+            // height: "auto",                 //是否固定高度, 38px | auto
+            // radio: false,                   //是否设置为单选模式
+            // direction: "auto",
+            // create: function(id, name){
+            //     console.log(id);    //多选id
+            //     console.log(name);  //创建的标签名称
+            //     return Date.now();  //返回该标签对应的val
+            // },
+            // filter: fun...,         //同formSelects.filter
+            // max: 3,                 //多选最多选择量
+            // maxTips: fun...,        //同formSelects.maxTips
+            // on: fun...,             //同formSelects.on
+            // searchType: "title",    //搜索框的位置
+
+            template: function(name, value, selected, disabled){
                 return value.name + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 14px;">' + value.deptname + '</span>';
             }
         });
@@ -434,7 +517,6 @@ Select.prototype.init=function () {
     });
 
 }
-
 <!--Select结束-->
 
 function GUID() {
@@ -481,3 +563,6 @@ function GUID() {
         }
     }
 }
+
+// 页面控件初始化
+initCtrl();
