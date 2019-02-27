@@ -106,6 +106,7 @@ public class DemoController extends BaseController
 	public String add(ModelMap mmap)
 	{
         mmap.put("posts", postService.selectPostAll());
+        mmap.put("demo", new Demo());
         return prefix + "/add";
 	}
 	
@@ -130,7 +131,7 @@ public class DemoController extends BaseController
 	{
 		Demo demo = demoService.selectDemoById(id);
 		mmap.put("demo", demo);
-	    return prefix + "/edit";
+	    return prefix + "/add";
 	}
 	
 	/**

@@ -396,7 +396,7 @@
             		shadeClose: true,
                     btn1: function(index, layero) {
                         var iframeWin = layero.find('iframe')[0];
-                        iframeWin.contentWindow.submitHandler();
+                        iframeWin.contentWindow.submitHandler(iframeWin);
                     },
             	    cancel: function(index) {
             	        return true;
@@ -463,7 +463,8 @@
             		shadeClose: true,
                     btn1: function(index, layero) {
                         var iframeWin = layero.find('iframe')[0];
-                        iframeWin.contentWindow.submitHandler();
+
+                        iframeWin.contentWindow.submitHandler(iframeWin);
                     },
 
             	    cancel: function(index) {
