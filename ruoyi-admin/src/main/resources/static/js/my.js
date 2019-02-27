@@ -319,9 +319,6 @@ var Select = function (obj) {
     }
     that.config = $.extend({}, that.config, option)
 
-    if(type=="user") {
-        search = ctx + 'system/user/getList4Select/';
-    }
     //添加属性
     obj.attr("xm-select",id);
     obj.attr("xm-select-skin",skin);  //样式 default，primary，normal，warm，danger
@@ -330,8 +327,8 @@ var Select = function (obj) {
         obj.attr("xm-select-radio","");  //单选
     }
 
-
     return that.init();
+
 }
 
 
@@ -396,15 +393,17 @@ Select.prototype.init=function () {
         layui.formSelects.config(config.id, {
             searchUrl: url,
             success: function(id, url, searchVal, result){
-                if(config.value) {
+
+                //绑定之前选中的
+                if(config.value && !searchVal) {
                     var selected = ("" + config.value).split(",");
+                    console.log(selected);
                     layui.formSelects.value(config.id, selected); //绑定已选中的值
                 }
 
-            }
+            },
+            clearInput: false          //当有搜索内容时, 点击选项是否清空搜索内容, 默认不清空
         });
-
-
     }
 
     //模板定义
@@ -412,6 +411,7 @@ Select.prototype.init=function () {
     {
         layui.formSelects.render(config.id, {
             template: function(name, value, selected, disabled){
+
                 return value.name + '<span style="position: absolute; right: 0; color: #A0A0A0; font-size: 14px;">' + value.deptname + '</span>';
             }
         });
@@ -434,6 +434,7 @@ Select.prototype.init=function () {
     });
 
 }
+
 <!--Select结束-->
 
 function GUID() {
