@@ -4,7 +4,8 @@
 <head th:include="include :: header"></head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-${classname}-add">
+        <form class="form-horizontal m" id="form-${classname}-add" th:action="${formAction}" th:object="${${classname}}">
+            <input id="${primaryKey.attrname}" name="${primaryKey.attrname}" th:field="*{${primaryKey.attrname}}"  type="hidden">
 #foreach($column in $columns)
 #if($column.columnName != $primaryKey.columnName)
 #if(!${column.configInfo})
@@ -49,11 +50,11 @@
 			}
 		});
 		
-		function submitHandler() {
-	        if ($.validate.form()) {
-	            $.operate.save(prefix + "/add", $('#form-${classname}-add').serialize());
-	        }
-	    }
+		## function submitHandler() {
+	    ##     if ($.validate.form()) {
+	    ##         $.operate.save(prefix + "/add", $('#form-${classname}-add').serialize());
+	    ##     }
+	    ## }
 	</script>
 </body>
 </html>

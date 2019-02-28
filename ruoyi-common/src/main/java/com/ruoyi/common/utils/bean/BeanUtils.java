@@ -41,7 +41,10 @@ public class BeanUtils
                     if (isMethodPropEquals(setter.getName(), getter.getName())
                             && setter.getParameterTypes()[0].equals(getter.getReturnType()))
                     {
-                        setter.invoke(dest, getter.invoke(src));
+
+                            setter.invoke(dest, getter.invoke(src));
+
+
                     }
                 }
             }

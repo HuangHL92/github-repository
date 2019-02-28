@@ -2,9 +2,12 @@ package com.ruoyi.web.controller.demo;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
@@ -12,7 +15,9 @@ import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
 import com.google.gson.JsonObject;
+import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.JedisUtils;
+import com.ruoyi.common.utils.bean.BeanUtils;
 import com.ruoyi.demo.domain.Demo;
 import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
@@ -79,8 +84,7 @@ public class DemoController extends BaseController
 	public TableDataInfo list(Demo demo)
 	{
 		startPage();
-        List<Demo> list = demoService.selectDemoList(demo);
-		return getDataTable(list);
+		return getDataTable(demoService.selectList(demo));
 	}
 	
 	
@@ -94,7 +98,7 @@ public class DemoController extends BaseController
     {
 
         PageHelper.startPage(1, 999999, "name");
-    	List<Demo> list = demoService.selectDemoList(demo);
+    	List<Demo> list = demoService.selectList(demo);
         ExcelUtil<Demo> util = new ExcelUtil<Demo>(Demo.class);
         return util.exportExcel(list, "demo");
     }
@@ -107,7 +111,7 @@ public class DemoController extends BaseController
 	{
         mmap.put("posts", postService.selectPostAll());
         Demo demo  = new Demo();
-        demo.setFormAction("demo/all/add");
+        demo.setFormAction(prefix + "/add");
         mmap.put("demo", demo);
         return prefix + "/add";
 	}
@@ -121,7 +125,7 @@ public class DemoController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Demo demo, HttpServletRequest request, HttpServletResponse response, Model model)
 	{
-        int count =0;
+        boolean rflag =false;
 //        if(StringUtils.isNotEmpty(demo.getId())) {
 //             count = demoService.updateDemo(demo);
 //
@@ -131,14 +135,14 @@ public class DemoController extends BaseController
 //        }
 
         demo.setId(Guid.GUID.newGuid().toGuidString());
-        count = demoService.insertDemo(demo);
+        rflag = demoService.save(demo);
 
         //测试websocket，给页面发消息通知
-        if (count > 0) {
+        if (rflag) {
             SocketServer.sendMessage("model3", "websocketDemo");
         }
 
-        return toAjax(count);
+        return toAjax(rflag);
 
 	}
 
@@ -148,8 +152,8 @@ public class DemoController extends BaseController
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") String id, ModelMap mmap)
 	{
-		Demo demo = demoService.selectDemoById(id);
-		demo.setFormAction("demo/all/edit");
+		Demo demo = demoService.getById(id);
+		demo.setFormAction(prefix + "/edit");
 		mmap.put("demo", demo);
 	    return prefix + "/add";
 	}
@@ -163,13 +167,14 @@ public class DemoController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Demo demo)
 	{
-		int count = demoService.updateDemo(demo);
+
+		boolean rflag = demoService.saveOrUpdate(demo);
 
 		//测试websocket，给页面发消息通知
-		if (count > 0) {
+		if (rflag) {
 			SocketServer.sendMessage("model3", "websocketDemo");
 		}
-		return toAjax(count);
+		return toAjax(rflag);
 	}
 	
 	/**
@@ -181,7 +186,7 @@ public class DemoController extends BaseController
 	@ResponseBody
 	public AjaxResult remove(String ids)
 	{		
-		return toAjax(demoService.deleteDemoByIds(ids));
+		return toAjax(demoService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 	}
 
 

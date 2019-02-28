@@ -75,8 +75,10 @@ public class ${className}Controller extends BaseController
 	 * 新增${tableComment}
 	 */
 	@GetMapping("/add")
-	public String add()
+	public String add(ModelMap mmap)
 	{
+        ${className} ${classname}  = new ${className}();
+        ${classname}.setFormAction(prefix + "/add");
 	    return prefix + "/add";
 	}
 	
@@ -87,7 +89,7 @@ public class ${className}Controller extends BaseController
 	@Log(title = "${tableComment}", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(${className} ${classname})
+	public AjaxResult addSave(${className} ${classname},HttpServletRequest request, Model model)
 	{		
 		return toAjax(${classname}Service.save(${classname}));
 	}
@@ -99,8 +101,10 @@ public class ${className}Controller extends BaseController
 	public String edit(@PathVariable("${primaryKey.attrname}") ${primaryKey.attrType} ${primaryKey.attrname}, ModelMap mmap)
 	{
 		${className} ${classname} = ${classname}Service.getById(${primaryKey.attrname});
+
+        ${classname}.setFormAction(prefix + "/edit");
 		mmap.put("${classname}", ${classname});
-	    return prefix + "/edit";
+	    return prefix + "/add";
 	}
 	
 	/**
