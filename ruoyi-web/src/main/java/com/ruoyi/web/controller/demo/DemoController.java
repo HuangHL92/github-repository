@@ -106,7 +106,9 @@ public class DemoController extends BaseController
 	public String add(ModelMap mmap)
 	{
         mmap.put("posts", postService.selectPostAll());
-        mmap.put("demo", new Demo());
+        Demo demo  = new Demo();
+        demo.setFormAction("demo/all/add");
+        mmap.put("demo", demo);
         return prefix + "/add";
 	}
 	
@@ -119,8 +121,25 @@ public class DemoController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(Demo demo, HttpServletRequest request, HttpServletResponse response, Model model)
 	{
+        int count =0;
+//        if(StringUtils.isNotEmpty(demo.getId())) {
+//             count = demoService.updateDemo(demo);
+//
+//        } else {
+//            demo.setId(Guid.GUID.newGuid().toGuidString());
+//            count = demoService.insertDemo(demo);
+//        }
+
         demo.setId(Guid.GUID.newGuid().toGuidString());
-		return toAjax(demoService.insertDemo(demo));
+        count = demoService.insertDemo(demo);
+
+        //测试websocket，给页面发消息通知
+        if (count > 0) {
+            SocketServer.sendMessage("model3", "websocketDemo");
+        }
+
+        return toAjax(count);
+
 	}
 
 	/**
@@ -130,6 +149,7 @@ public class DemoController extends BaseController
 	public String edit(@PathVariable("id") String id, ModelMap mmap)
 	{
 		Demo demo = demoService.selectDemoById(id);
+		demo.setFormAction("demo/all/edit");
 		mmap.put("demo", demo);
 	    return prefix + "/add";
 	}
@@ -144,6 +164,8 @@ public class DemoController extends BaseController
 	public AjaxResult editSave(Demo demo)
 	{
 		int count = demoService.updateDemo(demo);
+
+		//测试websocket，给页面发消息通知
 		if (count > 0) {
 			SocketServer.sendMessage("model3", "websocketDemo");
 		}

@@ -9,7 +9,9 @@
     <!--表单区域-->
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <!--如果页面有多个form（默认提交第一个），这种情况下想强制提交某一个请将id命名为****-MAIN-->
-        <form class="form-horizontal m" id="form-demo-add" action="demo/all/add" th:object="${demo}">
+        <form class="form-horizontal m" id="form-demo-add" th:action="*{formAction}" th:object="${demo}">
+
+            <input id="id" name="id" type="hidden" th:field="*{id}"/>
 
             <!--非明细数据-->
             <div class="row">
@@ -362,6 +364,7 @@
                     </div>
                 </div>
             </div>
+
 
         </form>
     </div>

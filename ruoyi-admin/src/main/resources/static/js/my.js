@@ -20,7 +20,6 @@ function submitAction(formobj) {
 //表单提交事件Handler(由ry-ui.js进行回调)
 function submitHandler(f) {
     //第一个form的ID（提交第一个form,注意一个画面如果有多个form的情况下可能有问题）
-
     var formlength =f.contentWindow.document.forms.length;
     var formid="";
 
@@ -29,21 +28,25 @@ function submitHandler(f) {
     if(formlength>1) {
         for(var i=0;i<formlength;i++){
             var form=f.contentWindow.document.forms[i];
-            //console.log(form.id);
-            if(form.id.indexOf("-MAIN")!=-1){
+            //console.log(form.getAttribute("id"));
+            if(form.getAttribute("id").indexOf("-MAIN")!=-1){
                 formid = form.id;
                 break;
             }
         }
         if(formid=="") {
-            formid = f.contentWindow.document.forms[0].id;
+            formid = f.contentWindow.document.forms[0].getAttribute("id");
         }
     } else {
-        formid = f.contentWindow.document.forms[0].id;
+        formid = f.contentWindow.document.forms[0].getAttribute("id");
+        //console.log( formid);
     }
 
+    console.log( formid);
+
     if ($.validate.form()) {
-        if(formid) {
+
+        if(formid!="") {
             submitAction($("#"+formid));
             console.log("表单>" + formid +"<提交成功！");
         } else {

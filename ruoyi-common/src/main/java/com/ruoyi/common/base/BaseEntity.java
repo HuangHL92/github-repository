@@ -51,6 +51,18 @@ public class BaseEntity implements Serializable
     @TableField(exist = false)
     private Map<String, Object> params;
 
+    /** 表单动作 */
+    @TableField(exist = false)
+    private String formAction;
+
+    public String getFormAction() {
+        return formAction;
+    }
+
+    public void setFormAction(String formAction) {
+        this.formAction = formAction;
+    }
+
     public String getSearchValue()
     {
         return searchValue;
