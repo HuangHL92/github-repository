@@ -15,7 +15,6 @@
 
             <input id="create_by" name="create_by" type="hidden" value=""/>
 
-
             <!--非明细数据-->
             <div class="row">
                 <div class="col-sm-12">
@@ -42,6 +41,7 @@
                         </div>
                         <div class="ibox-content">
                             <form method="get" class="form-horizontal">
+
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">普通</label>
 
@@ -81,6 +81,7 @@
                                         <input type="text" name="name2" disabled="" placeholder="已被禁用" class="form-control">
                                     </div>
                                 </div>
+
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">静态控制</label>
@@ -131,6 +132,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">内联复选框</label>
@@ -154,8 +156,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">suggest：</label>
@@ -174,36 +174,11 @@
                                     </div>
                                 </div>
 
-
-                                <!--<div class="hr-line-dashed"></div>-->
-                                <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">人员下拉多选：</label>-->
-                                <!--<div class="col-sm-10">-->
-                                <!--<select id="userid" name="userid" class="form-control select2-hidden-accessible" multiple="" th:with="users=${@user.getList()}">-->
-                                <!--<option th:each="user:${users}" th:value="${user.userId}" th:text="${user.userName}" ></option>-->
-                                <!--</select>-->
-                                <!--</div>-->
-                                <!--</div>-->
-
-                                <!--<div class="hr-line-dashed"></div>-->
-                                <!--<div class="form-group">-->
-                                <!--<label class="col-sm-2 control-label">部门下拉多选：</label>-->
-                                <!--<div class="col-sm-10">-->
-                                <!--<select id="deptid" name="deptid" class="form-control select2-hidden-accessible" multiple="" th:with="depts=${@dept.getList()}">-->
-                                <!--<option value="">请选择</option>-->
-                                <!---->
-                                <!--<option th:each="dept:${depts}" th:value="${dept.deptId}" th:text="${dept.deptName}" ></option>-->
-                                <!---->
-                                <!--</select>-->
-                                <!--</div>-->
-                                <!--</div>-->
-
-
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">用户(多选)：</label>
                                     <div class="col-sm-10">
-                                        <select name="st1"  data-toggle="select" data-id="st1" data-type="user" data-value="100">
+                                        <select name="st1"  data-toggle="select" data-id="st1" data-type="user" data-value="100" >
                                         </select>
                                     </div>
                                 </div>
@@ -212,7 +187,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">用户(单选)：</label>
                                     <div class="col-sm-10">
-                                        <select name="reporter" class="required"  data-toggle="select" data-id="reporter" data-skin="warm" data-radio="true" data-type="user" th:data-value="*{reporter}">
+                                        <select data-id="reporter"  data-class="required" data-toggle="select"  data-skin="warm" data-radio="true" data-type="user" th:data-value="*{reporter}">
                                         </select>
                                     </div>
                                 </div>
@@ -221,7 +196,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门(分组、自定义回调)：</label>
                                     <div class="col-sm-10">
-                                        <select name="st3"  data-toggle="select" data-id="st3" data-click="callback_select" data-type="dept-group">
+                                        <select data-id="st3"  data-toggle="select" data-click="callback_select" data-type="dept-group">
                                         </select>
                                     </div>
                                 </div>
@@ -230,7 +205,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门（树形）：</label>
                                     <div class="col-sm-10">
-                                        <select name="depts"  data-toggle="select" data-id="depts" data-type="dept" data-click="callback_select" th:data-value="*{depts}" >
+                                        <select data-id="depts" data-toggle="select" data-type="dept" data-click="callback_select" th:data-value="*{depts}" >
                                         </select>
                                     </div>
                                 </div>
@@ -239,11 +214,10 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门（树形,指定父级部门）：</label>
                                     <div class="col-sm-10">
-                                        <select name="st5"  data-toggle="select" data-id="st5" data-type="dept" data-pid="102" data-radio="true">
+                                        <select data-id="st5"  data-toggle="select" data-type="dept" data-pid="102" data-radio="true">
                                         </select>
                                     </div>
                                 </div>
-
 
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
@@ -261,8 +235,6 @@
                                     </div>
                                 </div>
 
-
-
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">备注：</label>
@@ -270,7 +242,6 @@
                                         <textarea id="remark" name="remark" class="form-control" rows="10" th:field="*{remark}"></textarea>
                                     </div>
                                 </div>
-
 
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
@@ -280,7 +251,6 @@
                                         <input type="hidden" name="filePath" data-toggle="fileupload" data-multiple="false" th:value="*{filePath}" data-back-type="no" data-btn-text="上传文件" />
                                     </div>
                                 </div>
-
 
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
@@ -309,9 +279,6 @@
                             </form>
                         </div>
                     </div>
-
-
-
                 </div>
             </div>
 
@@ -368,7 +335,6 @@
                 </div>
             </div>
 
-
         </form>
     </div>
 
@@ -389,6 +355,7 @@
     <!--页面JS-->
 	<script type="text/javascript">
 
+
         //自定义按钮事件
         $('#btn1', $.modal.currentWindow()).click(function(){
             alert("这个是一个自定义按钮方法。记得需要动态绑定方法哦！");
@@ -397,14 +364,18 @@
 
         //提交前表单验证
         $("#form-demo-add").validate({
+            // onkeyup:true,
+            // onblur:true,
+            // onfocus:true,
+            // onkeydown:true,
+
             rules:{
 
-                Name:{
-                    required:true,
-                    minlength: 3,
-                    maxlength: 10
-                },
-
+                // Name:{
+                //     required:true,
+                //     minlength: 3,
+                //     maxlength: 10
+                // },
                 // email:{
                 //     required:true,
                 //     email:true,

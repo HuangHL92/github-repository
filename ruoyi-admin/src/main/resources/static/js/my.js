@@ -53,6 +53,8 @@ function submitHandler(f) {
             $.modal.alertError("提交失败！（原因：没有获得表单对象）");
         }
 
+    } else {
+        $.modal.alertWarning("您还有未填数据项！");
     }
 }
 
@@ -382,6 +384,7 @@ var Select = function (obj) {
         ,type=obj.data("type")||""  //user,user-tree,dept,dept-tree
         ,pid=obj.data("pid")||""  // 父ID，解决只显示某个层级下数据问题
         ,value=obj.data("value")||""  // 选中的项
+        ,cls=obj.data("class")||""  // 样式
     var option={
         id:id
         ,callback:callback //回调方法
@@ -392,12 +395,18 @@ var Select = function (obj) {
     that.config = $.extend({}, that.config, option)
 
     //添加属性
+    obj.attr("name",id);
     obj.attr("xm-select",id);
     obj.attr("xm-select-skin",skin);  //样式 default，primary，normal，warm，danger
     obj.attr("xm-select-search",search); //支持搜索
     if(radio==true) {
         obj.attr("xm-select-radio","");  //单选
     }
+    //必填
+    if( cls.indexOf("required")!=-1) {
+        obj.attr("xm-select-required","required");
+    }
+
 
     return that.init();
 
@@ -558,6 +567,12 @@ Select.prototype.init=function () {
 }
 <!--Select结束-->
 
+
+$.validator.setDefaults({
+    ignore:":hidden:not(select)"
+});
+
+
 function GUID() {
     this.date = new Date();   /* 判断是否初始化过，如果初始化过以下代码，则以下代码将不再执行，实际中只执行一次 */
     if (typeof this.newGUID != 'function') {   /* 生成GUID码 */
@@ -605,3 +620,4 @@ function GUID() {
 
 // 页面控件初始化
 initCtrl();
+

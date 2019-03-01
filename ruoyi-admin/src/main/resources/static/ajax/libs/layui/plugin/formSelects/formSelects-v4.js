@@ -2,7 +2,9 @@
  * name: formSelects
  * 基于Layui Select多选
  * version: 4.0.0.0910
- * http://sun.faysunshine.com/layui/formSelects-v4/dist/formSelects-v4.js
+ * http://sun.faysunshine.com/layui/formSelects-v4/dist/formSelects-v4.
+ *
+ * TODO 针对必填验证有修改，请不要随意覆盖 add by yufei  2019-03-01
  */
 (function(layui, window, factory) {
 	if(typeof exports === 'object') { // 支持 CommonJS
@@ -25,6 +27,7 @@
 		THIS = 'xm-select-this',
 		LABEL = 'xm-select-label',
 		SEARCH = 'xm-select-search',
+        REQUIRED = 'xm-select-required',
 		SEARCH_TYPE = 'xm-select-search-type',
 		SHOW_COUNT = 'xm-select-show-count',
 		CREATE = 'xm-select-create',
@@ -156,6 +159,7 @@
 				isCreate: false,
 				placeholder: TIPS,
 				clearInput: false,
+                required: '',
 			};
 			this.select = null;
 			this.values = [];
@@ -213,6 +217,7 @@
  					layverType: othis.attr('lay-verType'),
  					searchType: othis.attr(SEARCH_TYPE) == 'dl' ? 1 : 0,
  					showCount: othis.attr(SHOW_COUNT) - 0,
+                    required: othis.attr(REQUIRED),
  				},
 				value = othis.find('option[selected]').toArray().map((option) => {//获取已选中的数据
 					return {
@@ -259,7 +264,7 @@
 			];
 			let reElem =
 				$(`<div class="${FORM_SELECT}" ${SKIN}="${fs.config.skin}">
-					<input class="${HIDE_INPUT}" value="" name="${fs.config.formname}" lay-verify="${fs.config.layverify}" lay-verType="${fs.config.layverType}" type="text" style="position: absolute;bottom: 0; z-index: -1;width: 100%; height: 100%; border: none; opacity: 0;"/>
+					<input class="${HIDE_INPUT} ${fs.config.required}" value="" name="${fs.config.formname}" lay-verify="${fs.config.layverify}" lay-verType="${fs.config.layverType}" type="text" style="position: absolute;bottom: 0; z-index: -1;width: 100%; height: 100%; border: none; opacity: 0;"/>
 					<div class="${FORM_TITLE} ${fs.config.disabled ? DIS : ''}">
 						<div class="${FORM_INPUT} ${NAME}" ${heightStyle}>
 							${inputHtml.join('')}
@@ -1598,6 +1603,7 @@
 			closed: options.closed,
 			template: options.template,
 			clearInput: options.clearInput,
+            required:options.required
 		} : {};
 		
 		options && options.searchType != undefined && (config.searchType = options.searchType == 'dl' ? 1 : 0);

@@ -24,6 +24,11 @@ com.ruoyi
 ├── ruoyi-admin       // 后台服务
 ├── ruoyi-xxxxxx      // 其他模块
 
+不能轻易覆盖的文件：
+static/ajax/libs/layui/plugin/formSelects/formSelects-v4.js
+static/ajax/libs/layer/layer.min.js
+
+
 注意：
     pad、screen、api、wap  这几个关键字已做特殊路径排除在shiro监控范围之外，新建requestmapping不要使用这几个关键词
     PAD页面地址：    http://localhost/pad

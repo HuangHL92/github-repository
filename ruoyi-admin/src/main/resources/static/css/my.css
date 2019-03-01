@@ -38,4 +38,10 @@
 .jyui-upimgs .jyui-up-upload .con { position: absolute; top: 50%; left: 50%; -webkit-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); text-align: center; }
 
 .jyui-upimgs .jyui-up-upload .con .fa-plus { font-size: 20px; }
-/*# sourceMappingURL=my.css.map */
+
+
+/*formselect控件必填样式*/
+.xm-form-select label.error i{font-family: FontAwesome!important;}
+.xm-hide-input.error ~ .xm-select-title .xm-select{background-color:#fbe2e2!important;border: 1px dotted #cc5965!important;}
+
+

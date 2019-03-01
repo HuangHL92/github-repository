@@ -171,7 +171,7 @@ public class DemoController extends BaseController
 		boolean rflag = demoService.saveOrUpdate(demo);
 
 		//测试websocket，给页面发消息通知
-		if (rflag) {
+    		if (rflag) {
 			SocketServer.sendMessage("model3", "websocketDemo");
 		}
 		return toAjax(rflag);
