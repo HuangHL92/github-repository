@@ -38,6 +38,24 @@ public class BaseController
                 setValue(DateUtils.parseDate(text));
             }
         });
+
+        //int 类型转换  Add by yufei 2019-03-01 解决int型数据画面参数转递后台为“”时的问题
+        binder.registerCustomEditor(int.class, new PropertyEditorSupport()
+        {
+            @Override
+            public void setAsText(String text)
+            {
+                if("".equals(text)){
+                    setValue(0);
+                } else {
+                    try {
+                        setValue(Integer.parseInt(text));
+                    }catch (Exception ex) {
+                        setValue(0);
+                    }
+                }
+            }
+        });
     }
 
     /**

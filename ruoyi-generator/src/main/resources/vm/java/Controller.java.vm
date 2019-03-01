@@ -116,7 +116,7 @@ public class ${className}Controller extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(${className} ${classname})
 	{		
-		return toAjax(${classname}Service.updateById(${classname}));
+		return toAjax(${classname}Service.saveOrUpdate(${classname}));
 	}
 	
 	/**

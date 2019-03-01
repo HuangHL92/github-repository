@@ -46,7 +46,7 @@
                                     <label class="col-sm-2 control-label">普通</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text"  name="Name" id="Name" class="form-control" placeholder="提示信息" th:field="*{name}">
+                                        <input type="text"  name="Name" id="Name" class="form-control required" placeholder="提示信息" th:field="*{name}">
                                         <span class="help-block m-b-none">帮助文本，可能会超过一行，以块级元素显示</span>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                     <label class="col-sm-2 control-label">密码</label>
 
                                     <div class="col-sm-10">
-                                        <input type="password" id="pw"  class="form-control required" name="password" >
+                                        <input type="password" id="pw"  class="form-control " name="password" >
                                     </div>
                                 </div>
 
@@ -212,7 +212,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">用户(单选)：</label>
                                     <div class="col-sm-10">
-                                        <select name="st2"  data-toggle="select" data-id="st2" data-skin="warm" data-radio="true" data-type="user">
+                                        <select name="reporter" class="required"  data-toggle="select" data-id="reporter" data-skin="warm" data-radio="true" data-type="user" th:data-value="*{reporter}">
                                         </select>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门（树形）：</label>
                                     <div class="col-sm-10">
-                                        <select name="st4"  data-toggle="select" data-id="st4" data-type="dept" data-click="callback_select" data-value="105,109" >
+                                        <select name="depts"  data-toggle="select" data-id="depts" data-type="dept" data-click="callback_select" th:data-value="*{depts}" >
                                         </select>
                                     </div>
                                 </div>
@@ -277,7 +277,7 @@
 
                                     <label class="col-sm-2 control-label">单文件上传</label>
                                     <div class="col-sm-10">
-                                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no" data-btn-text="上传文件" />
+                                        <input type="hidden" name="filePath" data-toggle="fileupload" data-multiple="false" th:value="*{filePath}" data-back-type="no" data-btn-text="上传文件" />
                                     </div>
                                 </div>
 
@@ -294,7 +294,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">图片上传</label>
                                     <div class="col-sm-10">
-                                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no" data-btn-text="" data-accept="image"/>
+                                        <input type="hidden" name="imgPath" data-toggle="fileupload" data-multiple="false" th:value="*{imgPath}" data-back-type="no" data-btn-text="" data-accept="image"/>
                                     </div>
                                 </div>
 
@@ -372,7 +372,7 @@
         </form>
     </div>
 
-    <!--自定义按钮区域-->
+    <!--自定义按钮区域(仅适合弹窗模式)-->
     <span class="toolbar-btn">
         <button class="btn btn-primary" type="button" id="btn1">
             <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">暂存1</span>
