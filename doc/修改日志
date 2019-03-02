@@ -46,3 +46,6 @@ com/ruoyi/framework/config/ShiroConfig.java
     访问路径：{内网穿透项目地址}/wap/wechat/authorize?returnUrl=/wap/wechat/index
     效果：/doc/authorize.jpg
 3、集成weui+前端框架
+
+********************* 2019-03-02  修改人：俞菲 ************************
+增加两套登录页面样式
