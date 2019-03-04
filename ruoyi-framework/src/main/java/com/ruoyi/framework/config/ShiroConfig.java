@@ -340,6 +340,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/pad/**", "anon");
         filterChainDefinitionMap.put("/wap/**", "anon");
 
+
         // 系统权限列表
         // filterChainDefinitionMap.putAll(SpringUtils.getBean(IMenuService.class).selectPermsAll());
 

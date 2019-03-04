@@ -1,36 +1,49 @@
 package com.ruoyi.web.controller.demo;
 
 import java.awt.*;
+import java.awt.Color;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import cn.hutool.Hutool;
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
+import cn.afterturn.easypoi.word.WordExportUtil;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
-import cn.hutool.json.JSONArray;
-import cn.hutool.json.JSONUtil;
 import com.github.pagehelper.PageHelper;
-import com.google.gson.JsonObject;
+import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.config.Global;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.JedisUtils;
-import com.ruoyi.common.utils.bean.BeanUtils;
+import com.ruoyi.common.utils.PdfUtils;
 import com.ruoyi.demo.domain.Demo;
 import com.ruoyi.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.websocket.SocketServer;
 import com.sun.jna.platform.win32.Guid;
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,9 +56,13 @@ import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import org.springframework.web.context.ContextLoader;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import static cn.hutool.extra.servlet.ServletUtil.isIE;
 
 /**
  * 测试 信息操作处理
@@ -304,4 +321,162 @@ public class DemoController extends BaseController
     {
         return prefix + "/other";
     }
+
+    /**
+     * 打印demo
+     */
+    @GetMapping("/print")
+    public String print(ModelMap mmap)
+    {
+        return prefix + "/print";
+    }
+
+
+    /**
+     * 生成PDF
+     */
+    @Log(title = "生成PDF（demo）", businessType = BusinessType.OTHER)
+    @PostMapping( "/createPDF")
+    @ResponseBody
+    public AjaxResult createPDF(HttpServletRequest request)
+    {
+
+        String filePath="";
+
+        try {
+            //给pdf赋值
+            Map<String, String> data = new HashMap<String, String>();
+            data.put("customername", getLoginName());
+            data.put("cardid", "310228198111232012");
+            data.put("address", "上海市金山区蒙山路900号");
+            data.put("phone", "13627279172");
+            data.put("postcode", "200540");
+            data.put("contents", "这是一个PDF文件生成测试这是一个PDF文件生成测试这是一个PDF文件生成测试这是一个PDF文件生成测试这是一个PDF文件生成测试这是一个PDF文件生成测试\n这是一个PDF文件生成测试这是一个PDF文件生成测试这是一个PDF文件生成测试@%#￥@&*《》");
+            //生成PDF文件
+            filePath = PdfUtils.createPDF("/static/docs/pdf导出模版.pdf","测试pdf导出.pdf",data);
+
+        } catch (Exception ex) {
+
+        }
+        return success(filePath);
+    }
+
+
+    /**
+     * 生成Word
+     * @param request
+     * @param response
+     * @return
+     */
+    @Log(title = "生成Word（demo）", businessType = BusinessType.OTHER)
+    @PostMapping( "/createWord")
+    @ResponseBody
+    private AjaxResult createWord(HttpServletRequest request,HttpServletResponse response) {
+
+
+        //需要填充的数据
+        Map<String, Object> map=new HashMap<String, Object>();
+        map.put("reason", "出差去上海");
+        map.put("applyStart","2018-10-20" );
+        map.put("applyEnd", "2018-10-21" );
+        map.put("createDate", "2018-10-19 12:23:45");
+        map.put("carType","SUV");
+        map.put("destination", "测试一下");
+        map.put("applicant", getLoginName());
+
+        try {
+
+            String path  = ResourceUtils.getFile("classpath:static/docs/word导出模版.docx").getPath();
+            XWPFDocument doc = WordExportUtil.exportWord07(path, map);
+            if(doc!=null) {
+                org.apache.commons.io.output.ByteArrayOutputStream bos =new org.apache.commons.io.output.ByteArrayOutputStream();
+                doc.write(bos);
+                byte[] content=bos.toByteArray();
+                //设置word的名字
+                String fileName="word导出实例";
+                //乱码设置
+                if (isIE(request)) {
+                    fileName = java.net.URLEncoder.encode(fileName, "UTF8");
+                } else {
+                    fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+                }
+//                response.setHeader("content-disposition", "attachment;filename=" + fileName + ".docx");
+//                ServletOutputStream out = response.getOutputStream();
+//                out.write(content);
+//                out.flush();
+//                out.close();
+
+                response.reset();
+                response.setHeader("Content-Disposition", "attachment; filename=" + fileName + ".docx");
+                response.addHeader("Content-Length", "" + content.length);
+                //response.setContentType("application/msword; charset=UTF-8");
+
+//                response.setContentType( "application/msword" );
+//                response.setContentType("application/vnd.ms-excel");
+//                response.setHeader("Content-type","application/pdf");
+
+                IOUtils.write(content, response.getOutputStream());
+            }
+        } catch (Exception e) {
+            return AjaxResult.error(e.getMessage());
+        }
+        return AjaxResult.success("成功");
+    }
+
+
+    /**
+     * 生成Excel
+     * @param request
+     * @param response
+     * @return
+     */
+    @Log(title = "生成Excel（demo）", businessType = BusinessType.OTHER)
+    @PostMapping( "/createExcel")
+    private String createExcel(HttpServletRequest request,HttpServletResponse response) {
+
+
+        String path  = null;
+        try {
+            path = ResourceUtils.getFile("classpath:static/docs/excel导出模版.xls").getPath();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        TemplateExportParams params=new TemplateExportParams(path);
+        params.setSheetName("excel导出实例");
+        Map<String, Object> map=new HashMap<>();
+        map.put("unitAbbreviation", "测试");
+        map.put("trainName","科目1");
+        map.put("courseName", "参数1");
+        map.put("instructorName", "参数2");
+        map.put("instructorProfessionalTitle", "参数3");
+        map.put("instructorBankNo", "参数4");
+        map.put("instructorDepositBank", "参数5");
+        map.put("coursePeroid","参数36");
+
+        Workbook workbook= ExcelExportUtil.exportExcel(params, map);
+        if(workbook!=null) {
+            org.apache.commons.io.output.ByteArrayOutputStream bos =new org.apache.commons.io.output.ByteArrayOutputStream();
+            try {
+                workbook.write(bos);
+                byte[] content=bos.toByteArray();
+                //设置excel的名字
+                String fileName="excel导出实例";
+                //乱码设置
+                if (isIE(request)) {
+                    fileName = java.net.URLEncoder.encode(fileName, "UTF8");
+                } else {
+                    fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+                }
+                response.setHeader("content-disposition", "attachment;filename=" + fileName + ".xls");
+                ServletOutputStream out = response.getOutputStream();
+                out.write(content);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
 }

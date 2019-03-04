@@ -154,7 +154,9 @@
                 <form class="form-horizontal m" id="form-demo-file" >
                     <div class="row">
                         <div class="col-sm-12">
-
+                            <a onclick="createPDF()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> PDF生成（Ajax）</a>
+                            <a onclick="createWord()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Word（Ajax）</a>
+                            <a onclick="createExcel()" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Excel（Ajax）</a>
                         </div>
                     </div>
                 </form>
@@ -206,8 +208,6 @@
 
 <script type="text/javascript">
 
-
-
     function sendMail() {
         var url =ctx + "demo/all/sendMail";
         $.operate.post(url,$("#form-demo-http").serialize());
@@ -221,6 +221,31 @@
     function checkQRCode() {
         var url =ctx + "demo/all/checkQRCode";
         $.operate.get(url);
+    }
+
+    function createPDF() {
+        var url =ctx + "demo/all/createPDF";
+        $.operate.post(url,$("#form-demo-redis").serialize());
+    }
+
+    function createWord() {
+        var url =ctx + "demo/all/createWord";
+
+        $.post(url, $("#form-demo-http").serialize(), function(result) {
+            if (result.code == web_status.SUCCESS) {
+                window.location.href = ctx + "common/download?fileName=" + result.msg + "&delete=" + true;
+            } else {
+                $.modal.alertError(result.msg);
+            }
+
+        });
+
+        //$.operate.get(url);
+    }
+
+    function createExcel() {
+        var url =ctx + "demo/all/createExcel";
+        $.operate.post(url,$("#form-demo-redis").serialize());
     }
 
     function saveRedis() {
