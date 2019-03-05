@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>吉运Java快速开发平台3.0</title>
+    <title th:text="${@config.getKey('sys.config.systemName')}">吉运Java快速开发平台3.0</title>
+    <meta name="keywords" th:content="${@config.getKey('sys.config.systemName')}">
+    <meta name="description" th:content="${@config.getKey('sys.config.systemName')}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="keywords" content="吉运,吉运软件,吉运快速开发平台">
-    <meta name="description" content="可能是基于SpringBoot2.0，做小型业务开发最好的系统之一。 核心技术采用Spring、MyBatis-Plus、Shiro没有任何其它重度依赖">
     <link th:href="@{/ruoyi/login/1/css/login.css}" rel="stylesheet"/>
     <script th:src="@{/js/jquery.min.js}"></script>
 
@@ -38,7 +38,7 @@
 <body>
 <div class="container">
     <div class="wrap">
-        <header><em>Logo</em><span>吉运Java快速开发平台3.0</span></header>
+        <header><em>Logo</em><span th:text="${@config.getKey('sys.config.systemName')}">吉运Java快速开发平台3.0</span></header>
         <article>
             <section>
                 <aside>

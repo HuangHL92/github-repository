@@ -67,3 +67,15 @@ static/ajax/libs/layer/layer.min.js
 API接口说明：
 @RequestMapping("/api/*")  为api开头的请求方法不会进行shiro验证
 接口代码实现目录  com/ruoyi/web/controller/api/
+
+登录页面修改说明：
+templates/login.html
+默认内置集成了3套不同风格的登录页面
+登录页面相关静态资源存放规则  static/ruoyi/login/1/* （1文件下存放一种风格的资源，如果新加请延续）
+
+系统名称：
+配置KEY，sys.config.systemName
+在系统管理->参数管理 中进行在线修改
+
+模板路径：
+static/docs/*  存放各类下载、文档生成等模板文件
