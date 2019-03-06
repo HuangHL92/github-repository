@@ -26,14 +26,13 @@ public class TokenController extends ApiBaseController {
 
     @ApiOperation("获取令牌")
     @PostMapping("get")
-    @CrossOrigin
     @ValidateRequest
     public ApiResult get( String account, String password)
     {
 
         //1.参数验证
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
-            return failed(ResponseCode.ILLEGAL_REQUEST);
+            return ApiResult.error(ResponseCode.ILLEGAL_REQUEST);
         }
         //TODO 2.生成令牌写入redis
 
@@ -41,19 +40,18 @@ public class TokenController extends ApiBaseController {
         String vcode = UUID.randomUUID().toString();
 
         //TODO 4.返回令牌
-        return success(vcode);
+        return ApiResult.success(vcode);
     }
 
     @ApiOperation("刷新令牌")
     @PostMapping("refresh")
-    @CrossOrigin
     public ApiResult refresh(String account, String password)
     {
 
         //1.参数验证
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
 
-            return failed(ResponseCode.ILLEGAL_REQUEST);
+            return ApiResult.error(ResponseCode.ILLEGAL_REQUEST);
         }
         //TODO 2.生成令牌写入redis
 
@@ -63,7 +61,7 @@ public class TokenController extends ApiBaseController {
         demo.setName(vcode);
 
         //TODO 4.返回令牌
-        return success(demo);
+        return ApiResult.success(demo);
     }
 
 }

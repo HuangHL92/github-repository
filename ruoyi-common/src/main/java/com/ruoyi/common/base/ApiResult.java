@@ -24,7 +24,15 @@ public class ApiResult<T> implements Serializable {
         this.msg = errorCode.getMsg();
     }
 
-    public static <T> ApiResult<T> ok(T data) {
+
+    public static <T> ApiResult<T> success() {
+        ResponseCode aec = ResponseCode.SUCCESS;
+
+        return restResult(null, aec);
+    }
+
+
+    public static <T> ApiResult<T> success(T data) {
         ResponseCode aec = ResponseCode.SUCCESS;
         if (data instanceof Boolean && Boolean.FALSE.equals(data)) {
             aec = ResponseCode.FAILED;
@@ -34,7 +42,7 @@ public class ApiResult<T> implements Serializable {
     }
 
 
-    public static <T> ApiResult<T> ok(String msg, T data) {
+    public static <T> ApiResult<T> success(String msg, T data) {
         ResponseCode aec = ResponseCode.SUCCESS;
         if (data instanceof Boolean && Boolean.FALSE.equals(data)) {
             aec = ResponseCode.FAILED;
@@ -43,15 +51,15 @@ public class ApiResult<T> implements Serializable {
         return restResult(data, aec, msg);
     }
 
-    public static <T> ApiResult<T> failed(String msg) {
+    public static <T> ApiResult<T> error(String msg) {
         return restResult(null, ResponseCode.FAILED.getCode(), msg);
     }
 
-    public static <T> ApiResult<T> failed(ResponseCode errorCode) {
+    public static <T> ApiResult<T> error(ResponseCode errorCode) {
         return restResult(null, errorCode);
     }
 
-    public static <T> ApiResult<T> failed(ResponseCode errorCode, String msg) {
+    public static <T> ApiResult<T> error(ResponseCode errorCode, String msg) {
         return restResult(null, errorCode.getCode(), msg);
     }
 

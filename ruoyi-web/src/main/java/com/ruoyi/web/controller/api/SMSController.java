@@ -1,7 +1,9 @@
 package com.ruoyi.web.controller.api;
 
 import cn.hutool.core.util.RandomUtil;
+import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.AjaxResult;
+import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,11 +19,12 @@ public class SMSController {
 
     @ApiOperation("发送验证码")
     @PostMapping("sendVcode")
-    public AjaxResult sendVcode(String mobile,String account,String password)
+    @ValidateRequest
+    public ApiResult sendVcode(String mobile,String account,String password)
     {
         //1.参数验证
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password) || StringUtils.isEmpty(mobile)) {
-            return AjaxResult.error("参数错误");
+            return ApiResult.error("参数错误");
         }
         //TODO 2.验证账号密码
 
@@ -29,22 +32,22 @@ public class SMSController {
         String vcode = RandomUtil.randomNumbers(6);
 
         //TODO 4.发送短信
-        return AjaxResult.success(vcode);
+        return ApiResult.success(vcode);
     }
 
     @ApiOperation("发送短信（单条）")
     @PostMapping("sendSms")
-    public AjaxResult sendSms(String mobile,String content, String account,String password)
+    public ApiResult sendSms(String mobile,String content, String account,String password)
     {
         //1.参数验证
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password)
                 || StringUtils.isEmpty(mobile) || StringUtils.isEmpty(content) ) {
-            return AjaxResult.error("参数错误");
+            return ApiResult.error("参数错误");
         }
         //TODO 2.验证账号密码
 
         //TODO 3.发送短信
 
-        return AjaxResult.success();
+        return ApiResult.success();
     }
 }

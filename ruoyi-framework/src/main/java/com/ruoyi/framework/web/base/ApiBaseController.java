@@ -30,23 +30,23 @@ public class ApiBaseController {
     }
 
     protected <T> ApiResult<T> success() {
-        return ApiResult.ok(null);
+        return ApiResult.success(null);
     }
 
     protected <T> ApiResult<T> success(T data) {
-        return ApiResult.ok(data);
+        return ApiResult.success(data);
     }
 
     protected <T> ApiResult<T> success(String msg, T data) {
-        return ApiResult.ok(msg,data);
+        return ApiResult.success(msg,data);
     }
 
-    protected <T> ApiResult<T> failed(String msg) {
-        return ApiResult.failed(msg);
+    protected <T> ApiResult<T> error(String msg) {
+        return ApiResult.error(msg);
     }
 
-    protected <T> ApiResult<T> failed(ResponseCode errorCode) {
-        return ApiResult.failed(errorCode);
+    protected <T> ApiResult<T> error(ResponseCode errorCode) {
+        return ApiResult.error(errorCode);
     }
 
     /**
@@ -68,10 +68,10 @@ public class ApiBaseController {
             ResponseCode errorCode = ((ApiRuntimeException) e).getErrorCode();
             if (null != errorCode) {
                 logger.debug("Rest request error, {}", errorCode.toString());
-                return ApiResult.failed(errorCode);
+                return ApiResult.error(errorCode);
             }
             logger.debug("Rest request error, {}", e.getMessage());
-            return ApiResult.failed(e.getMessage());
+            return ApiResult.error(e.getMessage());
         }
 
         /*
@@ -96,7 +96,7 @@ public class ApiBaseController {
          */
         logger.error("Error: handleBadRequest StackTrace : {}", e);
 
-        return ApiResult.failed(ResponseCode.FAILED,e.getMessage());
+        return ApiResult.error(ResponseCode.FAILED,e.getMessage());
     }
 
 }
