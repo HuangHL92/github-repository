@@ -1,12 +1,16 @@
 package com.ruoyi.common.utils;
 
-import cn.hutool.db.nosql.redis.RedisDS;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.Map;
@@ -18,9 +22,28 @@ import java.util.Set;
  * @author tao.liang
  * @version 2019-02-19
  */
+@Component
 public class JedisUtils {
 
     private static Logger logger = LoggerFactory.getLogger(JedisUtils.class);
+
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    @Value("${spring.redis.prefix}")
+    public void setPrefix(String pre) {
+        prefix = pre+":";
+    }
+
+
+    private static String prefix;
+
+
+
+    private static JedisPool jedisPool = SpringUtils.getBean(JedisPool.class);
+
 
     /**
      * 获取缓存
@@ -30,7 +53,8 @@ public class JedisUtils {
      */
     public static String get(String key) {
         String value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        key = prefix+ key;
+        Jedis jedis = getJedis();
         if (jedis.exists(key)) {
             value = jedis.get(key);
             value = StringUtils.isNotBlank(value) && !"nil".equalsIgnoreCase(value) ? value : null;
@@ -48,7 +72,8 @@ public class JedisUtils {
      */
     public static Object getObject(String key) {
         Object value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             value = toObject(jedis.get(getBytesKey(key)));
             logger.debug("getObject {} = {}", key, value);
@@ -67,7 +92,8 @@ public class JedisUtils {
      */
     public static String set(String key, String value, int cacheSeconds) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.set(key, value);
         if (cacheSeconds != 0) {
             jedis.expire(key, cacheSeconds);
@@ -87,7 +113,8 @@ public class JedisUtils {
      */
     public static String setObject(String key, Object value, int cacheSeconds) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.set(getBytesKey(key), toBytes(value));
         if (cacheSeconds != 0) {
             jedis.expire(key, cacheSeconds);
@@ -105,7 +132,8 @@ public class JedisUtils {
      */
     public static List<String> getList(String key) {
         List<String> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             value = jedis.lrange(key, 0, -1);
             logger.debug("getList {} = {}", key, value);
@@ -122,7 +150,8 @@ public class JedisUtils {
      */
     public static List<Object> getObjectList(String key) {
         List<Object> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             List<byte[]> list = jedis.lrange(getBytesKey(key), 0, -1);
             value = Lists.newArrayList();
@@ -146,7 +175,8 @@ public class JedisUtils {
      */
     public static long setList(String key, List<String> value, int cacheSeconds) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             jedis.del(key);
         }
@@ -169,7 +199,8 @@ public class JedisUtils {
      */
     public static long setObjectList(String key, List<Object> value, int cacheSeconds) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             jedis.del(key);
         }
@@ -195,7 +226,8 @@ public class JedisUtils {
      */
     public static long listAdd(String key, String... value) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.rpush(key, value);
         logger.debug("listAdd {} = {}", key, value);
 
@@ -211,7 +243,8 @@ public class JedisUtils {
      */
     public static long listObjectAdd(String key, Object... value) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         List<byte[]> list = Lists.newArrayList();
         for (Object o : value) {
             list.add(toBytes(o));
@@ -230,7 +263,8 @@ public class JedisUtils {
      */
     public static Set<String> getSet(String key) {
         Set<String> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             value = jedis.smembers(key);
             logger.debug("getSet {} = {}", key, value);
@@ -247,7 +281,8 @@ public class JedisUtils {
      */
     public static Set<Object> getObjectSet(String key) {
         Set<Object> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             value = Sets.newHashSet();
             Set<byte[]> set = jedis.smembers(getBytesKey(key));
@@ -270,7 +305,8 @@ public class JedisUtils {
      */
     public static long setSet(String key, Set<String> value, int cacheSeconds) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             jedis.del(key);
         }
@@ -293,7 +329,8 @@ public class JedisUtils {
      */
     public static long setObjectSet(String key, Set<Object> value, int cacheSeconds) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             jedis.del(key);
         }
@@ -319,7 +356,8 @@ public class JedisUtils {
      */
     public static long setSetAdd(String key, String... value) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.sadd(key, value);
         logger.debug("setSetAdd {} = {}", key, value);
 
@@ -335,7 +373,8 @@ public class JedisUtils {
      */
     public static long setSetObjectAdd(String key, Object... value) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         Set<byte[]> set = Sets.newHashSet();
         for (Object o : value) {
             set.add(toBytes(o));
@@ -354,7 +393,8 @@ public class JedisUtils {
      */
     public static Map<String, String> getMap(String key) {
         Map<String, String> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             value = jedis.hgetAll(key);
             logger.debug("getMap {} = {}", key, value);
@@ -371,7 +411,8 @@ public class JedisUtils {
      */
     public static Map<String, Object> getObjectMap(String key) {
         Map<String, Object> value = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             value = Maps.newHashMap();
             Map<byte[], byte[]> map = jedis.hgetAll(getBytesKey(key));
@@ -394,7 +435,8 @@ public class JedisUtils {
      */
     public static String setMap(String key, Map<String, String> value, int cacheSeconds) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             jedis.del(key);
         }
@@ -417,7 +459,8 @@ public class JedisUtils {
      */
     public static String setObjectMap(String key, Map<String, Object> value, int cacheSeconds) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             jedis.del(key);
         }
@@ -443,7 +486,8 @@ public class JedisUtils {
      */
     public static String mapPut(String key, Map<String, String> value) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.hmset(key, value);
         logger.debug("mapPut {} = {}", key, value);
 
@@ -459,7 +503,8 @@ public class JedisUtils {
      */
     public static String mapObjectPut(String key, Map<String, Object> value) {
         String result = null;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         Map<byte[], byte[]> map = Maps.newHashMap();
         for (Map.Entry<String, Object> e : value.entrySet()) {
             map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
@@ -479,7 +524,8 @@ public class JedisUtils {
      */
     public static long mapRemove(String key, String mapKey) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.hdel(key, mapKey);
         logger.debug("mapRemove {}  {}", key, mapKey);
 
@@ -495,7 +541,8 @@ public class JedisUtils {
      */
     public static long mapObjectRemove(String key, String mapKey) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.hdel(getBytesKey(key), getBytesKey(mapKey));
         logger.debug("mapObjectRemove {}  {}", key, mapKey);
 
@@ -511,7 +558,8 @@ public class JedisUtils {
      */
     public static boolean mapExists(String key, String mapKey) {
         boolean result = false;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.hexists(key, mapKey);
         logger.debug("mapExists {}  {}", key, mapKey);
 
@@ -527,7 +575,8 @@ public class JedisUtils {
      */
     public static boolean mapObjectExists(String key, String mapKey) {
         boolean result = false;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.hexists(getBytesKey(key), getBytesKey(mapKey));
         logger.debug("mapObjectExists {}  {}", key, mapKey);
 
@@ -542,7 +591,8 @@ public class JedisUtils {
      */
     public static long del(String key) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(key)) {
             result = jedis.del(key);
             logger.debug("del {}", key);
@@ -561,7 +611,8 @@ public class JedisUtils {
      */
     public static long delObject(String key) {
         long result = 0;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         if (jedis.exists(getBytesKey(key))) {
             result = jedis.del(getBytesKey(key));
             logger.debug("delObject {}", key);
@@ -580,7 +631,8 @@ public class JedisUtils {
      */
     public static boolean exists(String key) {
         boolean result = false;
-        Jedis jedis = RedisDS.create().getJedis();
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.exists(key);
         logger.debug("exists {}", key);
 
@@ -595,7 +647,9 @@ public class JedisUtils {
      */
     public static boolean existsObject(String key) {
         boolean result = false;
-        Jedis jedis = RedisDS.create().getJedis();
+
+        Jedis jedis = getJedis();
+        key = prefix+ key;
         result = jedis.exists(getBytesKey(key));
         logger.debug("existsObject {}", key);
 
@@ -634,6 +688,12 @@ public class JedisUtils {
      */
     public static Object toObject(byte[] bytes) {
         return ObjectUtils.unserialize(bytes);
+    }
+
+
+    private static Jedis getJedis() {
+
+        return jedisPool.getResource();
     }
 
 }

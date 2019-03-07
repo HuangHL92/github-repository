@@ -4,14 +4,19 @@
 package com.ruoyi.framework.util;
 
 
+import com.ruoyi.common.base.TokenEntity;
+import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysUser;
+import lombok.Getter;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -19,36 +24,60 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jeeplus
  * @version 2017-1-19
  */
+@Component
+@Getter
 public class CacheUtils {
 
+
+	public static String getSPRING_REDIS_PREFIX() {
+		return SPRING_REDIS_PREFIX;
+	}
+
+	@Value("${spring.redis.prefix}")
+	public  void setSPRING_REDIS_PREFIX(String springRedisPrefix) {
+		SPRING_REDIS_PREFIX = springRedisPrefix + ":";
+	}
 
 	/**
 	 * Redis缓存前缀，用于区分不同的项目
 	 */
-	private static final String SPRING_REDIS_PREFIX = "jy_basic:";
+
+	private static  String SPRING_REDIS_PREFIX;
 
 	/**
 	 * session缓存
 	 */
-	public static final String SHIRO_ACTIVE_SESSION_CACHE = SPRING_REDIS_PREFIX + "shiro_redis_session";
+	public static  String SHIRO_ACTIVE_SESSION_CACHE =  "shiro_redis_session";
 
 	/**
 	 * 登录记录缓存
 	 */
-	public static final String LOGIN_RECORD_CACHE = SPRING_REDIS_PREFIX + "loginRecordCache";
+	public static  String LOGIN_RECORD_CACHE =  "loginRecordCache";
 
 	/**
 	 * shiro 认证缓存
 	 */
-	public static final String AUTHENTICATION_CACHE = SPRING_REDIS_PREFIX + "authenticationcache";
+	public static  String AUTHENTICATION_CACHE =  "authenticationcache";
 	/**
 	 * shiro 授权缓存
 	 */
-	public static final String AUTHORIZATION_CACHE = SPRING_REDIS_PREFIX + "authorizationcache";
+	public static  String AUTHORIZATION_CACHE =  "authorizationcache";
 	/**
 	 * 用户 缓存
 	 */
-	public static final String USER_CACHE = SPRING_REDIS_PREFIX + "userCache";
+	public static  String USER_CACHE =  "userCache";
+
+	/**
+	 * tokenß 缓存
+	 */
+	public static  String TOKEN_CACHE = "tokenCache";
+
+
+	/**
+	 * 菜单 缓存
+	 */
+	public static  String MENU_CACHE = "menuCache";
+
 
 	private CacheManager cacheManager;
 
@@ -60,18 +89,28 @@ public class CacheUtils {
 
 	private Cache<String, SysUser> userCache;
 
+	private Cache<String, TokenEntity> tokenCache;
+
+	private Cache<String, List<SysMenu>> menuCache;
+
+
 	@PostConstruct
 	public void init()
 	{
+		SHIRO_ACTIVE_SESSION_CACHE = SPRING_REDIS_PREFIX +SHIRO_ACTIVE_SESSION_CACHE;
+		LOGIN_RECORD_CACHE= SPRING_REDIS_PREFIX +LOGIN_RECORD_CACHE;
+		AUTHENTICATION_CACHE= SPRING_REDIS_PREFIX +AUTHENTICATION_CACHE;
+		AUTHORIZATION_CACHE= SPRING_REDIS_PREFIX +AUTHORIZATION_CACHE;
+		USER_CACHE = SPRING_REDIS_PREFIX +USER_CACHE;
+		TOKEN_CACHE= SPRING_REDIS_PREFIX +TOKEN_CACHE;
+		MENU_CACHE= SPRING_REDIS_PREFIX +MENU_CACHE;
+
 		loginRecordCache = cacheManager.getCache(LOGIN_RECORD_CACHE);
 		userCache = cacheManager.getCache(USER_CACHE);
+		tokenCache = cacheManager.getCache(TOKEN_CACHE);
+		menuCache = cacheManager.getCache(MENU_CACHE);
+
 	}
 
-	public Cache<String, AtomicInteger> getLoginRecordCache() {
-		return loginRecordCache;
-	}
 
-	public Cache<String, SysUser> getUserCache() {
-		return userCache;
-	}
 }
