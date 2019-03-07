@@ -58,6 +58,10 @@ public class RedisCacheManager implements CacheManager
                 else if (CacheUtils.MENU_CACHE.equals(name)) {
                     cache = new RedisCache<>(name, -1, redisManager);
                 }
+                // 字典（授权缓存）：持久
+                else if (CacheUtils.DICT_CACHE.equals(name)) {
+                    cache = new RedisCache<>(name, -1, redisManager);
+                }
                 // 默认缓存（授权缓存）：60分钟
                 else {
                     cache = new RedisCache<>(name, 3600, redisManager);

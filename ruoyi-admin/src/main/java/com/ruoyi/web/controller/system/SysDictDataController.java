@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class SysDictDataController extends BaseController
 
     @Autowired
     private ISysDictDataService dictDataService;
+
+    @Autowired
+    private CacheUtils cacheUtils;
 
     @RequiresPermissions("system:dict:view")
     @GetMapping()
@@ -82,6 +87,7 @@ public class SysDictDataController extends BaseController
     public AjaxResult addSave(SysDictData dict)
     {
         dict.setCreateBy(ShiroUtils.getLoginName());
+        cacheUtils.getDictCache().remove(dict.getDictType());
         return toAjax(dictDataService.insertDictData(dict));
     }
 
@@ -105,6 +111,7 @@ public class SysDictDataController extends BaseController
     public AjaxResult editSave(SysDictData dict)
     {
         dict.setUpdateBy(ShiroUtils.getLoginName());
+        cacheUtils.getDictCache().remove(dict.getDictType());
         return toAjax(dictDataService.updateDictData(dict));
     }
 
@@ -114,6 +121,9 @@ public class SysDictDataController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
+        cacheUtils.getDictCache().clear();
         return toAjax(dictDataService.deleteDictDataByIds(ids));
     }
+
+
 }

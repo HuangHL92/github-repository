@@ -5,6 +5,7 @@ package com.ruoyi.framework.util;
 
 
 import com.ruoyi.common.base.TokenEntity;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysUser;
 import lombok.Getter;
@@ -58,25 +59,32 @@ public class CacheUtils {
 	 * shiro 认证缓存
 	 */
 	public static  String AUTHENTICATION_CACHE =  "authenticationcache";
+
 	/**
 	 * shiro 授权缓存
 	 */
 	public static  String AUTHORIZATION_CACHE =  "authorizationcache";
+
 	/**
 	 * 用户 缓存
 	 */
 	public static  String USER_CACHE =  "userCache";
 
 	/**
-	 * tokenß 缓存
+	 * token 缓存
 	 */
 	public static  String TOKEN_CACHE = "tokenCache";
-
 
 	/**
 	 * 菜单 缓存
 	 */
 	public static  String MENU_CACHE = "menuCache";
+
+	/**
+	 * 字典 缓存
+	 */
+	public static  String DICT_CACHE = "dictCache";
+
 
 
 	private CacheManager cacheManager;
@@ -93,6 +101,8 @@ public class CacheUtils {
 
 	private Cache<String, List<SysMenu>> menuCache;
 
+	private Cache<String, List<SysDictData>> dictCache;
+
 
 	@PostConstruct
 	public void init()
@@ -104,11 +114,13 @@ public class CacheUtils {
 		USER_CACHE = SPRING_REDIS_PREFIX +USER_CACHE;
 		TOKEN_CACHE= SPRING_REDIS_PREFIX +TOKEN_CACHE;
 		MENU_CACHE= SPRING_REDIS_PREFIX +MENU_CACHE;
+		DICT_CACHE= SPRING_REDIS_PREFIX +DICT_CACHE;
 
 		loginRecordCache = cacheManager.getCache(LOGIN_RECORD_CACHE);
 		userCache = cacheManager.getCache(USER_CACHE);
 		tokenCache = cacheManager.getCache(TOKEN_CACHE);
 		menuCache = cacheManager.getCache(MENU_CACHE);
+		dictCache = cacheManager.getCache(DICT_CACHE);
 
 	}
 
