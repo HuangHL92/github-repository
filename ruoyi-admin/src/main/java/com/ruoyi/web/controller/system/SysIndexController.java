@@ -1,6 +1,10 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.JedisUtils;
+import com.ruoyi.framework.util.CacheUtils;
+import com.ruoyi.framework.web.domain.server.Sys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,14 +26,24 @@ public class SysIndexController extends BaseController
     @Autowired
     private ISysMenuService menuService;
 
+    @Autowired
+    private CacheUtils cacheUtils;
+
     // 系统首页
     @GetMapping("/index")
     public String index(ModelMap mmap)
     {
         // 取身份信息
         SysUser user = getSysUser();
+
         // 根据用户id取出菜单
-        List<SysMenu> menus = menuService.selectMenusByUser(user);
+        List<SysMenu> menus = cacheUtils.getMenuCache().get(user.getUserId().toString());
+        if(menus==null) {
+            menus = menuService.selectMenusByUser(user);
+            cacheUtils.getMenuCache().put(user.getUserId().toString(),menus);
+        }
+
+        //List<SysMenu> menus = menuService.selectMenusByUser(user);
         mmap.put("menus", menus);
         mmap.put("user", user);
         mmap.put("copyrightYear", Global.getCopyrightYear());

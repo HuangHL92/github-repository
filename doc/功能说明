@@ -79,3 +79,9 @@ templates/login.html
 
 模板路径：
 static/docs/*  存放各类下载、文档生成等模板文件
+
+redis:
+redis使用Jedis做为底层(注意：hutool中的redis未使用)
+application-druid.yml 文件中prefix对应值就是本项目的前缀（每个项目请务必修为本项目名称）
+com/ruoyi/common/utils/JedisUtils.java
+key命名规则，XXXX:XXXX（例如：token:userid）

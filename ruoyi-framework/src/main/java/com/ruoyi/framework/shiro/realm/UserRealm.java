@@ -2,6 +2,8 @@ package com.ruoyi.framework.shiro.realm;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.ruoyi.common.utils.JedisUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -71,6 +73,7 @@ public class UserRealm extends AuthorizingRealm
         }
         else
         {
+            //先从缓存取得
             roles = roleService.selectRoleKeys(user.getUserId());
             menus = menuService.selectPermsByUserId(user.getUserId());
             // 角色加入AuthorizationInfo认证对象

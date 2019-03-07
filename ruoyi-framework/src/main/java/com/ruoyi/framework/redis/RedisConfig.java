@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -19,6 +23,8 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -30,8 +36,32 @@ import java.util.Map;
 @EnableCaching // 开启缓存支持
 public class RedisConfig extends CachingConfigurerSupport {
 
+	private static final Logger log = LoggerFactory.getLogger(RedisConfig.class);
+
+
 	@Resource
 	private LettuceConnectionFactory lettuceConnectionFactory;
+
+
+	@Value("${spring.redis.host}")
+	private String redisHost;
+
+	@Value("${spring.redis.password}")
+	private String redisPassword;
+
+	@Value("${spring.redis.port}")
+	private int redisPort;
+
+	@Value("${spring.redis.timeout}")
+	private String redisTimeout;
+
+	@Value("${spring.redis.lettuce.pool.max-idle}")
+	private int redisPoolMaxidle;
+
+	@Value("${spring.redis.lettuce.pool.max-wait}")
+	private String redisPoolMaxwait;
+
+
 
 	// 缓存管理器
 	@Bean
@@ -133,5 +163,26 @@ public class RedisConfig extends CachingConfigurerSupport {
 //        redisTemplate.setValueSerializer(valueSerializer());
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
 		return redisTemplate;
+	}
+
+
+	@Bean
+	public JedisPool redisPoolFactory() {
+
+
+		log.info("redis地址：" + redisHost + ":" + redisPort);
+		JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+		jedisPoolConfig.setMaxIdle(redisPoolMaxidle);
+		jedisPoolConfig.setMaxWaitMillis(Integer.parseInt(redisPoolMaxwait.replaceAll("ms","")));
+
+		JedisPool jedisPool=null;
+		if(StringUtils.isEmpty(redisPassword.trim())) {
+			 jedisPool = new JedisPool(jedisPoolConfig, redisHost, redisPort, Integer.parseInt(redisTimeout.replaceAll("ms","")));
+		} else {
+			 jedisPool = new JedisPool(jedisPoolConfig, redisHost, redisPort, Integer.parseInt(redisTimeout.replaceAll("ms","")),redisPassword.trim());
+		}
+
+		log.info("JedisPool注入成功！！");
+		return jedisPool;
 	}
 }

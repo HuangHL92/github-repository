@@ -22,6 +22,7 @@ import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.omg.CORBA.PUBLIC_MEMBER;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
@@ -93,6 +94,9 @@ public class ShiroConfig
     // redis缓存开关
     @Value("${spring.redis.enabled}")
     private boolean redisEnabled = false;
+
+    @Autowired
+    private CacheUtils cacheUtils;
 
     /**
      * 缓存管理器 使用Ehcache实现
