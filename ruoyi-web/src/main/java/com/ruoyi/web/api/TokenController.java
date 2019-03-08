@@ -1,4 +1,4 @@
-package com.ruoyi.web.controller.api;
+package com.ruoyi.web.api;
 
 import cn.hutool.core.lang.UUID;
 import com.ruoyi.common.annotation.ValidateRequest;
