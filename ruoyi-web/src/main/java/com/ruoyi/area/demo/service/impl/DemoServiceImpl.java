@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.mapper.DemoMapper;
 import com.ruoyi.area.demo.service.IDemoService;
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,9 +20,16 @@ import java.util.List;
 public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements IDemoService
 {
     @Override
-    public List<Demo> selectList(Demo sysDemo) {
+    public List<Demo> selectList(Demo demo) {
         QueryWrapper<Demo> query = new QueryWrapper<>();
         // 查询条件
+        if(StringUtils.isNotEmpty(demo.getName())) {
+            query.lambda()
+                    .likeRight(Demo::getName, demo.getName());
+            //query.like("name",sysDemo.getName());
+        }
+
+        //query.orderByAsc("id");
 
         return list(query);
     }

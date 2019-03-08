@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api("短信接口服务")
+@Api(value = "/sms", description = "短信接口服务")
 @RestController
 @RequestMapping("/api/sms/*")
 public class SMSController {

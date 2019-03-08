@@ -701,16 +701,16 @@ public class JedisUtils {
     public static long setIncr(String key, int cacheSeconds) {
         long result = 0;
         Jedis jedis = null;
-        key = prefix+ "request:" + key;
+        key = prefix+ "requestCache:" + key;
         try {
             jedis = jedisPool.getResource();
             result =jedis.incr(key);
             if (cacheSeconds != 0) {
                 jedis.expire(key, cacheSeconds);
             }
-            logger.debug("set "+ key + " = " + result);
+            //logger.debug("set "+ key + " = " + result);
         } catch (Exception e) {
-            logger.warn("set "+ key + " = " + result);
+            //logger.warn("set "+ key + " = " + result);
         } finally {
             jedisPool.returnResource(jedis);
         }

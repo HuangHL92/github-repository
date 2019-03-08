@@ -42,9 +42,13 @@
 		        </a>
 
                 <!--后添加按钮-->
-                <button class="btn btn-primary" type="button">
-                    <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">自定义按钮</span>
+                <button class="btn btn-primary" type="button" onclick="batchData()">
+                    <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">生成数据</span>
                 </button>
+
+				<button class="btn btn-primary" type="button" onclick="clearAll()">
+					<i class="fa fa-remove"></i>&nbsp;&nbsp;<span class="bold">清空表</span>
+				</button>
 
 	        </div>
 	        
@@ -69,7 +73,7 @@
 		        removeUrl: prefix + "/remove",
 		        exportUrl: prefix + "/export",
                 sortOrder:"desc",
-		        sortName: "name",
+		        sortName: "id",
 		        modalName: "测试数据",
 		        search: false,
 		        showExport: false,
@@ -104,8 +108,17 @@
 		    };
 		    $.table.init(options);
 		});
-		
 
+
+		function batchData() {
+			var url =ctx + "demo/all/batchData";
+			$.operate.post(url,$("#form-demo-redis").serialize());
+		}
+
+		function clearAll() {
+			var url =ctx + "demo/all/clearAll";
+			$.operate.post(url,$("#form-demo-redis").serialize());
+		}
 	</script>
 </body>
 </html>

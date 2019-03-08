@@ -2,19 +2,20 @@ package com.ruoyi.web.controller.demo;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.word.WordExportUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
+import com.ruoyi.area.demo.domain.Department;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.PdfUtils;
@@ -29,6 +30,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -194,6 +196,45 @@ public class DemoController extends BaseController
 	{		
 		return toAjax(demoService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 	}
+
+
+    /**
+     * 生成批量数据
+     */
+    @Log(title = "生成批量数据", businessType = BusinessType.OTHER)
+    @PostMapping( "/batchData")
+    @ResponseBody
+    public AjaxResult batchData(HttpServletRequest request)
+    {
+
+        List<Demo> ls = new ArrayList<Demo>();
+        int i=0;
+        while (i<5000) {
+            Demo demo = new Demo();
+            demo.setId(IdUtil.randomUUID());
+            demo.setName("姓名"+i);
+            ls.add(demo);
+            i++;
+        }
+        demoService.saveBatch(ls);
+
+        return AjaxResult.success("成功插入5000条记录");
+    }
+
+
+    /**
+     * 清空表
+     */
+    @Log(title = "清空表", businessType = BusinessType.OTHER)
+    @PostMapping( "/clearAll")
+    @ResponseBody
+    public AjaxResult clearAll(HttpServletRequest request)
+    {
+        QueryWrapper<Demo> query = new QueryWrapper<>();
+        demoService.remove(query);
+
+        return AjaxResult.success();
+    }
 
 
     /**

@@ -12,7 +12,6 @@ import com.ruoyi.common.exception.ApiRuntimeException;
 import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.framework.jwt.domain.Account;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -94,10 +93,8 @@ public class AuthenticationAspect {
                 return;
             }
 
-
-
             //从 http 请求头中取出 token
-            String token = request.getHeader("token");
+            String token = request.getHeader("x-access-token");
 
             // 执行认证
             if (token == null) {
@@ -117,7 +114,7 @@ public class AuthenticationAspect {
             try {
                 userId = JWT.decode(token).getAudience().get(0);
             } catch (JWTDecodeException j) {
-                throw j;
+                throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
             }
 //            User user = userService.findUserById(userId);
 //            if (user == null) {

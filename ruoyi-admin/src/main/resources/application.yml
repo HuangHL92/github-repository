@@ -1,7 +1,7 @@
 # 项目相关配置
 ruoyi:
   # 名称
-  name: RuoYi
+  name: JiYun
   # 版本
   version: 3.2.0
   # 版权年份
@@ -165,9 +165,9 @@ jiyun:
     aeskey:
   webPath: http://e94x2c.natappfree.cc
 
-# Api 配置
+# restful 配置
 api:
   overtime: 15    #接口请求失效时间
   nonceovertime: 15
-  basepackage: com.ruoyi.api
-  appsecret: 1q2w3e4r
+  basepackage: com.ruoyi.api #restful接口扫描路径
+  appsecret: 1q2w3e4r #token验证用密钥
