@@ -33,6 +33,9 @@
         <jedis.version>2.9.0</jedis.version>
         <easypoi.version>3.0.2</easypoi.version>
         <guava.version>20.0</guava.version>
+        <jwt.version>3.7.0</jwt.version>
+        <jjwt.version> 0.10.6</jjwt.version>
+
 	</properties>
 	
     <dependencyManagement>
@@ -182,6 +185,21 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+
+
+        <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
 
     </dependencies>

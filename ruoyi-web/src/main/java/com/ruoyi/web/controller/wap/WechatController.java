@@ -1,7 +1,7 @@
 package com.ruoyi.web.controller.wap;
 
 import com.ruoyi.config.WxMpConfig;
-import com.ruoyi.demo.service.WeixinService;
+import com.ruoyi.area.demo.service.WeixinService;
 import com.ruoyi.framework.web.base.BaseController;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 

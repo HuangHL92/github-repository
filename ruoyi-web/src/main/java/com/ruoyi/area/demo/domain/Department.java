@@ -1,4 +1,4 @@
-package com.ruoyi.demo.domain;
+package com.ruoyi.area.demo.domain;
 
 
 import com.baomidou.mybatisplus.annotation.TableId;

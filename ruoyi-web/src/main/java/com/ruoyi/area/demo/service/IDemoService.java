@@ -1,7 +1,7 @@
-package com.ruoyi.demo.service;
+package com.ruoyi.area.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ruoyi.demo.domain.Demo;
+import com.ruoyi.area.demo.domain.Demo;
 
 import java.util.List;
 

@@ -164,3 +164,10 @@ jiyun:
     token:
     aeskey:
   webPath: http://e94x2c.natappfree.cc
+
+# Api 配置
+api:
+  overtime: 15    #接口请求失效时间
+  nonceovertime: 15
+  basepackage: com.ruoyi.api
+  appsecret: 1q2w3e4r

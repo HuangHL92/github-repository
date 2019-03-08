@@ -3,8 +3,8 @@ package com.ruoyi.web.controller.demo;
 import java.util.Arrays;
 import java.util.List;
 
-import com.ruoyi.demo.domain.Department;
-import com.ruoyi.demo.service.IDepartmentService;
+import com.ruoyi.area.demo.domain.Department;
+import com.ruoyi.area.demo.service.IDepartmentService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.websocket.SocketServer;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

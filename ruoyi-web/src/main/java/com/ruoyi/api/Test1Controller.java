@@ -1,4 +1,4 @@
-package com.ruoyi.web.api;
+package com.ruoyi.api;
 
 import cn.hutool.core.util.RandomUtil;
 import com.ruoyi.common.annotation.ValidateRequest;

@@ -1,12 +1,12 @@
-package com.ruoyi.demo.service.impl;
+package com.ruoyi.area.demo.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ruoyi.demo.domain.Department;
-import com.ruoyi.demo.mapper.DepartmentMapper;
-import com.ruoyi.demo.service.IDepartmentService;
+import com.ruoyi.area.demo.domain.Department;
+import com.ruoyi.area.demo.mapper.DepartmentMapper;
+import com.ruoyi.area.demo.service.IDepartmentService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

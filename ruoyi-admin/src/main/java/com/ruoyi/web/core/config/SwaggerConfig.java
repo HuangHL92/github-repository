@@ -1,5 +1,6 @@
 package com.ruoyi.web.core.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.ruoyi.common.config.Global;
@@ -21,6 +22,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig
 {
+
+    @Value("${api.basepackage}")
+    private String basepackage;
+
     /**
      * 创建API
      */
@@ -32,7 +37,7 @@ public class SwaggerConfig
                 .apiInfo(apiInfo())
                 .select()
                 // 指定当前包路径
-                .apis(RequestHandlerSelectors.basePackage("com.ruoyi.web.api"))
+                .apis(RequestHandlerSelectors.basePackage(basepackage))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build();

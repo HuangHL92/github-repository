@@ -1,12 +1,10 @@
-package com.ruoyi.demo.service.impl;
+package com.ruoyi.area.demo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ruoyi.demo.domain.Demo;
-import com.ruoyi.demo.mapper.DemoMapper;
-import com.ruoyi.demo.service.IDemoService;
-import com.ruoyi.common.support.Convert;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ruoyi.area.demo.domain.Demo;
+import com.ruoyi.area.demo.mapper.DemoMapper;
+import com.ruoyi.area.demo.service.IDemoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,18 +1,16 @@
-package com.ruoyi.web.api;
+package com.ruoyi.api;
 
 import cn.hutool.core.lang.UUID;
-import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.demo.domain.Demo;
-import com.ruoyi.framework.util.CacheUtils;
+import com.ruoyi.framework.jwt.domain.Account;
+import com.ruoyi.framework.jwt.service.TokenService;
 import com.ruoyi.framework.web.base.ApiBaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +28,9 @@ import java.util.HashMap;
 public class TokenController extends ApiBaseController {
 
 
+    @Autowired
+    private TokenService tokenService;
+
     private String TOKEN_KEY= "tokenCache:%s";
 
     @ApiOperation("获取令牌")
@@ -45,11 +46,10 @@ public class TokenController extends ApiBaseController {
         //TODO 2.验证用户是否合法
 
         //3. 生成令牌写入redis
-        String token = UUID.randomUUID().toString();
-        JedisUtils.set(String.format(TOKEN_KEY,account), token,60);
+        String token = createToken(account,password);
 
         HashMap map =new HashMap();
-        map.put("expires",60);
+        map.put("expires",3600);
         map.put("token",token);
 
         //TODO 4.返回令牌
@@ -66,19 +66,29 @@ public class TokenController extends ApiBaseController {
 
             return ApiResult.error(ResponseCode.ILLEGAL_REQUEST);
         }
+
         //TODO 2.生成令牌写入redis
-        String token =JedisUtils.get(String.format(TOKEN_KEY,account));
+        String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
         if(token==null) {
-            token = UUID.randomUUID().toString();
+            token = createToken(account,password);
         }
-        JedisUtils.set(String.format(TOKEN_KEY,account), token,60);
 
         HashMap map =new HashMap();
-        map.put("expires",60);
+        map.put("expires",3600);
         map.put("token",token);
 
         //TODO 4.返回令牌
         return ApiResult.success(map);
     }
 
+
+    private String createToken(String account, String password) {
+        Account ac = new Account();
+        ac.setId(account);
+        ac.setUsername(account);
+        ac.setPassword(password);
+        String token = tokenService.getToken(ac);
+        JedisUtils.set(String.format(TOKEN_KEY,account), token,3600);
+        return token;
+    }
 }

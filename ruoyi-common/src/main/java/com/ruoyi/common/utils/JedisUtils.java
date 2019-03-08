@@ -691,6 +691,33 @@ public class JedisUtils {
     }
 
 
+    /**
+     * 对某个键的值自增
+     * @author liboyi
+     * @param key 键
+     * @param cacheSeconds 超时时间，0为不超时
+     * @return
+     */
+    public static long setIncr(String key, int cacheSeconds) {
+        long result = 0;
+        Jedis jedis = null;
+        key = prefix+ "request:" + key;
+        try {
+            jedis = jedisPool.getResource();
+            result =jedis.incr(key);
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("set "+ key + " = " + result);
+        } catch (Exception e) {
+            logger.warn("set "+ key + " = " + result);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+        return result;
+    }
+
+
     private static Jedis getJedis() {
 
         return jedisPool.getResource();

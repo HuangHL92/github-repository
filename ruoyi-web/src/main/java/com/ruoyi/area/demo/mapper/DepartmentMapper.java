@@ -1,7 +1,7 @@
-package com.ruoyi.demo.mapper;
+package com.ruoyi.area.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.demo.domain.Department;
+import com.ruoyi.area.demo.domain.Department;
 
 /**
  * 练习_部门 数据层

@@ -1,10 +1,7 @@
-package com.ruoyi.demo.mapper;
+package com.ruoyi.area.demo.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.demo.domain.Demo;
-import com.ruoyi.demo.domain.Department;
-
-import java.util.List;
+import com.ruoyi.area.demo.domain.Demo;
 
 /**
  * 测试 数据层
