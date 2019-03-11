@@ -86,20 +86,28 @@ function initCtrl() {
     //上传控件
     $("[data-toggle='fileupload']").each(function () {
         var _c=$(this);
-        var up=new UploadFile(_c);
+        var up = new UploadFile(_c);
     })
 
     //选择控件
     $("[data-toggle='select']").each(function () {
         var _c=$(this);
-        var up=new Select(_c);
+        var up = new Select(_c);
     })
 
     //日期控件
-    // $("[data-toggle='date']").each(function () {
-    //     var _c=$(this);
-    //     var up=new Date(_c);
-    // })
+    $("[data-toggle='date']").each(function () {
+        var _c=$(this);
+        DateInput(_c);
+    })
+
+    // if ($(".date-input").length > 0) {
+    //     $(".date-input").each(function () {
+    //         var _c=$(this);
+    //         DateInput(_c);
+    //     })
+    // }
+
 
     layui.use('element', function(){
         var $ = layui.jquery
@@ -382,15 +390,16 @@ UploadFile.prototype.init = function () {
 <!--Select开始-->
 var Select = function (obj) {
     var that = this;
-    var id= obj.data("id")
-        ,skin=obj.data("skin")||"primary"
-        ,radio=obj.data("radio")||"false"
-        ,callback=obj.data("click")||""
-        ,search=obj.data("search")||""
+    var id= obj.attr("id")
         ,type=obj.data("type")||""  //user,user-tree,dept,dept-tree
-        ,pid=obj.data("pid")||""  // 父ID，解决只显示某个层级下数据问题
-        ,value=obj.data("value")||""  // 选中的项
+        ,radio=obj.data("radio")||"false"
+        ,search=obj.data("search")||""
         ,cls=obj.data("class")||""  // 样式
+        ,skin=obj.data("skin")||"primary"
+        ,callback=obj.attr("click")||""
+        ,pid=obj.attr("pid")||""  // 父ID，解决只显示某个层级下数据问题
+        ,value=obj.attr("value")||""  // 选中的项
+
     var option={
         id:id
         ,callback:callback //回调方法
@@ -580,29 +589,57 @@ $.validator.setDefaults({
 
 
 <!--日期控件开始-->
-// var Date = function (obj) {
-//     var that = this;
-//     var id= obj.data("id")
-//         ,format=obj.data("format")||"YYYY-MM-DD hh:mm:ss"
-//         ,onclick=obj.data("click")
-//         ,value=obj.data("value")||""
-//         ,cls=obj.data("class")||""  // 样式
-//
-//     //添加属性
-//     obj.attr("name",id);
-//     obj.attr("class","form-control layer-date time-input " + cls);
-//     obj.attr("placeholder",format);
-//     if(onclick) {
-//         onclick="laydate({istime: true, format: '"+ format +"'})"
-//     }
-//     obj.attr("onclick",onclick);
-//     obj.attr("value",value);
-//
-//     obj.after("<label class=\"laydate-icon\"></label>");
-//
-//
-//
-// }
+var DateInput = function (obj) {
+
+    var placeholder ="";
+    var id= obj.attr("id")
+        ,name=obj.attr("name")||id
+        ,type=obj.data("type")||"time"  //year,month,date,time,datetime
+        ,placeholder=obj.attr("placeholder")
+        ,value=obj.attr("value")||""
+        ,callback=obj.data("callback")
+        ,max=obj.data("max")||'2099-12-31'
+        ,min=obj.data("min")||'1900-1-1'
+        ,cls=obj.attr("class");  // 样式
+
+    obj.attr("class",cls + " form-control layer-date");
+    obj.attr("name",name);
+    if(!placeholder) {
+        if(type=="year") {
+            placeholder="YYYY";
+        }
+        else if(type=="month") {
+            placeholder="YYYY-MM";
+        } else if(type=="date") {
+            placeholder="YYYY-MM-DD";
+        } else if(type=="datetime") {
+            placeholder="YYYY-MM-DD HH:mm:ss";
+        }
+    }
+
+    obj.attr("placeholder",placeholder);
+
+    layui.use('laydate', function() {
+        layui.laydate.render({
+            elem: '#'+id
+            ,type: type
+            // ,trigger: 'click'
+            ,value:value
+            ,min:min
+            ,max:max
+            ,done: function(value, date) {
+                //选中后的回调
+                if(callback) {
+                    var f = eval(callback);
+                    f(value);
+                }
+
+            }
+        });
+    });
+
+
+}
 
 <!--日期控件结束-->
 
@@ -650,8 +687,6 @@ function GUID() {
         }
     }
 }
-
-
 
 
 // 页面控件初始化

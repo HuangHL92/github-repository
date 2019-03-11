@@ -80,6 +80,7 @@ public class ${className}Controller extends BaseController
 	public String add(ModelMap mmap)
 	{
         ${className} ${classname}  = new ${className}();
+        //表单Action指定
         ${classname}.setFormAction(prefix + "/add");
 		mmap.put("${classname}", ${classname});
 	    return prefix + "/add";
@@ -104,8 +105,11 @@ public class ${className}Controller extends BaseController
 	public String edit(@PathVariable("${primaryKey.attrname}") ${primaryKey.attrType} ${primaryKey.attrname}, ModelMap mmap)
 	{
 		${className} ${classname} = ${classname}Service.getById(${primaryKey.attrname});
-
+		//表单Action指定
         ${classname}.setFormAction(prefix + "/edit");
+		//主键加密（配合editSave方法使用）- 如果需防止数据ID泄露，请放开，否则请删除此处代码
+		//${classname}.setId(pk_encrypt(${classname}.getId()));
+
 		mmap.put("${classname}", ${classname});
 	    return prefix + "/add";
 	}
@@ -118,7 +122,11 @@ public class ${className}Controller extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(${className} ${classname})
-	{		
+	{
+
+		//主键解密（配合edit方法使用，请确认edit方法中加密了）- 如果需防止数据ID泄露，请放开，否则请删除此处代码
+		//${classname}.setId(pk_decrypt(${classname}.getId()));
+
 		return toAjax(${classname}Service.saveOrUpdate(${classname}));
 	}
 	

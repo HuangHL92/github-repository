@@ -149,10 +149,33 @@
 
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">日期选择：</label>
+                                    <label class="col-sm-2 control-label">日期(YYYY)：</label>
                                     <div class="col-sm-10">
-                                        <input class="form-control layer-date time-input" placeholder="YYYY-MM-DD hh:mm:ss" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                                        <label class="laydate-icon"></label>
+                                        <input data-toggle="date" data-type="year" id="years"  value="2019" class="required"/>
+                                    </div>
+                                </div>
+
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">日期(YYYY-MM)：</label>
+                                    <div class="col-sm-10">
+                                        <input data-toggle="date" data-type="month" id="months"  />
+                                    </div>
+                                </div>
+
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">日期(YYYY-MM-DD)：</label>
+                                    <div class="col-sm-10">
+                                        <input data-toggle="date" data-type="date" id="days" th:value="*{#dates.format(createTime, 'yyyy-MM-dd')}" />
+                                    </div>
+                                </div>
+
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">创建时间：</label>
+                                    <div class="col-sm-10">
+                                        <p class="form-control-static" th:text="*{#dates.format(createTime, 'yyyy-MM-dd HH:mm:ss')}"></p>
                                     </div>
                                 </div>
 
@@ -178,7 +201,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">用户(多选)：</label>
                                     <div class="col-sm-10">
-                                        <select name="st1"  data-toggle="select" data-id="st1" data-type="user" data-value="100" >
+                                        <select data-toggle="select"  data-type="user" id="st1" value="100" >
                                         </select>
                                     </div>
                                 </div>
@@ -187,7 +210,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">用户(单选)：</label>
                                     <div class="col-sm-10">
-                                        <select data-id="reporter"  data-class="required" data-toggle="select"  data-skin="warm" data-radio="true" data-type="user" th:data-value="*{reporter}">
+                                        <select data-toggle="select" data-type="user" data-radio="true" id="reporter" th:value="*{reporter}" data-class="required" data-skin="warm"  >
                                         </select>
                                     </div>
                                 </div>
@@ -196,7 +219,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门(分组、自定义回调)：</label>
                                     <div class="col-sm-10">
-                                        <select data-id="st3"  data-toggle="select" data-click="callback_select" data-type="dept-group">
+                                        <select data-toggle="select" data-type="dept-group" click="callback_select" id="st3"  >
                                         </select>
                                     </div>
                                 </div>
@@ -205,7 +228,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门（树形）：</label>
                                     <div class="col-sm-10">
-                                        <select data-id="depts" data-toggle="select" data-type="dept" data-click="callback_select" th:data-value="*{depts}" >
+                                        <select data-toggle="select" data-type="dept" id="depts"  th:value="*{depts}"  >
                                         </select>
                                     </div>
                                 </div>
@@ -214,7 +237,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">部门（树形,指定父级部门）：</label>
                                     <div class="col-sm-10">
-                                        <select data-id="st5"  data-toggle="select" data-type="dept" data-pid="102" data-radio="true">
+                                        <select data-toggle="select" data-type="dept" id="st5" pid="102" radio="true">
                                         </select>
                                     </div>
                                 </div>

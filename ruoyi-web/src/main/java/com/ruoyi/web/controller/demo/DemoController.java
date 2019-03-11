@@ -8,7 +8,11 @@ import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.word.WordExportUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import cn.hutool.extra.mail.MailUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.extra.qrcode.QrConfig;
@@ -119,6 +123,7 @@ public class DemoController extends BaseController
 	{
         mmap.put("posts", postService.selectPostAll());
         Demo demo  = new Demo();
+        //表单Action指定
         demo.setFormAction(prefix + "/add");
         mmap.put("demo", demo);
         return prefix + "/add";
@@ -134,13 +139,6 @@ public class DemoController extends BaseController
 	public AjaxResult addSave(Demo demo, HttpServletRequest request, HttpServletResponse response, Model model)
 	{
         boolean rflag =false;
-//        if(StringUtils.isNotEmpty(demo.getId())) {
-//             count = demoService.updateDemo(demo);
-//
-//        } else {
-//            demo.setId(Guid.GUID.newGuid().toGuidString());
-//            count = demoService.insertDemo(demo);
-//        }
 
         demo.setId(Guid.GUID.newGuid().toGuidString());
         rflag = demoService.save(demo);
@@ -161,7 +159,11 @@ public class DemoController extends BaseController
 	public String edit(@PathVariable("id") String id, ModelMap mmap)
 	{
 		Demo demo = demoService.getById(id);
-		demo.setFormAction(prefix + "/edit");
+        //主键加密（TODO：配合editSave方法使用）
+        demo.setId(pk_encrypt(demo.getId()));
+        //表单Action指定
+        demo.setFormAction(prefix + "/edit");
+
 		mmap.put("demo", demo);
 	    return prefix + "/add";
 	}
@@ -175,11 +177,13 @@ public class DemoController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(Demo demo)
 	{
+	    //主键解密（TODO：配合edit方法使用，请确认edit方法中加密了）
+        demo.setId(pk_decrypt(demo.getId()));
 
 		boolean rflag = demoService.saveOrUpdate(demo);
 
 		//测试websocket，给页面发消息通知
-    		if (rflag) {
+    	if (rflag) {
 			SocketServer.sendMessage("model3", "websocketDemo");
 		}
 		return toAjax(rflag);

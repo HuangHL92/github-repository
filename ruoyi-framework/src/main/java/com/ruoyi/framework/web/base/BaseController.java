@@ -3,6 +3,11 @@ package com.ruoyi.framework.web.base;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
+
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.crypto.symmetric.SymmetricAlgorithm;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import com.github.pagehelper.PageHelper;
@@ -23,8 +28,14 @@ import com.ruoyi.system.domain.SysUser;
  */
 public class BaseController
 {
+    /***
+     * 加密解密用KEY
+     */
+    //byte[] key = SecureUtil.generateKey(SymmetricAlgorithm.AES.getValue()).getEncoded();
+    byte[] key = new byte[]{91,42,-39,-56,-13,79,-22,41,37,-61,-123,11,-20,56,107,57};
+
     /**
-     * 将前台传递过来的日期格式的字符串，自动转化为Date类型
+     * 将前台传递过来的数据预处理
      */
     @InitBinder
     public void initBinder(WebDataBinder binder)
@@ -56,6 +67,7 @@ public class BaseController
                 }
             }
         });
+
     }
 
     /**
@@ -175,4 +187,37 @@ public class BaseController
     {
         return getSysUser().getLoginName();
     }
+
+
+    /***
+     * 主键加密
+     * @param pk
+     * @return
+     */
+    public String pk_encrypt(String pk) {
+
+        // 构建
+        AES aes = SecureUtil.aes(key);
+        // 加密为16进制表示
+        String encryptHex = aes.encryptHex(pk);
+
+        return encryptHex;
+    }
+
+    /***
+     * 主键解密
+     * @param encryptpk
+     * @return
+     */
+    public String pk_decrypt(String encryptpk)  {
+
+        // 构建
+        AES aes = SecureUtil.aes(key);
+        // 解密为字符串
+        String decryptStr = aes.decryptStr(encryptpk, CharsetUtil.CHARSET_UTF_8);
+
+        return decryptStr;
+    }
+
+
 }

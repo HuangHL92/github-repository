@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.AES;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -17,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class BaseEntity implements Serializable
 {
     private static final long serialVersionUID = 1L;
+
+
 
     /** 搜索值 */
     @TableField(exist = false)
@@ -144,4 +149,8 @@ public class BaseEntity implements Serializable
     {
         this.params = params;
     }
+
+
+
+
 }
