@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html  lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-sysCalendar-add" th:action="*{formAction}" th:object="${sysCalendar}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">
+				<label class="col-sm-3 control-label">年度：</label>
+				<div class="col-sm-8">
+
+					<input name="years" th:field="*{years}" class="form-control layer-date time-input" placeholder="YYYY-MM-DD hh:mm:ss" onclick="laydate({istime: true, format: 'YYYY-MM-DD'})">
+					<label class="laydate-icon"></label>
+
+					<!--<input data-toggle="date" id="name" th:value="*{years}" format="YYYY-MM-DD"/>-->
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">日期：</label>
+				<div class="col-sm-8">
+					<input id="days" name="days" th:field="*{days}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">日期类型：</label>
+				<div class="col-sm-8">
+					<input id="dayType" name="dayType" th:field="*{dayType}" class="form-control" type="text">
+				</div>
+			</div>
+
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+
+	</script>
+</body>
+</html>

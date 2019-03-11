@@ -29,8 +29,6 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements ID
             //query.like("name",sysDemo.getName());
         }
 
-        //query.orderByAsc("id");
-
         return list(query);
     }
 	

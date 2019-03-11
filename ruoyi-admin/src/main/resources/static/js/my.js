@@ -95,6 +95,12 @@ function initCtrl() {
         var up=new Select(_c);
     })
 
+    //日期控件
+    // $("[data-toggle='date']").each(function () {
+    //     var _c=$(this);
+    //     var up=new Date(_c);
+    // })
+
     layui.use('element', function(){
         var $ = layui.jquery
             ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
@@ -573,6 +579,33 @@ $.validator.setDefaults({
 });
 
 
+<!--日期控件开始-->
+// var Date = function (obj) {
+//     var that = this;
+//     var id= obj.data("id")
+//         ,format=obj.data("format")||"YYYY-MM-DD hh:mm:ss"
+//         ,onclick=obj.data("click")
+//         ,value=obj.data("value")||""
+//         ,cls=obj.data("class")||""  // 样式
+//
+//     //添加属性
+//     obj.attr("name",id);
+//     obj.attr("class","form-control layer-date time-input " + cls);
+//     obj.attr("placeholder",format);
+//     if(onclick) {
+//         onclick="laydate({istime: true, format: '"+ format +"'})"
+//     }
+//     obj.attr("onclick",onclick);
+//     obj.attr("value",value);
+//
+//     obj.after("<label class=\"laydate-icon\"></label>");
+//
+//
+//
+// }
+
+<!--日期控件结束-->
+
 function GUID() {
     this.date = new Date();   /* 判断是否初始化过，如果初始化过以下代码，则以下代码将不再执行，实际中只执行一次 */
     if (typeof this.newGUID != 'function') {   /* 生成GUID码 */
@@ -617,6 +650,9 @@ function GUID() {
         }
     }
 }
+
+
+
 
 // 页面控件初始化
 initCtrl();
