@@ -188,7 +188,18 @@ public class DemoController extends BaseController
 		}
 		return toAjax(rflag);
 	}
-	
+
+    /**
+     * 详情
+     */
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") String id, ModelMap mmap)
+    {
+        Demo demo = demoService.getById(id);
+        mmap.put("demo", demo);
+        return prefix + "/add";
+    }
+
 	/**
 	 * 删除测试
 	 */

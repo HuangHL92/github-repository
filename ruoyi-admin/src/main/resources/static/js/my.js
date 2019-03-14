@@ -640,8 +640,15 @@ var DateInput = function (obj) {
 
 
 }
-
 <!--日期控件结束-->
+
+
+// 详情超链
+function link_detail(title,id) {
+    var actions = [];
+    actions.push('<div class="layui-text"><a href="#" onclick="$.operate.detail(\'' + id + '\')">' + title + '</a></div>');
+    return actions.join('');
+}
 
 function GUID() {
     this.date = new Date();   /* 判断是否初始化过，如果初始化过以下代码，则以下代码将不再执行，实际中只执行一次 */

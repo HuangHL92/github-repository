@@ -70,6 +70,7 @@
 		        url: prefix + "/list",
 		        createUrl: prefix + "/add",
 		        updateUrl: prefix + "/edit/{id}",
+                detailUrl: prefix + "/detail/{id}",
 		        removeUrl: prefix + "/remove",
 		        exportUrl: prefix + "/export",
                 sortOrder:"desc",
@@ -85,7 +86,10 @@
 		            title: '编号',
                     align : "center",
                     valign : "middle",
-                    width:400
+                    width:400,
+                    formatter:function (value, row, index) {
+                        return link_detail(row.id,value);
+                    }
 
                 },
 		        {

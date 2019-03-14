@@ -449,7 +449,9 @@
                 });
             },
             // 弹出层全屏
-            openFull: function (title, url, width, height) {
+            openFull: function (title, url, width, height,isDetail) {
+
+    		    var btns = ['确定', '关闭'];
             	//如果是移动端，就使用自适应大小弹窗
             	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
             	    width = 'auto';
@@ -467,6 +469,9 @@
                 if ($.common.isEmpty(height)) {
                 	height = ($(window).height() - 50);
                 };
+                if (isDetail) {
+                    btns=['关闭'];
+                }
                 var index = layer.open({
             		type: 2,
             		area: [width + 'px', height + 'px'],
@@ -476,7 +481,7 @@
             		shade: 0.3,
             		title: title,
             		content: url,
-            		btn: ['确定', '关闭'],
+            		btn: btns,
             		// 弹层外区域关闭
             		shadeClose: true,
                     btn1: function(index, layero) {
@@ -550,30 +555,15 @@
             },
             // 详细信息
             detail: function(id, width, height) {
-            	var _url = $.common.isEmpty(id) ? $.table._option.detailUrl : $.table._option.detailUrl.replace("{id}", id);
-                var _width = $.common.isEmpty(width) ? "800" : width; 
-                var _height = $.common.isEmpty(height) ? ($(window).height() - 50) : height;
-            	//如果是移动端，就使用自适应大小弹窗
-            	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
-            	    _width = 'auto';
-            	    _height = 'auto';
-            	}
-            	top.layer.open({
-            		type: 2,
-            		area: [_width + 'px', _height + 'px'],
-            		fix: false,
-            		//不固定
-            		maxmin: true,
-            		shade: 0.3,
-            		title: $.table._option.modalName + "详细",
-            		content: _url,
-            		btn: ['关闭'],
-            	    // 弹层外区域关闭
-            		shadeClose: true,
-            		cancel: function(index){
-            			return true;
-         	        }
-            	});
+                var url = "/404.html";
+                if ($.common.isNotEmpty(id)) {
+                    url = $.table._option.detailUrl.replace("{id}", id);
+                } else {
+                    var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+                    url = $.table._option.detailUrl.replace("{id}", row);
+                }
+                $.modal.openFull("查看" + $.table._option.modalName, url,800,600,true);
+
             },
             // 删除信息
             remove: function(id) {
