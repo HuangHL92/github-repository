@@ -21,7 +21,9 @@
 			<div class="form-group">
 				<label class="col-sm-3 control-label">日期类型：</label>
 				<div class="col-sm-8">
-					<input id="dayType" name="dayType" th:field="*{dayType}" class="form-control" type="text">
+					<select id="dayType" name="dayType" class="form-control m-b" th:with="type=${@dict.getType('sys_date_type')}">
+						<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+					</select>
 				</div>
 			</div>
 

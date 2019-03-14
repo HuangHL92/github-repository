@@ -24,7 +24,14 @@ public class SysAttachmentServiceImpl extends ServiceImpl<SysAttachmentMapper, S
         QueryWrapper<SysAttachment> query = new QueryWrapper<>();
         // 查询条件
         //attachmentNo
-        query.lambda().eq(StrUtil.isNotBlank(sysAttachment.getAttachmentNo()), SysAttachment::getAttachmentNo, sysAttachment.getAttachmentNo());
+//        query.lambda().eq(StrUtil.isNotBlank(sysAttachment.getAttachmentNo()), SysAttachment::getAttachmentNo, sysAttachment.getAttachmentNo());
+        // 关键字模糊查询（车牌号/驾驶员/驾驶员手机号）
+        String keyword = sysAttachment.getParams().isEmpty() ? null : sysAttachment.getParams().get("keyword").toString();
+        query.lambda().and(
+                StrUtil.isNotBlank(keyword),
+                i -> i.like(SysAttachment::getFileName, keyword)
+
+        );
         return list(query);
     }
 

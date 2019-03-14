@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2019-02-18
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_attachment")
 public class SysAttachment extends BaseEntity

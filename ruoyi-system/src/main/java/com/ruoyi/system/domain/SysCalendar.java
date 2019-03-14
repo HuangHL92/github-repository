@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2019-03-09
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("sys_calendar")
 public class SysCalendar extends BaseEntity

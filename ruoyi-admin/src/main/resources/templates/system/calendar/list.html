@@ -11,9 +11,8 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								年度：<input type="text" name="years"/>
+								关键字：<input type="text" name="params[keyword]" placeholder="年度/日期"/>
 							</li>
-
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset(); $.table.search()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -44,8 +43,9 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:calendar:editFull')}]];
+        var editFlag = [[${@permission.hasPermi('system:calendar:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:calendar:remove')}]];
+		var types = [[${@dict.getType('sys_date_type')}]];
         var prefix = ctx + "system/calendar";
 
         $(function() {
@@ -72,21 +72,24 @@
 					sortable: true
 				},
 				{
-					field : 'days', 
+					field : 'days',
 					title : '日期',
 					sortable: true
 				},
 				{
 					field : 'dayType', 
 					title : '日期类型',
-					sortable: true
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(types, value);
+					}
 				},
 		        {
 		            title: '操作',
 		            align: 'center',
+					width: 200,
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+						actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
@@ -94,6 +97,7 @@
             };
             $.table.init(options);
         });
+
     </script>
 </body>
 </html>

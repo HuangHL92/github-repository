@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class SysAttachmentController extends BaseController
 	@Autowired
 	private ISysAttachmentService sysAttachmentService;
 	
-	@RequiresPermissions("system:sysAttachment:view")
+	@RequiresPermissions("system:attachment:view")
 	@GetMapping()
 	public String sysAttachment()
 	{
@@ -48,7 +49,7 @@ public class SysAttachmentController extends BaseController
 	/**
 	 * 查询附件列表
 	 */
-	@RequiresPermissions("system:sysAttachment:list")
+	@RequiresPermissions("system:attachment:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(SysAttachment sysAttachment)
@@ -61,7 +62,7 @@ public class SysAttachmentController extends BaseController
 	/**
 	 * 导出附件列表
 	 */
-	@RequiresPermissions("system:sysAttachment:export")
+	@RequiresPermissions("system:attachment:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysAttachment sysAttachment)
@@ -83,7 +84,7 @@ public class SysAttachmentController extends BaseController
 	/**
 	 * 新增保存附件
 	 */
-	@RequiresPermissions("system:sysAttachment:add")
+	@RequiresPermissions("system:attachment:add")
 	@Log(title = "附件", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -106,7 +107,7 @@ public class SysAttachmentController extends BaseController
 	/**
 	 * 修改保存附件
 	 */
-	@RequiresPermissions("system:sysAttachment:edit")
+	@RequiresPermissions("system:attachment:edit")
 	@Log(title = "附件", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -118,7 +119,7 @@ public class SysAttachmentController extends BaseController
 	/**
 	 * 删除附件
 	 */
-	@RequiresPermissions("system:sysAttachment:remove")
+	@RequiresPermissions("system:attachment:remove")
 	@Log(title = "附件", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

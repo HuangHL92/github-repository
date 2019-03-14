@@ -1,20 +1,20 @@
 package com.ruoyi.web.controller.system;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysCalendar;
@@ -93,8 +93,18 @@ public class SysCalendarController extends BaseController
 	@Log(title = "日历", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(SysCalendar sysCalendar, HttpServletRequest request, Model model)
-	{		
+	public AjaxResult addSave(@RequestParam(value = "years",required = true)Integer years,
+							  @RequestParam(value = "days",required = true)Date days,
+							  @RequestParam(value = "dayType",required = false)Integer dayType,
+							  HttpServletRequest request, Model model)
+	{
+		SysCalendar sysCalendar = new SysCalendar();
+		int ts = Integer.valueOf(DateUtil.format(days,"yyyyMMdd"));
+
+		sysCalendar.setDays(ts);
+		sysCalendar.setYears(years);
+		sysCalendar.setDayType(dayType);
+
 		return toAjax(sysCalendarService.save(sysCalendar));
 	}
 
