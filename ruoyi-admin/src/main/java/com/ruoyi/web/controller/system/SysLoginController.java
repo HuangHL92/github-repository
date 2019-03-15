@@ -2,11 +2,23 @@ package com.ruoyi.web.controller.system;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysPostService;
+import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -23,6 +35,16 @@ import com.ruoyi.framework.web.base.BaseController;
 @Controller
 public class SysLoginController extends BaseController
 {
+
+    @Autowired
+    private ISysUserService userService;
+
+    @Autowired
+    private CaptchaValidateFilter captchaValidateFilter;
+
+    @Autowired
+    private SysPasswordService passwordService;
+
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response)
     {
@@ -62,4 +84,61 @@ public class SysLoginController extends BaseController
     {
         return "/error/unauth";
     }
+
+
+
+    /**
+     * 用户注册
+     */
+    @GetMapping("/register")
+    public String register(ModelMap mmap)
+    {
+        return "register";
+    }
+
+
+    /**
+     * 用户注册(提交)
+     */
+    @Log(title = "用户注册", businessType = BusinessType.INSERT)
+    @PostMapping("/register")
+    @ResponseBody
+    public AjaxResult register(HttpServletRequest request, SysUser user, ModelMap mmap)
+    {
+        String vcode = request.getParameter("validateCode");
+        if(StringUtils.isEmpty(user.getLoginName()) ||
+                StringUtils.isEmpty(user.getPassword())) {
+             return  error("请完善信息!");
+        }
+
+        if(user.getPassword().length()<6) {
+            return  error("密码不能少于6位");
+        }
+
+        //1.验证码验证
+        if(!captchaValidateFilter.validateResponse(request,vcode)) {
+            return  error("验证码错误!");
+        }
+
+        //2.验证用户唯一
+        String hasUser= userService.checkLoginNameUnique(user.getLoginName());
+        if("1".equals(hasUser)) {
+            return  error("用户名已经存在!");
+        }
+
+        //3.验证手机号码唯一
+        String hasPhone= userService.checkPhoneUnique(user);
+        if("1".equals(hasPhone)) {
+            return  error("手机号码已经存在!");
+        }
+        //4.用户保存
+        user.setSalt(ShiroUtils.randomSalt());
+        user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
+        user.setCreateBy(ShiroUtils.getLoginName());
+        userService.insertUser(user);
+        return success();
+    }
+
+
+
 }

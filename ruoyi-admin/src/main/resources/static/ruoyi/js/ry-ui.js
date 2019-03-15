@@ -562,6 +562,7 @@
                     var row = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
                     url = $.table._option.detailUrl.replace("{id}", row);
                 }
+                console.log(url);
                 $.modal.openFull("查看" + $.table._option.modalName, url,800,600,true);
 
             },

@@ -583,6 +583,7 @@ Select.prototype.init=function () {
 <!--Select结束-->
 
 
+// 验证相关处理
 $.validator.setDefaults({
     ignore:":hidden:not(select)"
 });
@@ -650,6 +651,8 @@ function link_detail(title,id) {
     return actions.join('');
 }
 
+
+<!-- 私有方法-开始 -->
 function GUID() {
     this.date = new Date();   /* 判断是否初始化过，如果初始化过以下代码，则以下代码将不再执行，实际中只执行一次 */
     if (typeof this.newGUID != 'function') {   /* 生成GUID码 */
@@ -694,7 +697,7 @@ function GUID() {
         }
     }
 }
-
+<!-- 私有方法-结束 -->
 
 // 页面控件初始化
 initCtrl();

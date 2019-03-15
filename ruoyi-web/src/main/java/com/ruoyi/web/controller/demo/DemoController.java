@@ -197,7 +197,7 @@ public class DemoController extends BaseController
     {
         Demo demo = demoService.getById(id);
         mmap.put("demo", demo);
-        return prefix + "/add";
+        return prefix + "/detail";
     }
 
 	/**

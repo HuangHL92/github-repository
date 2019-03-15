@@ -343,6 +343,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/screen/**", "anon");
         filterChainDefinitionMap.put("/pad/**", "anon");
         filterChainDefinitionMap.put("/wap/**", "anon");
+        filterChainDefinitionMap.put("/register", "anon,captchaValidate");
 
 
         // 系统权限列表

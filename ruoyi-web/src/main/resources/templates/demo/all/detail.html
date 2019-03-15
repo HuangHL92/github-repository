@@ -363,11 +363,10 @@
 
 <!--自定义按钮区域(仅适合弹窗模式)-->
 <span class="toolbar-btn">
-        <button class="btn btn-primary" type="button" id="btn1">
-            <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">打印</span>
-        </button>
-
-    </span>
+    <button class="btn btn-primary" type="button" id="btn1">
+        <i class="fa fa-upload"></i>&nbsp;&nbsp;<span class="bold">打印</span>
+    </button>
+</span>
 
 <!--底部引用-->
 <div th:include="include::footer"></div>
@@ -382,58 +381,6 @@
         console.log($("input[name='st1']").val());
     });
 
-    //提交前表单验证
-    $("#form-demo-add").validate({
-        // onkeyup:true,
-        // onblur:true,
-        // onfocus:true,
-        // onkeydown:true,
-
-        rules:{
-
-            // Name:{
-            //     required:true,
-            //     minlength: 3,
-            //     maxlength: 10
-            // },
-            // email:{
-            //     required:true,
-            //     email:true,
-            //     remote: {
-            //         url: ctx + "system/user/checkEmailUnique",
-            //         type: "post",
-            //         dataType: "json",
-            //         data: {
-            //             name: function () {
-            //                 return $.common.trim($("#email").val());
-            //             }
-            //         },
-            //         dataFilter: function (data, type) {
-            //             return $.validate.unique(data);
-            //         }
-            //     }
-            // },
-
-        }
-    });
-
-
-    function addtr(tableid,refreshIndex){
-        var tr = $("#" + tableid +" tr").eq(1).clone();
-        tr.appendTo("#" + tableid);
-        //添加完成后索引刷新 todo
-        if(refreshIndex == true) {
-            $("#" + tableid).find("tr").each(function () {
-                var rowIndex = parseInt(this.sectionRowIndex);
-            });
-        }
-
-    }
-
-    function deltr(obj) {
-        var tr=obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
-        tr.remove();
-    }
 
     $("#test").bsSuggest('init', {
         clearable: true,
@@ -453,7 +400,6 @@
     }).on('onHideDropdown', function (e, data) {
         console.log('onHideDropdown', e.target.value, data);
     });
-
 
     function  callback_select(val) {
         alert("这里回调，点击了：" + val.value + "(" + val.name + ")");
