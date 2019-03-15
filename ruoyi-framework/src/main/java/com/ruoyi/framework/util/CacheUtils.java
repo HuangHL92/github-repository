@@ -5,6 +5,7 @@ package com.ruoyi.framework.util;
 
 
 import com.ruoyi.common.base.TokenEntity;
+import com.ruoyi.system.domain.SysConfig;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysUser;
@@ -85,7 +86,10 @@ public class CacheUtils {
 	 */
 	public static  String DICT_CACHE = "dictCache";
 
-
+    /**
+     * 配置 缓存
+     */
+    public static  String CONFIG_CACHE = "configCache";
 
 	private CacheManager cacheManager;
 
@@ -103,6 +107,7 @@ public class CacheUtils {
 
 	private Cache<String, List<SysDictData>> dictCache;
 
+    private Cache<String, String> configCache;
 
 	@PostConstruct
 	public void init()
@@ -115,13 +120,14 @@ public class CacheUtils {
 		TOKEN_CACHE= SPRING_REDIS_PREFIX +TOKEN_CACHE;
 		MENU_CACHE= SPRING_REDIS_PREFIX +MENU_CACHE;
 		DICT_CACHE= SPRING_REDIS_PREFIX +DICT_CACHE;
+        CONFIG_CACHE= SPRING_REDIS_PREFIX +CONFIG_CACHE;
 
 		loginRecordCache = cacheManager.getCache(LOGIN_RECORD_CACHE);
 		userCache = cacheManager.getCache(USER_CACHE);
 		tokenCache = cacheManager.getCache(TOKEN_CACHE);
 		menuCache = cacheManager.getCache(MENU_CACHE);
 		dictCache = cacheManager.getCache(DICT_CACHE);
-
+        configCache = cacheManager.getCache(CONFIG_CACHE);
 	}
 
 

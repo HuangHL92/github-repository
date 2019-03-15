@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.framework.util.CacheUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,6 +35,9 @@ public class SysConfigController extends BaseController
 
     @Autowired
     private ISysConfigService configService;
+
+    @Autowired
+    private CacheUtils cacheUtils;
 
     @RequiresPermissions("system:config:view")
     @GetMapping()
@@ -106,6 +111,7 @@ public class SysConfigController extends BaseController
     @ResponseBody
     public AjaxResult editSave(SysConfig config)
     {
+        cacheUtils.getConfigCache().remove(config.getConfigKey());
         config.setUpdateBy(ShiroUtils.getLoginName());
         return toAjax(configService.updateConfig(config));
     }
@@ -119,6 +125,7 @@ public class SysConfigController extends BaseController
     @ResponseBody
     public AjaxResult remove(String ids)
     {
+        cacheUtils.getConfigCache().clear();
         return toAjax(configService.deleteConfigByIds(ids));
     }
 
