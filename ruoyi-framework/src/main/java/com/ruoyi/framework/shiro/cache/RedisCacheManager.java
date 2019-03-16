@@ -55,12 +55,16 @@ public class RedisCacheManager implements CacheManager
                     cache = new RedisCache<>(name, 3600, redisManager);
                 }
                 // 菜单（授权缓存）：持久
-                else if (CacheUtils.MENU_CACHE.equals(name)) {
+                else if (CacheUtils.USER_MENU_CACHE.equals(name)) {
                     cache = new RedisCache<>(name, -1, redisManager);
                 }
                 // 字典（授权缓存）：持久
                 else if (CacheUtils.DICT_CACHE.equals(name)) {
                     cache = new RedisCache<>(name, -1, redisManager);
+                }
+                // 用户在线缓存（实时刷新过期时间，默认 60分钟）
+                else if (CacheUtils.USER_ONLINE_CACHE.equals(name)) {
+                    cache = new RedisCache<>(name, 3600, redisManager);
                 }
                 // 默认缓存（授权缓存）：60分钟
                 else {
