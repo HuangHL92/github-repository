@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 
@@ -15,6 +15,7 @@
             <li>Redis操作</li>
             <li>word、excel、pdf</li>
             <li>上传、下载</li>
+            <li>工作日demo</li>
         </ul>
 
         <div class="layui-tab-content">
@@ -22,13 +23,15 @@
             <!--Http、邮件-->
             <div class="layui-tab-item layui-show">
 
-                <form class="form-horizontal m" id="form-demo-http" >
+                <form class="form-horizontal m" id="form-demo-http">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="ibox float-e-margins">
 
                                 <div class="ibox-title">
-                                    <h5>邮件测试 <small>使用hutool，通过Ajax请求</small></h5>
+                                    <h5>邮件测试
+                                        <small>使用hutool，通过Ajax请求</small>
+                                    </h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -41,7 +44,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">邮箱地址</label>
                                         <div class="col-sm-10">
-                                            <input type="text"  name="mailto" id="mailto" class="form-control" placeholder="邮箱地址">
+                                            <input type="text" name="mailto" id="mailto" class="form-control"
+                                                   placeholder="邮箱地址">
                                             <span class="help-block m-b-none">邮箱地址为空，默认发送至fei.yu@51e.com.cn</span>
                                         </div>
                                     </div>
@@ -51,12 +55,14 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">邮件内容</label>
                                         <div class="col-sm-10">
-                                            <textarea id="mailtext" name="mailtext" class="form-control" rows="10"></textarea>
+                                            <textarea id="mailtext" name="mailtext" class="form-control"
+                                                      rows="10"></textarea>
                                         </div>
                                     </div>
 
                                     <div class="mail-body text-right tooltip-demo">
-                                        <a onclick="sendMail()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 发送（Ajax）</a>
+                                        <a onclick="sendMail()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 发送（Ajax）</a>
 
                                     </div>
 
@@ -70,13 +76,15 @@
             <!--二维码、条码-->
             <div class="layui-tab-item">
 
-                <form class="form-horizontal m" id="form-demo-code" >
+                <form class="form-horizontal m" id="form-demo-code">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="ibox float-e-margins">
 
                                 <div class="ibox-title">
-                                    <h5>二维码 <small>使用hutool，生成在D:\ruoyi目录下</small></h5>
+                                    <h5>二维码
+                                        <small>使用hutool，生成在D:\ruoyi目录下</small>
+                                    </h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -89,14 +97,17 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">二维码内容</label>
                                         <div class="col-sm-10">
-                                            <input type="text"  name="qrcode" id="qrcode" class="form-control" placeholder="二维码内容">
+                                            <input type="text" name="qrcode" id="qrcode" class="form-control"
+                                                   placeholder="二维码内容">
                                             <span class="help-block m-b-none">二维码内容为空，默认发送至www.baidu.com</span>
                                         </div>
                                     </div>
 
                                     <div class="mail-body text-right tooltip-demo">
-                                        <a onclick="createQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成（Ajax）</a>
-                                        <a onclick="checkQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 识别（读取二维码图片中内容）</a>
+                                        <a onclick="createQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成（Ajax）</a>
+                                        <a onclick="checkQRCode()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 识别（读取二维码图片中内容）</a>
                                     </div>
 
                                 </div>
@@ -109,13 +120,15 @@
             <!--Redis操作-->
             <div class="layui-tab-item">
 
-                <form class="form-horizontal m" id="form-demo-redis" >
+                <form class="form-horizontal m" id="form-demo-redis">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="ibox float-e-margins">
 
                                 <div class="ibox-title">
-                                    <h5>Redis <small>本实例默认过期时间为15s</small></h5>
+                                    <h5>Redis
+                                        <small>本实例默认过期时间为15s</small>
+                                    </h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -128,17 +141,21 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">key</label>
                                         <div class="col-sm-4">
-                                            <input type="text"  name="key" id="redisKey" class="form-control" placeholder="key">
+                                            <input type="text" name="key" id="redisKey" class="form-control"
+                                                   placeholder="key">
                                         </div>
                                         <label class="col-sm-2 control-label">value</label>
                                         <div class="col-sm-4">
-                                            <input type="text"  name="value" id="redisValue" class="form-control" placeholder="value">
+                                            <input type="text" name="value" id="redisValue" class="form-control"
+                                                   placeholder="value">
                                         </div>
                                     </div>
 
                                     <div class="mail-body text-right tooltip-demo">
-                                        <a onclick="saveRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 存入redis</a>
-                                        <a onclick="getRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 获取指定key的值</a>
+                                        <a onclick="saveRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 存入redis</a>
+                                        <a onclick="getRedis()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 获取指定key的值</a>
                                     </div>
 
                                 </div>
@@ -151,12 +168,15 @@
             <!--word、excel、pdf-->
             <div class="layui-tab-item">
 
-                <form class="form-horizontal m" id="form-demo-file" >
+                <form class="form-horizontal m" id="form-demo-file">
                     <div class="row">
                         <div class="col-sm-12">
-                            <a onclick="createPDF()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> PDF生成（Ajax）</a>
-                            <a onclick="createWord()" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Word（Ajax）</a>
-                            <a onclick="createExcel()" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Excel（Ajax）</a>
+                            <a onclick="createPDF()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                               data-placement="top" title="Send"><i class="fa fa-reply"></i> PDF生成（Ajax）</a>
+                            <a onclick="createWord()" class="btn btn-sm btn-danger" data-toggle="tooltip"
+                               data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Word（Ajax）</a>
+                            <a onclick="createExcel()" class="btn btn-sm btn-success" data-toggle="tooltip"
+                               data-placement="top" title="Send"><i class="fa fa-reply"></i> 生成Excel（Ajax）</a>
                         </div>
                     </div>
                 </form>
@@ -170,7 +190,8 @@
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no" data-btn-text="上传文件" />
+                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no"
+                               data-btn-text="上传文件"/>
                     </div>
                 </div>
                 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -178,7 +199,8 @@
                 </fieldset>
                 <div class="row">
                     <div class="col-sm-12">
-                        <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""  data-btn-text="上传文件（多个）"/>
+                        <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""
+                               data-btn-text="上传文件（多个）"/>
                     </div>
                 </div>
                 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -186,7 +208,8 @@
                 </fieldset>
                 <div class="row">
                     <div class="col-sm-12">
-                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value=""   data-back-type="no" data-btn-text="" data-accept="image"/>
+                        <input type="hidden" data-toggle="fileupload" data-multiple="false" value="" data-back-type="no"
+                               data-btn-text="" data-accept="image"/>
                     </div>
                 </div>
                 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -194,11 +217,89 @@
                 </fieldset>
                 <div class="row">
                     <div class="col-sm-12">
-                        <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""   data-back-type="no" data-btn-text="" data-accept="image"/>
+                        <input type="hidden" data-toggle="fileupload" data-multiple="true" value="" data-back-type="no"
+                               data-btn-text="" data-accept="image"/>
                     </div>
                 </div>
             </div>
 
+            <!--工作日demo-->
+            <!--<div class="layui-tab-item">
+
+                <form class="form-horizontal m" id="form-demo-workday">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <li class="select-time">
+                                    <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="startTime" name="startTime" placeholder="开始时间"/>
+                                    <span>-</span>
+                                    <input type="text" class="time-input" id="endTime" name="endTime" placeholder="结束时间" />
+                                </li>
+                                <li>
+                                    <a onclick="doSearchWorkTime()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                       data-placement="top" title="Send"><i class="fa fa-reply"></i>查看工作日</a>
+                                </li>
+                                <li class="select-time">
+                                    <label>创建时间： </label>
+                                    <input type="text" class="time-input" id="oldTime" name="startTime" placeholder="开始时间"/>
+                                    <input type="text" id="num" name="num" placeholder="天数"/>
+                                </li>
+                                <li>
+                                    <a onclick="doSearchEndTime()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                       data-placement="top" title="Send"><i class="fa fa-reply"></i>查看工作日</a>
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>-->
+            <div class="layui-tab-item">
+
+                <form class="form-horizontal m" id="form-demo-workday">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <ul>
+                                    <li class="select-time">
+                                        <label>创建时间： </label>
+                                        <input type="text" class="time-input" id="startTime" name="startTime"
+                                               placeholder="开始时间" style="width: 100px"/>
+                                        <span>-</span>
+                                        <input type="text" class="time-input" id="endTime" name="endTime"
+                                               placeholder="结束时间" style="width: 100px"/>
+                                    </li>
+                                    <li>
+                                        <a onclick="doSearchWorkTime()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 查询工作日</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form class="form-horizontal m" id="form-demo-workdayNums">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <ul>
+                                    <li class="select-time">
+                                        <label>创建时间： </label>
+                                        <input type="text" class="time-input" id="oldTime" name="oldTime"
+                                               placeholder="开始时间" style="width: 100px"/>
+                                        <input type="text" id="nums" name="nums"
+                                               placeholder="工作日" style="width: 100px"/>
+                                    </li>
+                                    <li>
+                                        <a onclick="doSearchEndTime()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                                           data-placement="top" title="Send"><i class="fa fa-reply"></i> 查询工作日</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -208,30 +309,48 @@
 
 <script type="text/javascript">
 
+    function doSearchEndTime() {
+        var url = ctx + "demo/all/searchResult?oldTime=" + $("#oldTime").val() + "&num=" + $("#nums").val();
+
+        $.post(url, function (result) {
+            $.modal.alert(result.msg);
+        });
+
+    }
+
+    function doSearchWorkTime() {
+
+        var url = ctx + "demo/all/search?startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
+        // window.location.href = url;
+        $.post(url, function (result) {
+            $.modal.alert(result.msg);
+        });
+    }
+
     function sendMail() {
-        var url =ctx + "demo/all/sendMail";
-        $.operate.post(url,$("#form-demo-http").serialize());
+        var url = ctx + "demo/all/sendMail";
+        $.operate.post(url, $("#form-demo-http").serialize());
     }
 
     function createQRCode() {
-        var url =ctx + "demo/all/createQRCode";
-        $.operate.post(url,$("#form-demo-code").serialize());
+        var url = ctx + "demo/all/createQRCode";
+        $.operate.post(url, $("#form-demo-code").serialize());
     }
 
     function checkQRCode() {
-        var url =ctx + "demo/all/checkQRCode";
+        var url = ctx + "demo/all/checkQRCode";
         $.operate.get(url);
     }
 
     function createPDF() {
-        var url =ctx + "demo/all/createPDF";
-        $.operate.post(url,$("#form-demo-redis").serialize());
+        var url = ctx + "demo/all/createPDF";
+        $.operate.post(url, $("#form-demo-redis").serialize());
     }
 
     function createWord() {
-        var url =ctx + "demo/all/createWord";
+        var url = ctx + "demo/all/createWord";
 
-        $.post(url, $("#form-demo-http").serialize(), function(result) {
+        $.post(url, $("#form-demo-http").serialize(), function (result) {
             if (result.code == web_status.SUCCESS) {
                 window.location.href = ctx + "common/download?fileName=" + result.msg + "&delete=" + true;
             } else {
@@ -244,13 +363,13 @@
     }
 
     function createExcel() {
-        var url =ctx + "demo/all/createExcel";
-        $.operate.post(url,$("#form-demo-redis").serialize());
+        var url = ctx + "demo/all/createExcel";
+        $.operate.post(url, $("#form-demo-redis").serialize());
     }
 
     function saveRedis() {
-        var url =ctx + "demo/all/saveRedis";
-        $.operate.post(url,$("#form-demo-redis").serialize());
+        var url = ctx + "demo/all/saveRedis";
+        $.operate.post(url, $("#form-demo-redis").serialize());
     }
 
     function getRedis() {
@@ -259,7 +378,7 @@
             $.modal.alertError("请填写key值!");
             return;
         }
-        var url =ctx + "demo/all/getRedis/" + redisKey;
+        var url = ctx + "demo/all/getRedis/" + redisKey;
         $.operate.get(url);
     }
 

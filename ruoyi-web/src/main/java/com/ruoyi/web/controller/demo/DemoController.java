@@ -2,11 +2,13 @@ package com.ruoyi.web.controller.demo;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.util.*;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.word.WordExportUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.CharsetUtil;
 import cn.hutool.core.util.IdUtil;
@@ -26,6 +28,9 @@ import com.ruoyi.common.utils.PdfUtils;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.workday.WorkdayUtils;
+import com.ruoyi.system.domain.SysCalendar;
+import com.ruoyi.system.service.ISysCalendarService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.websocket.SocketServer;
@@ -40,11 +45,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 
@@ -79,7 +80,10 @@ public class DemoController extends BaseController
 
     @Autowired
     private ISysPostService postService;
-	
+
+    @Autowired
+    private ISysCalendarService sysCalendarService;
+
 	@RequiresPermissions("demo:all:view")
 	@GetMapping()
 	public String demo()
@@ -211,6 +215,39 @@ public class DemoController extends BaseController
 	{		
 		return toAjax(demoService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 	}
+
+	@PostMapping("/search")
+    @ResponseBody
+    public AjaxResult search(String startTime,String endTime,
+                             HttpServletRequest request,SysCalendar sysCalendar) throws ParseException {
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+        List<SysCalendar> list = sysCalendarService.selectList(sysCalendar);
+        for (SysCalendar sysCalendar1 : list){
+            map.put(sysCalendar1.getDays(),sysCalendar1.getDayType());
+
+        }
+
+        WorkdayUtils.init(map);
+        return AjaxResult.success(""+WorkdayUtils.howManyWorkday(DateUtil.parseDate(startTime),DateUtil.parseDate(endTime)));
+
+    }
+
+    @PostMapping("/searchResult")
+    @ResponseBody
+    public AjaxResult searchResult(String oldTime,String num,
+                             HttpServletRequest request,SysCalendar sysCalendar) throws ParseException {
+
+        HashMap<Integer,Integer> map = new HashMap<>();
+        List<SysCalendar> list = sysCalendarService.selectList(sysCalendar);
+        for (SysCalendar sysCalendar1 : list){
+            map.put(sysCalendar1.getDays(),sysCalendar1.getDayType());
+        }
+
+        WorkdayUtils.init(map);
+        return AjaxResult.success(""+WorkdayUtils.getIncomeDate(DateUtil.parseDate(oldTime),Integer.valueOf(num)));
+
+    }
 
 
     /**
