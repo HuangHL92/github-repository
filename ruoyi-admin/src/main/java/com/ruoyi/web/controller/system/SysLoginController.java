@@ -12,6 +12,7 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.web.websocket.SocketServer;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -66,6 +67,12 @@ public class SysLoginController extends BaseController
         try
         {
             subject.login(token);
+
+            //socket消息通知
+            SysUser user = userService.selectUserByLoginName(username);
+            String msg = user.getUserName() + "，上线啦！";
+            SocketServer.sendMessage(msg, "onlineNotice");
+
             return success();
         }
         catch (AuthenticationException e)

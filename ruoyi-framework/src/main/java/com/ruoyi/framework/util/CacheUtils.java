@@ -5,10 +5,7 @@ package com.ruoyi.framework.util;
 
 
 import com.ruoyi.common.base.TokenEntity;
-import com.ruoyi.system.domain.SysConfig;
-import com.ruoyi.system.domain.SysDictData;
-import com.ruoyi.system.domain.SysMenu;
-import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.*;
 import lombok.Getter;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheManager;
@@ -79,7 +76,7 @@ public class CacheUtils {
 	/**
 	 * 菜单 缓存
 	 */
-	public static  String MENU_CACHE = "menuCache";
+	public static  String USER_MENU_CACHE = "userMenuCache";
 
 	/**
 	 * 字典 缓存
@@ -90,6 +87,12 @@ public class CacheUtils {
      * 配置 缓存
      */
     public static  String CONFIG_CACHE = "configCache";
+
+    /**
+     * 用户在线 缓存
+     */
+    public static  String USER_ONLINE_CACHE = "userOnlineCache";
+
 
 	private CacheManager cacheManager;
 
@@ -103,11 +106,13 @@ public class CacheUtils {
 
 	private Cache<String, TokenEntity> tokenCache;
 
-	private Cache<String, List<SysMenu>> menuCache;
+	private Cache<String, List<SysMenu>> userMenuCache;
 
 	private Cache<String, List<SysDictData>> dictCache;
 
     private Cache<String, String> configCache;
+
+    private Cache<String, List<SysUserOnline>> userOnlineCache;
 
 	@PostConstruct
 	public void init()
@@ -118,16 +123,18 @@ public class CacheUtils {
 		AUTHORIZATION_CACHE= SPRING_REDIS_PREFIX +AUTHORIZATION_CACHE;
 		USER_CACHE = SPRING_REDIS_PREFIX +USER_CACHE;
 		TOKEN_CACHE= SPRING_REDIS_PREFIX +TOKEN_CACHE;
-		MENU_CACHE= SPRING_REDIS_PREFIX +MENU_CACHE;
+        USER_MENU_CACHE= SPRING_REDIS_PREFIX +USER_MENU_CACHE;
 		DICT_CACHE= SPRING_REDIS_PREFIX +DICT_CACHE;
         CONFIG_CACHE= SPRING_REDIS_PREFIX +CONFIG_CACHE;
+        USER_ONLINE_CACHE= SPRING_REDIS_PREFIX +USER_ONLINE_CACHE;
 
 		loginRecordCache = cacheManager.getCache(LOGIN_RECORD_CACHE);
 		userCache = cacheManager.getCache(USER_CACHE);
 		tokenCache = cacheManager.getCache(TOKEN_CACHE);
-		menuCache = cacheManager.getCache(MENU_CACHE);
+        userMenuCache = cacheManager.getCache(USER_MENU_CACHE);
 		dictCache = cacheManager.getCache(DICT_CACHE);
         configCache = cacheManager.getCache(CONFIG_CACHE);
+        userOnlineCache = cacheManager.getCache(USER_ONLINE_CACHE);
 	}
 
 

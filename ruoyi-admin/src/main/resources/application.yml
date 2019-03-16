@@ -157,7 +157,7 @@ gen:
 # websocket & 微信公众号配置
 jiyun:
   websocket:
-    url: ws://localhost/socketServer
+    url: ws://localhost:81/socketServer
   wechat:
     appid: wx7738841a00491a68
     appsecret: 8df7ef2490e79bc69682c9907d423ca9

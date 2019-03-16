@@ -113,7 +113,7 @@ public class SysJob extends BaseEntity implements Serializable
 
     public Date getNextValidTime()
     {
-        if (StringUtils.isNotEmpty(cronExpression))
+        if (StringUtils.isNotEmpty(cronExpression) && "0".equals(status))
         {
             return CronUtils.getNextExecution(cronExpression);
         }

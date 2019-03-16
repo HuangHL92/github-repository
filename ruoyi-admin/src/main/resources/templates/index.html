@@ -18,6 +18,7 @@
     <link th:href="@{/css/skins.css}" rel="stylesheet"/>
     <link th:href="@{/ruoyi/css/ry-ui.css?v=3.2.0}" rel="stylesheet"/>
     <link th:href="@{/css/my.css}" rel="stylesheet"/>
+    <link th:href="@{/ajax/libs/toastr/toastr.css}" rel="stylesheet"/>
     <style type="text/css">
         .nav > li:hover .dropdown-menu {display: block;}
         #content-main.max { height: calc(100% - 110px); overflow: hidden; width: 100%; height: 100%; left: 0px; position: absolute; top: 0px; z-index: 9998; margin: 0; }
@@ -25,7 +26,7 @@
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden" th:classappend="${@config.getKey('sys.index.skinName')}">
 <div id="wrapper">
-
+    <input type="hidden" id="wsUrl" th:value="${@config.getKey('sys.config.websocket')}"/>
     <!--左侧导航开始-->
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="nav-close">
@@ -87,7 +88,13 @@
                     	<i class="fa fa-bars"></i>
                     </a>
                 </div>
+
                 <ul class="nav navbar-top-links navbar-right welcome-message">
+                    <li>
+                        <a   style="color:coral">
+                            <i class="fa fa-warning" style="margin-right: 3px"></i><span id="div_notice">H+是一个很棒的后台UI框架.</span>
+                        </a>
+                    </li>
                     <li><a title="使用文档" href="http://doc.ruoyi.vip" target="_blank"><i class="fa fa-question-circle"></i> 使用文档</a></li>
 	                <li><a title="全屏显示" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示</a></li>
                     <li class="dropdown user-menu">
@@ -163,13 +170,57 @@
 <script th:src="@{/ruoyi/js/ry-ui.js?v=3.2.0}"></script>
 <script th:src="@{/ruoyi/index.js}"></script>
 <script th:src="@{/ajax/libs/fullscreen/jquery.fullscreen.js}"></script>
-<script th:inline="javascript"> 
-var ctx = [[@{/}]];
-/*用户管理-重置密码*/
-function resetPwd() {
-    var url = ctx + 'system/user/profile/resetPwd';
-    $.modal.open("重置密码", url, '800', '500');
-}
+
+<script th:src="@{/ajax/libs/toastr/toastr.min.js}"></script>
+<script th:src="@{/js/websocket.js}"></script>
+<!--使用常链接的websocket.js 连接断开后会一直尝试连接-->
+<script th:src="@{/js/plugins/reconnecting-websocket/reconnecting-websocket.min.js}"></script>
+
+<script th:inline="javascript">
+
+    var ctx = [[@{/}]];
+    /*用户管理-重置密码*/
+    function resetPwd() {
+        var url = ctx + 'system/user/profile/resetPwd';
+        $.modal.open("重置密码", url, '800', '500');
+    }
+
+
+    $(function() {
+        //websocket服务初始化
+        WsConnect('onlineNotice');
+
+        //设置显示配置
+        var messageOpts = {
+            "closeButton" : false,//是否显示关闭按钮
+            "debug" : false,//是否使用debug模式
+            "positionClass" : "toast-bottom-right",//弹出窗的位置
+            "onclick" : null,
+            "showDuration" : "300",//显示的动画时间
+            "hideDuration" : "1000",//消失的动画时间
+            "timeOut" : "5000",//展现时间
+            "extendedTimeOut" : "1000",//加长展示时间
+            "showEasing" : "swing",//显示时的动画缓冲方式
+            "hideEasing" : "linear",//消失时的动画缓冲方式
+            "showMethod" : "fadeIn",//显示时的动画方式
+            "hideMethod" : "fadeOut" //消失时的动画方式
+        };
+        toastr.options = messageOpts;
+
+        //
+        //toastr.info($("#wsUrl").val());
+        // //成功
+        // toastr.success('内容success', '标题success');
+        // //错误
+        // toastr.error('内容error', '标题error');
+        // //警告
+        // toastr.warning('内容warning', '标题warning');
+    })
+
+    function socketCallback(msg) {
+        toastr.info(msg);
+    }
+
 </script>
 </body>
 </html>

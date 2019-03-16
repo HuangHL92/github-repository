@@ -37,10 +37,10 @@ public class SysIndexController extends BaseController
         SysUser user = getSysUser();
 
         // 根据用户id取出菜单
-        List<SysMenu> menus = cacheUtils.getMenuCache().get(user.getLoginName());
+        List<SysMenu> menus = cacheUtils.getUserMenuCache().get(user.getLoginName());
         if(menus==null) {
             menus = menuService.selectMenusByUser(user);
-            cacheUtils.getMenuCache().put(user.getLoginName(),menus);
+            cacheUtils.getUserMenuCache().put(user.getLoginName(),menus);
         }
 
         //List<SysMenu> menus = menuService.selectMenusByUser(user);

@@ -133,6 +133,7 @@ public class UserRealm extends AuthorizingRealm
             throw new AuthenticationException(e.getMessage(), e);
         }
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getLoginName(), password, getName());
+
         return info;
     }
 

@@ -103,15 +103,20 @@ public class SysUserOnlineController extends BaseController
         {
             return error("用户已下线");
         }
-        OnlineSession onlineSession = (OnlineSession) sessionDao.readSession(online.getSessionId());
-        if (onlineSession == null)
-        {
+        try {
+            OnlineSession onlineSession = (OnlineSession) sessionDao.readSession(online.getSessionId());
+            if (onlineSession == null)
+            {
+                return error("用户已下线");
+            }
+            onlineSession.setStatus(OnlineStatus.off_line);
+            online.setStatus(OnlineStatus.off_line);
+            userOnlineService.saveOnline(online);
+            sessionDao.deleteSession(onlineSession);
+        }  catch (Exception ex) {
             return error("用户已下线");
         }
-        onlineSession.setStatus(OnlineStatus.off_line);
-        online.setStatus(OnlineStatus.off_line);
-        userOnlineService.saveOnline(online);
-        sessionDao.deleteSession(onlineSession);
+
         return success();
     }
 }
