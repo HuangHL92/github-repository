@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.system;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -9,6 +10,7 @@ import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.workday.WorkdayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 日历 信息操作处理
- * 
+ *
  * @author jiyunsoft
  * @date 2019-03-09
  */
@@ -37,17 +39,17 @@ import javax.servlet.http.HttpServletRequest;
 public class SysCalendarController extends BaseController
 {
     private String prefix = "system/calendar";
-	
+
 	@Autowired
 	private ISysCalendarService sysCalendarService;
-	
+
 	@RequiresPermissions("system:calendar:view")
 	@GetMapping()
 	public String sysCalendar()
 	{
 	    return prefix + "/list";
 	}
-	
+
 	/**
 	 * 查询日历列表
 	 */
@@ -85,7 +87,7 @@ public class SysCalendarController extends BaseController
 		mmap.put("sysCalendar", sysCalendar);
 	    return prefix + "/add";
 	}
-	
+
 	/**
 	 * 新增保存日历
 	 */
@@ -93,34 +95,25 @@ public class SysCalendarController extends BaseController
 	@Log(title = "日历", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(@RequestParam(value = "years",required = true)Integer years,
-							  @RequestParam(value = "days",required = true)Date days,
-							  @RequestParam(value = "dayType",required = false)Integer dayType,
-							  HttpServletRequest request, Model model)
+	public AjaxResult addSave(SysCalendar sysCalendar,HttpServletRequest request, Model model)
 	{
-		SysCalendar sysCalendar = new SysCalendar();
-		int ts = Integer.valueOf(DateUtil.format(days,"yyyyMMdd"));
-
-		sysCalendar.setDays(ts);
-		sysCalendar.setYears(years);
-		sysCalendar.setDayType(dayType);
+		sysCalendar.setDays(WorkdayUtils.Date2Int(sysCalendar.getDateStr()));
 
 		return toAjax(sysCalendarService.save(sysCalendar));
 	}
-
 	/**
 	 * 修改日历
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") String id, ModelMap mmap)
-	{
+	public String edit(@PathVariable("id") String id, ModelMap mmap) throws ParseException {
 		SysCalendar sysCalendar = sysCalendarService.getById(id);
+		sysCalendar.setDateStr(WorkdayUtils.Integer2Date(sysCalendar.getDays()));
 
         sysCalendar.setFormAction(prefix + "/edit");
 		mmap.put("sysCalendar", sysCalendar);
 	    return prefix + "/add";
 	}
-	
+
 	/**
 	 * 修改保存日历
 	 */
@@ -129,10 +122,11 @@ public class SysCalendarController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(SysCalendar sysCalendar)
-	{		
+	{
+		sysCalendar.setDays(WorkdayUtils.Date2Int(sysCalendar.getDateStr()));
 		return toAjax(sysCalendarService.saveOrUpdate(sysCalendar));
 	}
-	
+
 	/**
 	 * 删除日历
 	 */
@@ -141,8 +135,8 @@ public class SysCalendarController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
+	{
 		return toAjax(sysCalendarService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 	}
-	
+
 }

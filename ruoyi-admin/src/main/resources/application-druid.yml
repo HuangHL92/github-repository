@@ -50,7 +50,7 @@ spring:
 
     redis:
         # Redis开关/默认关闭
-        enabled: true
+        enabled: false
         database: 0
         password:
         host: 127.0.0.1
