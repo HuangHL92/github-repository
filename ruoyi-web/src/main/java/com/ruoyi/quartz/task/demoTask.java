@@ -11,7 +11,7 @@ public class demoTask {
 //        String mailto = "15800822996@163.com";
 //        String mailtext = "定时任务测试";
 //        MailUtil.send(mailto, "测试", mailtext, false);
-        SocketServer.sendMessage("定时任务测试","onlineNotice");
+        SocketServer.sendMessage("定时任务测试！","onlineNotice");
     }
 
 }

@@ -87,3 +87,16 @@ redis使用Jedis做为底层(注意：hutool中的redis未使用)
 application-druid.yml 文件中prefix对应值就是本项目的前缀（每个项目请务必修为本项目名称）
 com/ruoyi/common/utils/JedisUtils.java
 key命名规则，XXXX:XXXX（例如：token:userid）
+
+wesocket:
+com/ruoyi/web/websocket/SocketServer.java
+static/js/websocket.js
+
+jwt:
+自定义注解：@ValidateRequest
+请求头部加入key: x-access-token
+验证实现切面：ruoyi-web\src\main\java\com\ruoyi\framework\aspectj\AuthenticationAspect.java
+验证逻辑：
+1.在需要去验证的接口添加@ValidateRequest
+2.通过 /api/auth/login 接口 获得token
+3.将token写入请求头部进行请求

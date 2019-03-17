@@ -32,7 +32,7 @@ import java.util.HashMap;
  * @Author yufei
  * @Date 2019-03-05 21:21
  **/
-@Api(value = "/auth", description = "基础服务接口")
+@Api(value = "/auth", description = "授权服务接口")
 @RestController
 @RequestMapping("/api/auth/*")
 public class AuthController extends ApiBaseController {
