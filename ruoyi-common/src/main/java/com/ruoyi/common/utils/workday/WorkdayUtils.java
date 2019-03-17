@@ -1,12 +1,13 @@
 package com.ruoyi.common.utils.workday;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 
 public class WorkdayUtils {
@@ -159,13 +160,17 @@ public class WorkdayUtils {
             } else if (entry.getValue() == 4) {
                 WORKDAY_MAP.put(entry.getKey(), true);
             }
-//            System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());
         }
 
     }
 
     public static Date integerToDate() {
         return new Date();
+    }
+
+    public static Integer Date2Int(Date dateStr) {
+        int ts = Integer.valueOf(DateUtil.format(dateStr,"yyyyMMdd"));
+        return ts;
     }
 
     /**
@@ -238,6 +243,7 @@ public class WorkdayUtils {
             incomeDate = getIncomeDate(incomeDate);
         }
         incomeDate = DateUtil.parse(DateUtil.format(incomeDate,"yyyy-MM-dd"));
+
         return incomeDate;
     }
 
@@ -272,7 +278,14 @@ public class WorkdayUtils {
         return incomeDate;
     }
 
+    public static Date Integer2Date(Integer days) throws ParseException {
 
+        String dayStr = days.toString();
+        String date = StringUtils.format("{}-{}-{}",dayStr.substring(0,4),dayStr.substring(4,6),dayStr.substring(6,8));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        return sdf.parse(date);
+    }
     /**
      * String转Calendar
      *
