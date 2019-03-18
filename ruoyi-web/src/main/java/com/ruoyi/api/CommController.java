@@ -1,30 +1,36 @@
 package com.ruoyi.api;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.extra.mail.MailUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.exception.user.CaptchaException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.RegexUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.workday.WorkdayUtils;
 import com.ruoyi.framework.jwt.domain.Account;
 import com.ruoyi.framework.jwt.service.TokenService;
 import com.ruoyi.framework.shiro.service.SysLoginService;
 import com.ruoyi.framework.web.base.ApiBaseController;
+import com.ruoyi.system.domain.SysCalendar;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysCalendarService;
+import com.ruoyi.system.service.impl.SysCalendarServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @Description $功能描述$
@@ -41,6 +47,8 @@ public class CommController extends ApiBaseController {
     private TokenService tokenService;
     @Autowired
     private SysLoginService loginService;
+    @Autowired
+    private ISysCalendarService calendarService;
 
     private String VCODE_KEY= "vcodeCache:%s";
 
@@ -124,4 +132,68 @@ public class CommController extends ApiBaseController {
         }
         return ApiResult.success();
     }
+
+
+    @ApiOperation("工作日计算（指定日期之后N个工作日是几号）")
+    @GetMapping("calander4workday")
+    public ApiResult calander4workday(@RequestParam(name="cdate") String cdate, @RequestParam(name="days") int days)
+    {
+
+        //1.参数验证
+        if(StringUtils.isEmpty(cdate)) {
+            return ApiResult.error(ResponseCode.ILLEGAL_REQUEST);
+        }
+
+        try {
+            HashMap<Integer,Integer> map = new HashMap<>();
+            QueryWrapper<SysCalendar> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("years",DateUtil.parse(cdate).year());
+            List<SysCalendar> list = calendarService.list(queryWrapper);
+            for (SysCalendar obj : list){
+                map.put(obj.getDays(),obj.getDayType());
+            }
+            WorkdayUtils.init(map);
+
+            Date date = WorkdayUtils.getIncomeDate(DateUtil.parse(cdate),days);
+            return ApiResult.success(date);
+        }catch (Exception ex) {
+            return ApiResult.error("日期格式错误！");
+        }
+
+
+
+    }
+
+
+    @ApiOperation("工作日计算（计算两个日期之间有几个工作日）")
+    @GetMapping("calander4days")
+    public ApiResult calander4days(@RequestParam(name="sdate") String sdate, @RequestParam(name="edate") String edate)
+    {
+
+        //1.参数验证
+        if(StringUtils.isEmpty(sdate) || StringUtils.isEmpty(edate)) {
+            return ApiResult.error(ResponseCode.ILLEGAL_REQUEST);
+        }
+
+        int days = 0;
+        try {
+            //日历初始化（休息日）
+            HashMap<Integer,Integer> map = new HashMap<>();
+            QueryWrapper<SysCalendar> queryWrapper = new QueryWrapper<>();
+            queryWrapper.between("days",Integer.parseInt(sdate.replaceAll("-","")),Integer.parseInt(edate.replaceAll("-","")));
+            List<SysCalendar> list = calendarService.list(queryWrapper);
+            for (SysCalendar obj : list){
+                map.put(obj.getDays(),obj.getDayType());
+            }
+            WorkdayUtils.init(map);
+
+            days = WorkdayUtils.howManyWorkday(DateUtil.parse(sdate),DateUtil.parse(edate));
+
+        }catch (Exception ex) {
+            return ApiResult.error("日期格式错误！日期格式为：YYYY-MM-dd");
+        }
+
+        return ApiResult.success(days);
+    }
+
 }

@@ -233,17 +233,17 @@
                                 <ul>
                                     <li class="select-time">
                                         <label>起止时间： </label>
-                                        <input data-toggle="date" data-type="date" id="startTime" style="width: 120px" />
+                                        <input data-toggle="date" data-type="date" id="startTime" style="width: 120px"/>
                                         <span>-</span>
-                                        <input data-toggle="date" data-type="date" id="endTime"  style="width: 120px"/>
+                                        <input data-toggle="date" data-type="date" id="endTime" style="width: 120px"/>
                                     </li>
                                     <li>
-                                        <a onclick="doSearchWorkTime()" class="btn btn-sm btn-primary" data-toggle="tooltip" style="margin-left: 10px"
+                                        <a onclick="doSearchWorkDayCount()" class="btn btn-sm btn-primary"
+                                           data-toggle="tooltip" style="margin-left: 10px"
                                            data-placement="top" title="Send"><i class="fa fa-reply"></i> 查询工作日</a>
                                     </li>
                                 </ul>
                             </div>
-
                         </div>
                     </div>
                 </form>
@@ -254,21 +254,17 @@
                                 <ul>
                                     <li class="select-time">
                                         <label>开始时间： </label>
-                                        <input data-toggle="date" data-type="date" id="oldTime" style="width: 120px" />
-                                        <label>N个工作日:  </label>
-                                        <input data-toggle="date" data-type="date" id="nums" style="width: 120px" />
+                                        <input data-toggle="date" data-type="date" id="oldTime" style="width: 120px"/>
+                                        <label>N个工作日: </label>
+                                        <input type="text" name="nums" id="nums" class="form-control"
+                                               placeholder="工作日" style="width: 120px">
                                         <a onclick="doSearchEndTime()" class="btn btn-sm btn-primary"
                                            data-toggle="tooltip"
-                                           data-placement="top" title="Send" style="margin-left: 10px"><i class="fa fa-reply"></i> 查询具体日期</a>
+                                           data-placement="top" title="Send" style="margin-left: 10px"><i
+                                                class="fa fa-reply"></i> 查询具体日期</a>
                                     </li>
-
                                 </ul>
-
-
                             </div>
-                            <!--<div class="mail-body text-right tooltip-demo">
-
-                            </div>-->
                         </div>
                     </div>
                 </form>
@@ -283,18 +279,15 @@
 <script type="text/javascript">
 
     function doSearchEndTime() {
-        var url = ctx + "demo/all/searchResult?oldTime=" + $("#oldTime").val() + "&num=" + $("#nums").val();
-
+        var url = ctx + "demo/all/searchWorkDay?oldTime=" + $("#oldTime").val() + "&num=" + $("#nums").val();
         $.post(url, function (result) {
             $.modal.alert(result.msg);
         });
 
     }
 
-    function doSearchWorkTime() {
-
-        var url = ctx + "demo/all/search?startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
-        // window.location.href = url;
+    function doSearchWorkDayCount() {
+        var url = ctx + "demo/all/searchWorkDayCount?startTime=" + $("#startTime").val() + "&endTime=" + $("#endTime").val();
         $.post(url, function (result) {
             $.modal.alert(result.msg);
         });

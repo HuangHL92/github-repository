@@ -45,7 +45,11 @@ public class WorkdayUtils {
     private static SegmentTree SEGMENT_TREE;
 
     public static void init(HashMap<Integer, Integer> map) {
-        initWorkday(map); // 初始化工作日map
+
+        if(map!=null) {
+            initWorkday(map); // 初始化工作日map
+        }
+
 
         // 计算从START_YEAR到END_YEAR一共有多少天
         int totalDays = 0;
@@ -76,32 +80,41 @@ public class WorkdayUtils {
      * @param
      * @return
      */
-    public static int howManyWorkday(Date startDate, Date endDate) throws ParseException {
+    public static int howManyWorkday(Date startDate, Date endDate) {
 
-        if (startDate.after(endDate)) {
-            return howManyWorkday(endDate, startDate);
+        try {
+            if(SEGMENT_TREE==null) {
+                init(null);
+            }
+            if (startDate.after(endDate)) {
+                return howManyWorkday(endDate, startDate);
+            }
+
+            Calendar startCalendar = Calendar.getInstance();
+            startCalendar.setTime(startDate);
+            int startDays = getDaysAfterStartYear(startCalendar) - 1;   // 第一天从0开始
+
+            Calendar endCalendar = Calendar.getInstance();
+            endCalendar.setTime(endDate);
+            int endDays = getDaysAfterStartYear(endCalendar) - 1;   // 第一天从0开始
+
+            if (startDays == endDays) { // 如果开始日期和结束日期在同一天的话
+                return isWorkDay(startDate) ? 1 : 0;    // 当天为工作日则返回1天，否则0天
+            }
+
+            if (!START_DATE_HANDLING_STRATEGY.ifCountAsOneDay(startDate)) { // 根据处理策略，如果开始日期不算一天的话
+                ++startDays;    // 起始日期向后移一天
+            }
+
+            if (!END_DATE_HANDLING_STRATEGY.ifCountAsOneDay(endDate)) { // 根据处理策略，如果结束日期不算一天的话
+                --endDays;  // 结束日期向前移一天
+            }
+            return SEGMENT_TREE.query(startDays, endDays);
+
+        }catch (Exception ex) {
+            return 0;
         }
 
-        Calendar startCalendar = Calendar.getInstance();
-        startCalendar.setTime(startDate);
-        int startDays = getDaysAfterStartYear(startCalendar) - 1;   // 第一天从0开始
-
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.setTime(endDate);
-        int endDays = getDaysAfterStartYear(endCalendar) - 1;   // 第一天从0开始
-
-        if (startDays == endDays) { // 如果开始日期和结束日期在同一天的话
-            return isWorkDay(startDate) ? 1 : 0;    // 当天为工作日则返回1天，否则0天
-        }
-
-        if (!START_DATE_HANDLING_STRATEGY.ifCountAsOneDay(startDate)) { // 根据处理策略，如果开始日期不算一天的话
-            ++startDays;    // 起始日期向后移一天
-        }
-
-        if (!END_DATE_HANDLING_STRATEGY.ifCountAsOneDay(endDate)) { // 根据处理策略，如果结束日期不算一天的话
-            --endDays;  // 结束日期向前移一天
-        }
-        return SEGMENT_TREE.query(startDays, endDays);
     }
 
     /**
@@ -111,6 +124,11 @@ public class WorkdayUtils {
      * @return
      */
     public static boolean isWorkDay(Date date) {
+
+        if(SEGMENT_TREE==null) {
+            init(null);
+        }
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -238,6 +256,11 @@ public class WorkdayUtils {
      * @return incomeDate(去除周末后的日期)
      */
     public static Date getIncomeDate(Date date, int days) throws NullPointerException {
+
+        if(SEGMENT_TREE==null) {
+            init(null);
+        }
+
         Date incomeDate = date;
         for (int i = 1; i <= days; i++) {
             incomeDate = getIncomeDate(incomeDate);
@@ -278,13 +301,18 @@ public class WorkdayUtils {
         return incomeDate;
     }
 
-    public static Date Integer2Date(Integer days) throws ParseException {
+    public static Date Integer2Date(Integer days) {
 
         String dayStr = days.toString();
         String date = StringUtils.format("{}-{}-{}",dayStr.substring(0,4),dayStr.substring(4,6),dayStr.substring(6,8));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        return sdf.parse(date);
+        Date datetime = null;
+        try {
+            return sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datetime;
     }
     /**
      * String转Calendar
