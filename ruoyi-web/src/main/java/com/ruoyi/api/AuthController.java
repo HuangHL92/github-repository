@@ -46,8 +46,8 @@ public class AuthController extends ApiBaseController {
     private String TOKEN_KEY= "tokenCache:%s";
 
     @ApiOperation("用户验证（成功：返回token）")
-    @PostMapping("login")
-    public ApiResult login(@RequestParam(name="account") String account,
+    @PostMapping("getToken")
+    public ApiResult getToken(@RequestParam(name="account") String account,
                          @RequestParam(name="password") String password)
     {
 
