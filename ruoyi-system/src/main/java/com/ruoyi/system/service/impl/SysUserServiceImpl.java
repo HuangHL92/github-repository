@@ -445,4 +445,9 @@ public class SysUserServiceImpl implements ISysUserService
         }
         return userMapper.updateUser(user);
     }
+
+    @Override
+    public List<SysUser> selectUserListByDeptId(SysUser sysUser) {
+        return userMapper.selectUserListByDeptId(sysUser);
+    }
 }

@@ -4,14 +4,13 @@ import java.util.List;
 
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.framework.util.CacheUtils;
-import com.ruoyi.framework.web.domain.server.Sys;
+import com.ruoyi.framework.util.JsonFileUtils;
+import com.ruoyi.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
@@ -141,6 +140,8 @@ public class SysUserController extends BaseController
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(userService.insertUser(user));
     }
 
@@ -175,6 +176,8 @@ public class SysUserController extends BaseController
         cacheUtils.getUserCache().remove(userService.selectUserById(user.getUserId()).getLoginName());
         // 清空用户认证权限缓存（修改了角色的情况）
         ShiroUtils.clearCachedAuthorizationInfo();
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(userService.updateUser(user));
     }
 
@@ -220,6 +223,8 @@ public class SysUserController extends BaseController
             }
             // 清空用户认证权限缓存
             ShiroUtils.clearCachedAuthorizationInfo();
+            // 删除组织结构json文件
+            JsonFileUtils.deleteOrgJsonFile();
             return toAjax(userService.deleteUserByIds(ids));
         }
         catch (Exception e)
@@ -269,6 +274,8 @@ public class SysUserController extends BaseController
     {
         // 清空用户缓存
         cacheUtils.getUserCache().remove(user.getLoginName());
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(userService.changeStatus(user));
     }
 
@@ -313,5 +320,15 @@ public class SysUserController extends BaseController
 
         robj.put("data",rList);
         return robj;
+    }
+
+    /**
+     * 获取组织&用户json
+     * @return
+     */
+    @GetMapping("/orgTree")
+    @ResponseBody
+    public String orgTree() {
+        return JsonFileUtils.getOrgTreeJson();
     }
 }

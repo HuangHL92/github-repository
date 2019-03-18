@@ -7,10 +7,9 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.shiro.web.filter.captcha.CaptchaValidateFilter;
+import com.ruoyi.framework.util.JsonFileUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.service.ISysPostService;
-import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.web.websocket.SocketServer;
 import org.apache.shiro.SecurityUtils;
@@ -143,6 +142,8 @@ public class SysLoginController extends BaseController
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         user.setCreateBy(ShiroUtils.getLoginName());
         userService.insertUser(user);
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return success();
     }
 

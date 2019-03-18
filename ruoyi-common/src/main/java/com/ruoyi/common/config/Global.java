@@ -138,6 +138,14 @@ public class Global
     }
 
     /**
+     * 获取Json文件路径
+     */
+    public static String getJsonPath()
+    {
+        return getConfig("ruoyi.profile") + "json/";
+    }
+
+    /**
      * 获取作者
      */
     public static String getAuthor()

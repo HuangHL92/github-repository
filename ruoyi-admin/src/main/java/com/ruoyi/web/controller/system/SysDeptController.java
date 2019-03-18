@@ -3,9 +3,9 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import java.util.Map;
 
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.ruoyi.framework.util.JsonFileUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +78,8 @@ public class SysDeptController extends BaseController
     public AjaxResult addSave(SysDept dept)
     {
         dept.setCreateBy(ShiroUtils.getLoginName());
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(deptService.insertDept(dept));
     }
 
@@ -106,6 +108,8 @@ public class SysDeptController extends BaseController
     public AjaxResult editSave(SysDept dept)
     {
         dept.setUpdateBy(ShiroUtils.getLoginName());
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(deptService.updateDept(dept));
     }
 
@@ -126,6 +130,8 @@ public class SysDeptController extends BaseController
         {
             return error(1, "部门存在用户,不允许删除");
         }
+        // 删除组织结构json文件
+        JsonFileUtils.deleteOrgJsonFile();
         return toAjax(deptService.deleteDeptById(deptId));
     }
 

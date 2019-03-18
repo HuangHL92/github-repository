@@ -157,4 +157,11 @@ public interface ISysUserService
      * @return 结果
      */
     public int changeStatus(SysUser user);
+
+    /**
+     * 根据部门id查找下面的用户（直接属于该结构下面的）
+     * @param sysUser
+     * @return
+     */
+    List<SysUser> selectUserListByDeptId(SysUser sysUser);
 }

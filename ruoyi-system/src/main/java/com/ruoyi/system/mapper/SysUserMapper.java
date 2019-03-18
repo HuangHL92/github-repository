@@ -105,4 +105,11 @@ public interface SysUserMapper
      * @return 结果
      */
     public SysUser checkEmailUnique(String email);
+
+    /**
+     * 根据部门id查找下面的用户（直接属于该结构下面的）
+     * @param sysUser
+     * @return
+     */
+    List<SysUser> selectUserListByDeptId(SysUser sysUser);
 }
