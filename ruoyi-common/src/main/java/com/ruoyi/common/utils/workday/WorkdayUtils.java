@@ -301,13 +301,18 @@ public class WorkdayUtils {
         return incomeDate;
     }
 
-    public static Date Integer2Date(Integer days) throws ParseException {
+    public static Date Integer2Date(Integer days) {
 
         String dayStr = days.toString();
         String date = StringUtils.format("{}-{}-{}",dayStr.substring(0,4),dayStr.substring(4,6),dayStr.substring(6,8));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        return sdf.parse(date);
+        Date datetime = null;
+        try {
+            return sdf.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return datetime;
     }
     /**
      * String转Calendar
