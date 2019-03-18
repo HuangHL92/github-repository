@@ -1,13 +1,10 @@
 package com.ruoyi.web.controller.system;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.utils.workday.WorkdayUtils;
@@ -97,7 +94,9 @@ public class SysCalendarController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(SysCalendar sysCalendar,HttpServletRequest request, Model model)
 	{
+		//设置年份,日期
 		sysCalendar.setDays(WorkdayUtils.Date2Int(sysCalendar.getDateStr()));
+		sysCalendar.setYears(DateUtil.year(sysCalendar.getDateStr()));
 
 		return toAjax(sysCalendarService.save(sysCalendar));
 	}
@@ -105,7 +104,7 @@ public class SysCalendarController extends BaseController
 	 * 修改日历
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") String id, ModelMap mmap) throws ParseException {
+	public String edit(@PathVariable("id") String id, ModelMap mmap){
 		SysCalendar sysCalendar = sysCalendarService.getById(id);
 		sysCalendar.setDateStr(WorkdayUtils.Integer2Date(sysCalendar.getDays()));
 
@@ -123,7 +122,10 @@ public class SysCalendarController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(SysCalendar sysCalendar)
 	{
+		//设置年份,日期
 		sysCalendar.setDays(WorkdayUtils.Date2Int(sysCalendar.getDateStr()));
+		sysCalendar.setYears(DateUtil.year(sysCalendar.getDateStr()));
+
 		return toAjax(sysCalendarService.saveOrUpdate(sysCalendar));
 	}
 
