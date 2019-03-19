@@ -17,27 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/sms/*")
 public class SMSController {
 
-    @ApiOperation("发送验证码")
-    @PostMapping("sendVcode")
-    @ValidateRequest
-    public ApiResult sendVcode(String mobile,String account,String password)
-    {
-        //1.参数验证
-        if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password) || StringUtils.isEmpty(mobile)) {
-            return ApiResult.error("参数错误");
-        }
-        //TODO 2.验证账号密码
-
-        //3.生成六位随机数
-        String vcode = RandomUtil.randomNumbers(6);
-
-        //TODO 4.发送短信
-        return ApiResult.success(vcode);
-    }
 
     @ApiOperation("发送短信（单条）")
-    @PostMapping("sendSms")
-    public ApiResult sendSms(String mobile,String content, String account,String password)
+    @PostMapping("send")
+    public ApiResult send(String mobile,String content, String account,String password)
     {
         //1.参数验证
         if(StringUtils.isEmpty(account) || StringUtils.isEmpty(password)

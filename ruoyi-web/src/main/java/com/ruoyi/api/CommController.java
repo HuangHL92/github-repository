@@ -43,10 +43,7 @@ import java.util.List;
 public class CommController extends ApiBaseController {
 
 
-    @Autowired
-    private TokenService tokenService;
-    @Autowired
-    private SysLoginService loginService;
+
     @Autowired
     private ISysCalendarService calendarService;
 
