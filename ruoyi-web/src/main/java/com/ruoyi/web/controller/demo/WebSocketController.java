@@ -21,13 +21,13 @@ import java.util.List;
 @RequestMapping("/demo/websocket")
 public class WebSocketController {
 
-    @Value("${jiyun.websocket.url}")
-    private String wsUrl;
+//    @Value("${jiyun.websocket.url}")
+//    private String wsUrl;
 
     @GetMapping()
     public String websocket(Model model)
     {
-        model.addAttribute("wsUrl", wsUrl);
+//        model.addAttribute("wsUrl", wsUrl);
         return "demo/websocket/websocket";
     }
 

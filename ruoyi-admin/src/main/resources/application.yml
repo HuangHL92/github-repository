@@ -155,15 +155,30 @@ gen:
   tablePrefix: biz_
 
 # websocket & 微信公众号配置
-jiyun:
-  websocket:
-    url: ws://localhost:81/socketServer
-  wechat:
-    appid: wx7738841a00491a68
-    appsecret: 8df7ef2490e79bc69682c9907d423ca9
-    token:
-    aeskey:
-  webPath: http://e94x2c.natappfree.cc
+#jiyun:
+#  websocket:
+#    url: ws://localhost:81/socketServer
+#  wechat:
+#    appid: wx2b911f070115b89a  #微驱动appid
+#    appsecret: a6d343b9592121b3c215c8301b0c3d75  #微驱动appsecret
+#    token:
+#    aeskey:
+#    thirdurl: http://wx.51e.com.cn/get-weixin-code.html  #第三中转URL（用于解决省去配置白名单问题。非必须配置）
+#  webPath: http://hahayu.natapp1.cc
+
+wx:
+  mp:
+    configs:
+      - appId: wx2b911f070115b89a #（一个公众号的appid）
+        secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret）
+        token: 111 #（接口配置里的Token值）
+        aesKey: 111 #（接口配置里的EncodingAESKey值）
+        webPath: http://hahayu.natapp1.cc
+        thirdurl: http://wx.51e.com.cn/get-weixin-code.html
+#      - appId: 2222 （另一个公众号的appid，以下同上）
+#        secret: 1111
+#        token: 111
+#        aesKey: 111
 
 # restful 配置
 api:
@@ -171,6 +186,24 @@ api:
   nonceovertime: 15
   basepackage: com.ruoyi.api #restful接口扫描路径
   appsecret: 1q2w3e4r #token验证用密钥
+
+#Actuator相关配置
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  server:
+    port: 10111
+    servlet:
+      context-path: /
+    ssl:
+      enabled: false
+  endpoint:
+    health:
+      show-details: always
+
+
 
 # 正则表达式(未启用)
 #regex:

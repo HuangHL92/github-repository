@@ -32,6 +32,13 @@
             <version>${ruoyi.version}</version>
         </dependency>
 
+        <!--微信模板-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-wx</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
+
         <!--tomcat下部署需要的配置-->
         <!--<dependency>-->
             <!--<groupId>org.springframework.boot</groupId>-->

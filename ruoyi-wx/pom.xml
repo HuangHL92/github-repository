@@ -8,15 +8,11 @@
         <version>3.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
-    <artifactId>ruoyi-web</artifactId>
 
-    <description>
-        项目工程模块
-    </description>
+    <artifactId>ruoyi-wx</artifactId>
 
     <dependencies>
-	
+
         <!-- 核心模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
@@ -29,18 +25,6 @@
             <version>${ruoyi.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.9.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-wx</artifactId>
-            <version>3.2</version>
-            <scope>compile</scope>
-        </dependency>
 
     </dependencies>
-
 </project>
