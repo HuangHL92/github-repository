@@ -100,3 +100,8 @@ jwt:
 1.在需要去验证的接口添加@ValidateRequest
 2.通过 /api/auth/login 接口 获得token
 3.将token写入请求头部进行请求
+
+微信：
+核心实现 ruoyi-wx
+demo实现 com/ruoyi/web/controller/wap/WechatController.java
+入口方法 /wap/wechat/access?appid=wx2b911f070115b89a

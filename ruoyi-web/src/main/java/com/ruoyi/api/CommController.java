@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * @Description $功能描述$
  * @Author yufei
- * @Date 2019-03-017 21:21
+ * @Date 2019-03-17 21:21
  **/
 @Api(value = "/comm", description = "基础服务接口")
 @RestController

@@ -84,12 +84,16 @@ public class JsonFileUtils
             JSONObject object = new JSONObject(new LinkedHashMap());
             object.put("id", item.getDeptId()); // id
             object.put("deptname", item.getDeptName()); // deptname
+            object.put("type", "dept"); // type
             parent.setParentId(item.getDeptId());
             List<SysDept> childrenDept = deptService.selectDeptList(parent);
             JSONArray children = getUserJsonDeptId(item.getDeptId());
             if (childrenDept != null && childrenDept.size() > 0) {
                 object.put("children", bindChildByParent(item.getDeptId(), children)); // children
             } else {
+                if (children.size() > 0) {
+                    object.put("hasUser", true); // hasUser
+                }
                 object.put("children", children); // children
             }
             array.add(object);
@@ -111,6 +115,7 @@ public class JsonFileUtils
             JSONObject object = new JSONObject(new LinkedHashMap());
             object.put("id", user.getUserId()); // id
             object.put("deptname", user.getUserName()); // deptname
+            object.put("type", "user"); // type
             object.put("children", new JSONArray()); // children
             array.add(object);
         }

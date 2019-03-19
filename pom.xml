@@ -58,6 +58,7 @@
 		<module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>ruoyi-web</module>
+        <module>ruoyi-wx</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -201,6 +202,13 @@
             <artifactId>java-jwt</artifactId>
             <version>${jwt.version}</version>
         </dependency>
+
+        <!-- Actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
 
     </dependencies>
 

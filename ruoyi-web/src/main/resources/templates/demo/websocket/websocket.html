@@ -31,7 +31,7 @@
         <p>模块三：使用websocket刷新</p>
     </div>
     <div class="col-sm-8">
-        <h4 >本画面websocket url：ws://localhost/socketServer/${code}</h4>
+        <h4>本画面websocket url：ws://localhost/socketServer/${code}</h4>
         <ol>
             <li>code：未每个画面的唯一编码。</li>
             <li>同一个code可以打开多个画面，都可以实现实时刷新</li>
@@ -42,9 +42,7 @@
     </div>
 </div>
 <div class="wrapper wrapper-content">
-
     <input type="hidden" id="wsUrl" th:value="${@config.getKey('sys.config.websocket')}"/>
-
     <div class="row">
         <div class="col-sm-4">
             <div class="ibox float-e-margins">
