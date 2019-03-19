@@ -169,8 +169,8 @@ gen:
 wx:
   mp:
     configs:
-      - appId: wx2b911f070115b89a #（一个公众号的appid）
-        secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret）
+      - appId: wx2b911f070115b89a #（一个公众号的appid  微驱动）
+        secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret 微驱动）
         token: 111 #（接口配置里的Token值）
         aesKey: 111 #（接口配置里的EncodingAESKey值）
         webPath: http://hahayu.natapp1.cc
