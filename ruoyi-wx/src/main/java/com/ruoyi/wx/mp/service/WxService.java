@@ -14,6 +14,7 @@ public class WxService extends WxMpServiceImpl {
 
     public void setWxConfigStorage(WxConfigStorage wxConfigStorage) {
         this.wxConfigStorage = wxConfigStorage;
+        this.initHttp();
     }
     @Override
     public WxMpConfigStorage getWxMpConfigStorage() {
