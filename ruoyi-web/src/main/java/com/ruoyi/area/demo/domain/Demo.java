@@ -48,6 +48,30 @@ public class Demo extends BaseEntity
     @Excel(name = "图片路径")
     private String imgPath;
 
+    /** 用户1 */
+    @Excel(name = "用户1")
+    private String userids1;
+
+    /** 用户2 */
+    @Excel(name = "用户2")
+    private String userids2;
+
+    public String getUserids1() {
+        return userids1;
+    }
+
+    public void setUserids1(String userids1) {
+        this.userids1 = userids1;
+    }
+
+    public String getUserids2() {
+        return userids2;
+    }
+
+    public void setUserids2(String userids2) {
+        this.userids2 = userids2;
+    }
+
     public String getImgPath() {
         return imgPath;
     }
