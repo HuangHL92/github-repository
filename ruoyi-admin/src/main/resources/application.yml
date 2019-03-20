@@ -7,7 +7,7 @@ ruoyi:
   # 版权年份
   copyrightYear: 2019
   # 文件上传路径
-  profile: ruoyi/profile/
+  profile: /ruoyi/profile/
   # 获取ip地址开关
   addressEnabled: true
 
@@ -154,18 +154,12 @@ gen:
   # 表前缀(类名不会包含表前缀)
   tablePrefix: biz_
 
-# websocket & 微信公众号配置
+# websocket
 #jiyun:
 #  websocket:
 #    url: ws://localhost:81/socketServer
-#  wechat:
-#    appid: wx2b911f070115b89a  #微驱动appid
-#    appsecret: a6d343b9592121b3c215c8301b0c3d75  #微驱动appsecret
-#    token:
-#    aeskey:
-#    thirdurl: http://wx.51e.com.cn/get-weixin-code.html  #第三中转URL（用于解决省去配置白名单问题。非必须配置）
-#  webPath: http://hahayu.natapp1.cc
 
+# 微信公众号配置
 wx:
   mp:
     configs:

@@ -91,6 +91,7 @@ key命名规则，XXXX:XXXX（例如：token:userid）
 wesocket:
 com/ruoyi/web/websocket/SocketServer.java
 static/js/websocket.js
+参考demo: templates/index.html
 
 jwt:
 自定义注解：@ValidateRequest
