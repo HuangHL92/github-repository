@@ -8,4 +8,5 @@ public class WxConfigStorage extends WxMpInMemoryConfigStorage {
     protected volatile String webPath;
     protected volatile String thirdUrl;
 
+
 }
