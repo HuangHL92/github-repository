@@ -101,13 +101,11 @@ function initCtrl() {
         DateInput(_c);
     })
 
-    // if ($(".date-input").length > 0) {
-    //     $(".date-input").each(function () {
-    //         var _c=$(this);
-    //         DateInput(_c);
-    //     })
-    // }
-
+    //弹出选择人控件
+    $("[data-toggle='lookup_user']").each(function () {
+        var _c=$(this);
+        LookUpUser(_c);
+    })
 
     layui.use('element', function(){
         var $ = layui.jquery
@@ -538,8 +536,6 @@ Select.prototype.init=function () {
     //模板定义
     if(config.type=="user-tree" || config.type=="user" )
     {
-
-
         layui.formSelects.render(config.id, {
             // init: ["100", "109"],           //默认值
             // skin: "danger",                 //多选皮肤
@@ -643,6 +639,35 @@ var DateInput = function (obj) {
 }
 <!--日期控件结束-->
 
+
+<!--弹窗选人控件-->
+var LookUpUser = function (obj) {
+
+    var id= obj.attr("id");
+    var val= obj.attr("value");
+    var dispName= obj.attr("dispName");  //显示控件名称
+    var hiddenName= obj.attr("hiddenName"); //选择用户ID保存控件
+    var cls_disp = "js_tree_selected_" +  hiddenName;
+
+    var strhtml = $([
+        '<input class="form-control js_show_party_selector ' + cls_disp + '" type="text" name="' + dispName + '" readonly="true">'
+        ,'<input id="' + hiddenName + '" class="form-input" type="hidden" name="' + hiddenName + '" value="' + val +'">'
+    ].join(''));
+
+    $("#" + id).html(strhtml);
+
+
+    $("#" + id).orgTree({
+        all: true,                //人物组织都开启
+        area: ['650px','542px'],  //弹窗框宽高
+        search: true,              //开启搜索
+        cls_disp: cls_disp,        //已选择用户控件样式（用于查找）
+        selectedids: hiddenName
+    });
+
+
+}
+<!--弹窗选人控件-->
 
 // 详情超链
 function link_detail(title,id) {
