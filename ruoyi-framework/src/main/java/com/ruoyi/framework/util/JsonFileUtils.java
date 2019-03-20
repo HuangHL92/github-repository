@@ -91,9 +91,6 @@ public class JsonFileUtils
             if (childrenDept != null && childrenDept.size() > 0) {
                 object.put("children", bindChildByParent(item.getDeptId(), children)); // children
             } else {
-                if (children.size() > 0) {
-                    object.put("hasUser", true); // hasUser
-                }
                 object.put("children", children); // children
             }
             array.add(object);
