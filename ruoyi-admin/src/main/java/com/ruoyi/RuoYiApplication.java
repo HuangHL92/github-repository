@@ -1,12 +1,17 @@
 package com.ruoyi;
 
+import com.ruoyi.common.config.Global;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.servlet.MultipartConfigElement;
 
 /**
  * 启动程序
@@ -31,6 +36,8 @@ public class RuoYiApplication
                 " |  | \\ `'   /|   `-'  /           \n" +
                 " |  |  \\    /  \\      /           \n" +
                 " ''-'   `'-'    `-..-'              ");
+
+
     }
 
 
@@ -38,6 +45,17 @@ public class RuoYiApplication
         // 注意这里要指向原先用main方法执行的Application启动类
         return builder.sources(RuoYiApplication.class);
     }
+
+//    /**
+//     * 文件上传临时路径
+//     */
+//    @Bean
+//    MultipartConfigElement multipartConfigElement() {
+//        MultipartConfigFactory factory = new MultipartConfigFactory();
+//        factory.setLocation(Global.getUploadPath());
+//        return factory.createMultipartConfig();
+//    }
+
 
 
 }

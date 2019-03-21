@@ -189,6 +189,10 @@
     $(function() {
         //websocket服务初始化
         WsConnect('onlineNotice');
+        //websocket回调方法
+        function socketCallback(msg) {
+            toastr.info(msg);
+        }
 
         //设置显示配置
         var messageOpts = {
@@ -217,9 +221,7 @@
         // toastr.warning('内容warning', '标题warning');
     })
 
-    function socketCallback(msg) {
-        toastr.info(msg);
-    }
+
 
 </script>
 </body>

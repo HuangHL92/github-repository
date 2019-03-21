@@ -2,6 +2,8 @@ package com.ruoyi.common.utils.file;
 
 import java.io.File;
 import java.io.IOException;
+
+import cn.hutool.core.io.FileUtil;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.exception.file.FileNameLengthLimitExceededException;
@@ -113,7 +115,9 @@ public class FileUploadUtils
         String fileName = extractFilename(file, extension);
 
         File desc = getAbsoluteFile(baseDir, baseDir + fileName);
+
         file.transferTo(desc);
+
         return fileName;
     }
 
@@ -126,7 +130,9 @@ public class FileUploadUtils
 
     private static final File getAbsoluteFile(String uploadDir, String filename) throws IOException
     {
-        File desc = new File(File.separator + filename);
+        //File desc = new File(File.separator + filename);
+
+        File desc = new File(new File(uploadDir).getAbsolutePath()+ "/" + filename);
 
         if (!desc.getParentFile().exists())
         {

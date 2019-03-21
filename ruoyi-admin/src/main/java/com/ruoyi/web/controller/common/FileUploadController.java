@@ -221,26 +221,6 @@ public class FileUploadController extends BaseController {
     }
 
 
-    /***
-     * 根据文件路径删除文件
-     * @param filePath 文件路径
-     * @return
-     */
-//    @RequestMapping(value="/removeFile", method = RequestMethod.POST)
-//    @ResponseBody
-//    public AjaxResult removeFile(String filePath) {
-//
-//        try {
-//            //删除物理文件
-//
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//            return error(e.getMessage());
-//        }
-//
-//        return AjaxResult.success();
-//    }
-
 
     @RequestMapping(value="/downloadFile", method = RequestMethod.GET)
     public HttpServletResponse downloadFile(String id,String path,HttpServletResponse response) {

@@ -270,6 +270,8 @@ UploadFile.prototype.init = function () {
                     });
                 }
                 ,done: function(res, index, upload){
+                    console.log(res);
+                    console.log(config.input);
                     if(res.code == 0){ //上传成功
                         var tr = config.appendArea.find('#upload-'+ index)
                             ,deldata=null;
@@ -302,6 +304,7 @@ UploadFile.prototype.init = function () {
                     });
                     tr.find('.upload-loading').addClass('layui-hide')
                     tr.find('.upload-reload').removeClass('layui-hide')
+                    $.modal.alertError("上传失败！");
                 }
             });
         })
