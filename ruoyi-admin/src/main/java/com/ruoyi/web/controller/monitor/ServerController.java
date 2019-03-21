@@ -33,13 +33,16 @@ public class ServerController extends BaseController
     @GetMapping()
     public String server(ModelMap mmap, HttpServletRequest request) throws Exception
     {
-        String jsonObj = HttpUtil.get(request.getScheme()+"://"+request.getServerName()+":"+port+"/actuator/health");
-        JSONObject health = JSONUtil.parseObj(jsonObj);
-
+        try{
+            String jsonObj = HttpUtil.get(request.getScheme()+"://"+request.getServerName()+":"+port+"/actuator/health");
+            JSONObject health = JSONUtil.parseObj(jsonObj);
+            mmap.put("health",health);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Server server = new Server();
         server.copyTo();
         mmap.put("server", server);
-        mmap.put("health",health);
         return prefix + "/server";
     }
 }
