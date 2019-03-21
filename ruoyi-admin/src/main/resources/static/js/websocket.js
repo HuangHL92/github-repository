@@ -12,10 +12,10 @@ function WsConnect(server){
     ws.onmessage = function(evt) {
         var data = evt.data;
         console.log("接收的websocket消息:" + data);
-        if (!typeof(socketCallback)=="undefined")
-        {
+        // if (!typeof(socketCallback)=="undefined")
+        // {
             socketCallback(data);
-        }
+        //}
 
         $('#div_notice').css("alert alert-success");
         $('#div_notice').html("接收的websocket消息:" + data );
