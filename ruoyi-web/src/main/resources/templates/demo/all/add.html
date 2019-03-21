@@ -283,7 +283,7 @@
 
                                     <label class="col-sm-2 control-label">单文件上传</label>
                                         <div class="col-sm-10">
-                                        <input type="hidden" name="filePath" data-toggle="fileupload" data-multiple="false" th:value="*{filePath}" data-back-type="path" data-btn-text="上传文件" />
+                                        <input type="hidden" name="filePath" data-toggle="fileupload" data-multiple="false" th:value="*{filePath}" data-back-type="no" data-btn-text="上传文件" />
                                     </div>
                                 </div>
 
@@ -291,7 +291,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">多文件上传</label>
                                     <div class="col-sm-10">
-                                        <input type="hidden" data-toggle="fileupload" data-multiple="true" value=""  data-btn-text="上传文件（多个）"/>
+                                        <input type="hidden" name="filePath2" data-toggle="fileupload" data-multiple="true" value=""  data-btn-text="上传文件（多个）"/>
                                     </div>
                                 </div>
 

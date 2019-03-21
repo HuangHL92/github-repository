@@ -46,16 +46,5 @@ public class RuoYiApplication
         return builder.sources(RuoYiApplication.class);
     }
 
-//    /**
-//     * 文件上传临时路径
-//     */
-//    @Bean
-//    MultipartConfigElement multipartConfigElement() {
-//        MultipartConfigFactory factory = new MultipartConfigFactory();
-//        factory.setLocation(Global.getUploadPath());
-//        return factory.createMultipartConfig();
-//    }
-
-
 
 }

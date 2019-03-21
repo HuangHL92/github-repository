@@ -234,8 +234,9 @@ public class FileUploadController extends BaseController {
             }else{
                 filePath=path;
             }
+            ;
             //Hutool读取文件
-            FileReader fileReader = new FileReader(Global.getUploadPath()+filePath);
+            FileReader fileReader = new FileReader(FileUtil.file("/"+ Global.getUploadPath()+filePath));
             if(fileName.isEmpty()){
                 fileName=FileUtil.getName(fileReader.getFile());
                 //fileName=fileName.substring(31,fileName.length()-31);

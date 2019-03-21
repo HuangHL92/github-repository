@@ -169,7 +169,7 @@ wx:
         aesKey: 111 #（接口配置里的EncodingAESKey值）
         webPath: http://hahayu.natapp1.cc
         thirdurl: http://wx.51e.com.cn/get-weixin-code.html
-#      - appId: 2222 （另一个公众号的appid，以下同上）
+        ##      - appId: 2222 （另一个公众号的appid，以下同上）
 #        secret: 1111
 #        token: 111
 #        aesKey: 111
