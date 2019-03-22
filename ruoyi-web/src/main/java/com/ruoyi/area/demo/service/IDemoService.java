@@ -1,5 +1,6 @@
 package com.ruoyi.area.demo.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.area.demo.domain.Demo;
@@ -19,7 +20,8 @@ public interface IDemoService extends IService<Demo>
 {
     List<Demo> selectList(Demo sysDemo);
 
-    Page<Demo> selectList4Page(Page<Demo> page);
+    Page<Demo> selectList4Page1(Page<Demo> page);
 
+    Page<Demo> selectList4Page2(Page<Demo> page,Demo sysDemo);
 
 }

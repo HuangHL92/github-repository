@@ -1,6 +1,7 @@
 package com.ruoyi.api;
 
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -87,11 +89,11 @@ public class TestController extends ApiBaseController {
 
 
 
-    @ApiOperation("mybatisPlus 翻页获得数据Demo")
-    @GetMapping("/mptest4page/{page}/{size}")
-    public Map<String, Object> mptest4page(@PathVariable Integer page, @PathVariable Integer size) {
+    @ApiOperation("mybatisPlus 翻页获得数据Demo1")
+    @GetMapping("/mptest4page1/{page}/{size}")
+    public Map<String, Object> mptest4page1(@PathVariable Integer page, @PathVariable Integer size) {
         Map<String, Object> map = new HashMap<>();
-        Page<Demo> questionStudent = demoService.selectList4Page(new Page<>(page, size));
+        Page<Demo> questionStudent = demoService.selectList4Page1(new Page<>(page, size));
         if (questionStudent.getRecords().size() == 0) {
             map.put("code", 400);
         } else {
@@ -101,5 +103,20 @@ public class TestController extends ApiBaseController {
         return map;
     }
 
+    @ApiOperation("mybatisPlus 多表翻页获得数据Demo2")
+    @GetMapping("/mptest4page2/{page}/{size}/{keywords}")
+    public Map<String, Object> mptest4page2(@PathVariable Integer page, @PathVariable Integer size,@RequestParam(name="keywords",required = false) String keywords) {
+        Map<String, Object> map = new HashMap<>();
+        Demo demo = new Demo();
+        demo.setName(keywords);
+        Page<Demo> list = demoService.selectList4Page2(new Page<>(page, size),demo);
 
+        if (list.getRecords().size() == 0) {
+            map.put("code", 400);
+        } else {
+            map.put("code", 200);
+            map.put("data", list);
+        }
+        return map;
+    }
 }

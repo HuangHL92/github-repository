@@ -28,15 +28,30 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements ID
         if(StringUtils.isNotEmpty(demo.getName())) {
             query.lambda()
                     .likeRight(Demo::getName, demo.getName());
-            //query.like("name",sysDemo.getName());
         }
 
         return list(query);
     }
 
     @Override
-    public Page<Demo> selectList4Page(Page<Demo> page) {
-        return page.setRecords(this.baseMapper.getDemoLIst(page));
+    public Page<Demo> selectList4Page1(Page<Demo> page) {
+        return page.setRecords(this.baseMapper.select4page1(page));
+    }
+
+    @Override
+    public Page<Demo> selectList4Page2(Page<Demo> page,Demo demo) {
+        QueryWrapper<Demo> query = new QueryWrapper<>();
+
+        // 查询条件
+        if(StringUtils.isNotEmpty(demo.getName())) {
+            //query.lambda().and(i-> i.like(Demo::getName,demo.getName()));  //TODO 此方式在多表状态下会存在字段名相同而引起SQL报错，不建议使用
+            StringBuffer strWhere = new StringBuffer();
+            strWhere = strWhere.append(" sys_demo.name like '%" + demo.getName() + "%'");
+            query.apply(strWhere.toString());
+        }
+
+        return page.setRecords(this.baseMapper.select4page2(page,query));
+
     }
 
 }

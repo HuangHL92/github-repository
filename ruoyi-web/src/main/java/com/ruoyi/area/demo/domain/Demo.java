@@ -61,6 +61,15 @@ public class Demo extends BaseEntity
     @TableField(exist = false)
     private String creator;
 
+    public String getCreator() {
+        return creator+"（来源于第二张表）";
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+
     public String getUserids1() {
         return userids1;
     }
