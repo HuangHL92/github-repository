@@ -3,6 +3,7 @@ package com.ruoyi.area.demo.domain;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -55,6 +56,8 @@ public class Demo extends BaseEntity
     /** 用户2 */
     @Excel(name = "用户2")
     private String userids2;
+
+    private String creator;
 
     public String getUserids1() {
         return userids1;

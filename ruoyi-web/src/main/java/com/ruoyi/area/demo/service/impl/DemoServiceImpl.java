@@ -1,11 +1,13 @@
 package com.ruoyi.area.demo.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.mapper.DemoMapper;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
+import javafx.scene.control.Pagination;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,5 +33,10 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements ID
 
         return list(query);
     }
-	
+
+    @Override
+    public Page<Demo> selectList4Page(Page<Demo> page) {
+        return page.setRecords(this.baseMapper.getDemoLIst(page));
+    }
+
 }

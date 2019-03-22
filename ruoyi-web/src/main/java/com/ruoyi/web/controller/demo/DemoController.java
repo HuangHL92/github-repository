@@ -156,6 +156,7 @@ public class DemoController extends BaseController {
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") String id, ModelMap mmap) {
+
         Demo demo = demoService.getById(id);
         //主键加密（TODO：配合editSave方法使用）
         demo.setId(pk_encrypt(demo.getId()));

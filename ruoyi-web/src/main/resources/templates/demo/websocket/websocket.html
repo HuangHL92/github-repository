@@ -42,7 +42,7 @@
     </div>
 </div>
 <div class="wrapper wrapper-content">
-    <input type="hidden" id="wsUrl" th:value="${@config.getKey('sys.config.websocket')}"/>
+    <input type="hidden" id="wsUrl" th:value="${@config.WebSocketAddress()}"/>
     <div class="row">
         <div class="col-sm-4">
             <div class="ibox float-e-margins">
