@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${@config.getKey('sys.config.systemName')}">吉运Java快速开发平台3.0</title>
-    <meta name="keywords" th:content="${@config.getKey('sys.config.systemName')}">
-    <meta name="description" th:content="${@config.getKey('sys.config.systemName')}">
+    <title th:text="${@config.SystemName()}">吉运Java快速开发平台3.0</title>
+    <meta name="keywords" th:content="${@config.SystemName()}">
+    <meta name="description" th:content="${@config.SystemName()}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link th:href="@{/ruoyi/login/1/css/login.css}" rel="stylesheet"/>
@@ -38,7 +38,7 @@
 <body>
 <div class="container">
     <div class="wrap">
-        <header><em>Logo</em><span th:text="${@config.getKey('sys.config.systemName')}">吉运Java快速开发平台3.0</span></header>
+        <header><em>Logo</em><span th:text="${@config.SystemName()}">吉运Java快速开发平台3.0</span></header>
         <article>
             <section>
                 <aside>

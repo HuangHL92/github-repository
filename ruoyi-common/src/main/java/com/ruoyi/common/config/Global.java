@@ -176,4 +176,13 @@ public class Global
     {
         return StringUtils.nvl(getConfig("gen.tablePrefix"), "sys_");
     }
+
+
+    /**
+     * 获取websocketServer地址
+     */
+    public static String getWebSocketAddress()
+    {
+        return StringUtils.nvl(getConfig("jiyun.websocket.url"), "");
+    }
 }

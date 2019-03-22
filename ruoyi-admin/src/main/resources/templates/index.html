@@ -4,9 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
-    <title th:text="${@config.getKey('sys.config.systemName')}">吉运Java快速开发平台3.0</title>
-    <meta name="keywords" th:content="${@config.getKey('sys.config.systemName')}">
-    <meta name="description" th:content="${@config.getKey('sys.config.systemName')}">
+    <title th:text="${@config.SystemName()}">吉运Java快速开发平台3.0</title>
+    <meta name="keywords" th:content="${@config.SystemName()}">
+    <meta name="description" th:content="${@config.SystemName()}">
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
     <![endif]-->
@@ -26,7 +26,7 @@
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow: hidden" th:classappend="${@config.getKey('sys.index.skinName')}">
 <div id="wrapper">
-    <input type="hidden" id="wsUrl" th:value="${@config.getKey('sys.config.websocket')}"/>
+    <input type="hidden" id="wsUrl" th:value="${@config.WebSocketAddress()}"/>
     <!--左侧导航开始-->
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="nav-close">
@@ -35,7 +35,7 @@
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
                 <li class="logo">
-				     <span class="logo-lg">JiYun</span>
+				     <span class="logo-lg" th:text="${@config.SystemName()}">JiYun</span>
             	</li>
             	<li>
             		<div class="user-panel">

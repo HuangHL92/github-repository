@@ -1,5 +1,6 @@
 package com.ruoyi.framework.web.service;
 
+import com.ruoyi.common.config.Global;
 import com.ruoyi.framework.util.CacheUtils;
 import com.ruoyi.system.domain.SysConfig;
 import com.ruoyi.system.domain.SysDictData;
@@ -38,5 +39,23 @@ public class ConfigService
             cacheUtils.getConfigCache().put(configKey,config);
         }
         return config;
+    }
+
+    /**
+     * 取得系统名称
+     * @return
+     */
+    public String SystemName()
+    {
+        return Global.getName();
+    }
+
+    /**
+     * 获取websocketServer地址
+     * @return
+     */
+    public String WebSocketAddress()
+    {
+        return Global.getWebSocketAddress();
     }
 }
