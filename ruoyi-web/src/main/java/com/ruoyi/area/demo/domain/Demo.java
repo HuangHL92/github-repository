@@ -1,5 +1,6 @@
 package com.ruoyi.area.demo.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.base.BaseEntity;
@@ -57,6 +58,7 @@ public class Demo extends BaseEntity
     @Excel(name = "用户2")
     private String userids2;
 
+    @TableField(exist = false)
     private String creator;
 
     public String getUserids1() {
