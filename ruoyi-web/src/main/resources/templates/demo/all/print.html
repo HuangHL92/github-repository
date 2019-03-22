@@ -4,328 +4,267 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 
-
-    <object id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
-            <embed id="LODOP_EM" type="application/x-print-lodop"  style="display: none"/>
-    </object>
-
-    <script th:src="@{/js/plugins/lodop/LodopFuncs.js}"></script>
-
-    <!--<script type="text/javascript">-->
-        <!--var LODOP;-->
-
-        <!--function closeCurrent() {-->
-            <!--window.close();-->
-        <!--}-->
-
-        <!--// B5: 176×250 mm，2031×2952 px-->
-        <!--function prn1_preview() {-->
-            <!--$("#printDiv").hide();-->
-            <!--$("div.parentDiv:last").children(".pageNext").remove();-->
-            <!--LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));-->
-
-            <!--LODOP.SET_PRINT_PAGESIZE(2,930,490,"结业证书打印");-->
-            <!--LODOP.ADD_PRINT_HTM("2", "1", "930", "490", document.documentElement.innerHTML);-->
-            <!--LODOP.PREVIEW();-->
-
-            <!--$("#printDiv").show();-->
-        <!--}-->
-
-        <!--function createPrintPage() {-->
-            <!--$("#printDiv").hide();-->
-            <!--LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));-->
-            <!--LODOP.SET_PRINT_PAGESIZE(2,930,490,"结业证书打印");-->
-            <!--LODOP.ADD_PRINT_HTM("1", "1", "930", "490", document.documentElement.innerHTML);-->
-        <!--}-->
-
-        <!--function printSetup() {//打印设置-->
-            <!--createPrintPage();-->
-            <!--$("div.parentDiv:last").children(".pageNext").remove();-->
-            <!--LODOP.PRINT_DESIGN();-->
-            <!--$("#printDiv").show();-->
-        <!--}-->
-    <!--</script>-->
-
+<script language="javascript" th:src="@{/js/LodopFuncs.js}"></script>
+<object  id="LODOP_OB" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0>
+    <embed id="LODOP_EM" type="application/x-print-lodop" width=0 height=0></embed>
+</object>
 
 <script language="javascript" type="text/javascript">
-    var LODOP; //声明为全局变量
+
     function Preview1() {
-        CreateFullBill();
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        printAllBillModel();
         LODOP.PREVIEW();
     };
 
     function Design1() {
-        CreateFullBill();
-//		LODOP.SET_SHOW_MODE("HIDE_ITEM_LIST",true);//设置对象列表默认处于关闭状态
-//		LODOP.SET_SHOW_MODE("TEXT_SHOW_BORDER",1); //设置字符编辑框默认为single
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        printAllBillModel();
         LODOP.PRINT_DESIGN();
     };
-    function Preview2() {
-        CreateDataBill();
-        LODOP.PREVIEW();
-    };
-    function Setup2() {
-        CreateDataBill();
-        LODOP.PRINT_SETUP();
-    };
-    function Design2() {
-        LODOP.PRINT_DESIGN();
-    };
-    function RealPrint() {
-        CreateDataBill();
-        //云打印C-Lodop返回结果用回调函数:
-        if (LODOP.CVERSION) {
-            CLODOP.On_Return=function(TaskID,Value){ if (Value) alert("已发出实际打印命令！"); else alert("放弃打印！"); };
-            LODOP.PRINTA();
-            return;
-        };
-        //控件返回结果用语句本身：
-        if (LODOP.PRINTA())
-            alert("已发出实际打印命令！");
-        else
-            alert("放弃打印！");
-    };
-    function CreateFullBill() {
-        LODOP=getLodop();
-        LODOP.PRINT_INITA(10,10,762,533,"打印控件功能演示_Lodop功能_移动公司发票全样");
-        LODOP.SET_PRINT_STYLE("FontColor","#0000FF");
-        LODOP.ADD_PRINT_SHAPE(2,116,43,655,373,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(1,144,44,653,1,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(1,172,44,653,1,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,116,143,1,56,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,116,488,1,56,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,116,574,1,372,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,172,166,1,282,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,172,415,1,282,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(1,454,44,653,1,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,454,130,1,34,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,454,483,1,34,0,1,"#800000");
-        LODOP.ADD_PRINT_SHAPE(0,64,62,120,1,0,1,"#0000FF");
-        LODOP.ADD_PRINT_SHAPE(3,29,62,32,32,0,4,"#0000FF");
-        LODOP.ADD_PRINT_SHAPE(3,21,300,147,75,0,3,"#FF0000");
-        LODOP.ADD_PRINT_SHAPE(3,26,307,132,65,0,1,"#FF0000");
-        LODOP.ADD_PRINT_TEXT(33,192,408,30,"中国移动通信集团北京有限公司专用发票");
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",15);
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(68,326,100,25,"发 票 联");
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",11);
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(29,98,84,35,"中国移动通信CHINA MOBILE");
-        LODOP.ADD_PRINT_SHAPE(2,37,69,18,15,0,1,"#0000FF");
-        LODOP.ADD_PRINT_SHAPE(2,40,73,10,9,0,1,"#0000FF");
-        LODOP.ADD_PRINT_TEXT(70,64,117,20,"移 动 信 息 专 家");
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(124,58,68,20,"客户名称");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(152,58,68,20,"手机号码");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(124,497,68,20,"受理类别");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(152,497,68,20,"合 同 号");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(465,54,68,20,"大写金额");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(465,495,104,20,"小写金额    ￥: ");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(98,56,47,20,"编号：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(98,259,48,20,"日期：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(97,500,71,20,"发票号码：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(496,54,83,20,"话费帐期：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(496,321,83,20,"营业员工号：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(496,480,93,20,"收款单位名称：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(226,703,27,121,"第二联发票联");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(203,21,17,195,"京地税准印八九号五百万份");
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",8);
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
-        LODOP.ADD_PRINT_TEXT(126,150,100,20,"郭德强");
-        LODOP.ADD_PRINT_TEXT(151,150,100,20,"13954885188");
-        LODOP.ADD_PRINT_TEXT(125,584,99,20,"发票打印(第1次)");
-        LODOP.ADD_PRINT_TEXT(465,140,198,20,"陆百柒拾捌元叁角零分");
-        LODOP.ADD_PRINT_TEXT(465,599,70,20,"678.30");
-        LODOP.ADD_PRINT_TEXT(496,408,59,20,"H112063");
-        LODOP.ADD_PRINT_TEXT(191,58,100,20,"国内漫游通话");
-        LODOP.ADD_PRINT_TEXT(191,217,100,20,"584.00");
-        LODOP.ADD_PRINT_TEXT(222,58,100,20,"增值业务费");
-        LODOP.ADD_PRINT_TEXT(222,217,100,20,"48.30");
-        LODOP.ADD_PRINT_TEXT(251,58,100,20,"代收费");
-        LODOP.ADD_PRINT_TEXT(251,217,100,20,"50.00");
-        LODOP.ADD_PRINT_TEXT(280,58,100,20,"优惠费");
-        LODOP.ADD_PRINT_TEXT(280,217,100,20,"4.00");
-        LODOP.ADD_PRINT_TEXT(98,101,150,20,"101081005747319387");
-        LODOP.ADD_PRINT_TEXT(97,307,150,20,"2008年10月19日 10:28:38");
-        LODOP.ADD_PRINT_TEXT(152,584,103,20,"138860016786");
-        LODOP.ADD_PRINT_TEXT(95,571,112,20,"06775516");
-        LODOP.SET_PRINT_STYLEA(0,"FontName","System");
-        LODOP.ADD_PRINT_TEXT(76,500,71,20,"发票代码：");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#800000");
-        LODOP.SET_PRINT_STYLEA(0,"Alignment",3);
-        LODOP.ADD_PRINT_TEXT(74,571,112,20,"237090742401");
-        LODOP.SET_PRINT_STYLEA(0,"FontName","System");
-        LODOP.SET_PRINT_STYLEA(0,"FontColor","#FF0000");
-        LODOP.ADD_PRINT_TEXT(496,135,183,20,"2008年09月(20080901-20080930)");
-        LODOP.ADD_PRINT_TEXT(496,572,112,20,"-王府井中心店营");
-        LODOP.ADD_PRINT_TEXT(311,217,100,20,"678.30");
-        LODOP.ADD_PRINT_TEXT(311,58,100,20,"费用合计");
 
-    };
-    function CreateDataBill() {
-        LODOP=getLodop();
-        LODOP.PRINT_INITA(10,10,762,533,"打印控件功能演示_Lodop功能_移动公司发票套打");
-        LODOP.SET_PRINT_STYLE("FontColor","#0000FF");
-        LODOP.ADD_PRINT_TEXT(126,150,100,20,"郭德强");
-        LODOP.ADD_PRINT_TEXT(151,150,100,20,"13954885188");
-        LODOP.ADD_PRINT_TEXT(125,584,99,20,"发票打印(第1次)");
-        LODOP.ADD_PRINT_TEXT(465,140,198,20,"陆百柒拾捌元叁角零分");
-        LODOP.ADD_PRINT_TEXT(465,599,70,20,"678.30");
-        LODOP.ADD_PRINT_TEXT(496,408,59,20,"H112063");
-        LODOP.ADD_PRINT_TEXT(191,58,100,20,"国内漫游通话");
-        LODOP.SET_PRINT_STYLEA(0,"FontSize",7);
-        LODOP.ADD_PRINT_TEXT(191,217,100,20,"584.00");
-        LODOP.ADD_PRINT_TEXT(222,58,100,20,"增值业务费");
-        LODOP.ADD_PRINT_TEXT(222,217,100,20,"48.30");
-        LODOP.ADD_PRINT_TEXT(251,58,100,20,"代收费");
-        LODOP.ADD_PRINT_TEXT(251,217,100,20,"50.00");
-        LODOP.ADD_PRINT_TEXT(280,58,100,20,"优惠费");
-        LODOP.ADD_PRINT_TEXT(280,217,100,20,"4.00");
-        LODOP.ADD_PRINT_TEXT(98,101,150,20,"101081005747319387");
-        LODOP.ADD_PRINT_TEXT(97,307,150,20,"2008年10月19日 10:28:38");
-        LODOP.ADD_PRINT_TEXT(152,584,103,20,"138860016786");
-        LODOP.ADD_PRINT_TEXT(95,571,112,20,"06775516");
-        LODOP.SET_PRINT_STYLEA(0,"FontName","System");
-        LODOP.ADD_PRINT_TEXT(496,135,183,20,"2008年09月(20080901-20080930)");
-        LODOP.ADD_PRINT_TEXT(496,572,112,20,"-王府井中心店营");
-        LODOP.ADD_PRINT_TEXT(311,217,100,20,"678.30");
-        LODOP.ADD_PRINT_TEXT(311,58,100,20,"费用合计");
+    /*多条数据连打，在此循环*/
+    function printAllBillModel() {
+        for (var i=0;i<2;i++){
+            doPrintPage();
+        }
+    }
+    /*多页打印*/
+    function doPrintPage() {
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        var length = 6;
+        var num = 0;
+        if (length <= 3){
+            staticPrint();
+            CreatePrintPage(num);
+            LODOP.NEWPAGE();
+        }else{
+            for(num = 0;num < length;num+=3){
+                staticPrint();
+                CreatePrintPage(num);
+                LODOP.NEWPAGE();
+            }
+        }
+    }
+    /*需要循环的数据*/
+    function CreatePrintPage(num) {
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        //动态列表信息
+        var pageSize = 3;
+        var size = 6; //需要循环的数据数量
+        var thHeight = 59.00;//用于每行商品距离上面的固定长度
+        var newHeight = 0;//用于动态增加一行的长度
+
+        for (var k = num; k < num+3; k++) {
+            var i = k%3;
+            newHeight = i * 6.91;
+            LODOP.ADD_PRINT_TEXT(thHeight + newHeight + "mm", "5.56mm","76.73mm","5.82mm", "测试产品"+k);
+            LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+            LODOP.ADD_PRINT_TEXT(thHeight + newHeight + "mm", "82.55mm","26.46mm","5.82mm", "测试数量"+k);
+            LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+            LODOP.ADD_PRINT_TEXT(thHeight + newHeight + "mm", "108.21mm","26.46mm","5.82mm", "吨");
+            LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+            LODOP.ADD_PRINT_TEXT(thHeight + newHeight + "mm", "137.58mm", "26.46mm", "5.82mm", "测试价格"+k);
+            LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+            LODOP.ADD_PRINT_TEXT(thHeight + newHeight + "mm", "170.66mm", "26.46mm", "5.82mm", "测试金额"+k*k);
+            LODOP.SET_PRINT_STYLEA(0, "Alignment", 2);
+        }
+    }
+
+    function staticPrint() {
+        var LODOP = getLodop(document.getElementById('LODOP_OB'), document.getElementById('LODOP_EM'));
+        LODOP.SET_PRINT_PAGESIZE(1, 2410, 1400, "");
+        LODOP.SET_PRINT_MODE("AUTO_CLOSE_PREWINDOW", true);
+        LODOP.SET_PRINT_MODE("PRINT_NOCOLLATE", 1);
+        LODOP.ADD_PRINT_TEXT("2.12mm", "57.41mm", "103.98mm", "9.79mm", "上海金山东方实业有限公司");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 23);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_TEXT("11.91mm", "98.43mm", "23.81mm", "8.2mm", "提货单");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 18);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_TEXT("20.11mm", "3.97mm", "26.19mm", "6.88mm", "提货单位：");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_TEXT("21.43mm", "29.9mm", "145.52mm", "6.61mm","测试提货单位");
+        LODOP.ADD_PRINT_TEXT("27.78mm", "3.97mm", "26.19mm", "6.88mm", "提货日期：");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_TEXT("28.84mm", "29.9mm", "44.98mm", "6.61mm", "2019年03月22日");
+        LODOP.ADD_PRINT_LINE("39.69mm","27.78mm","39.69mm","56.89mm",0,1);
+        LODOP.ADD_PRINT_TEXT("35.19mm", "3.97mm", "26.19mm", "6.88mm", "提货车号：");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_LINE("39.69mm", "80.7mm", "39.69mm", "108.51mm", 0, 1);
+        LODOP.ADD_PRINT_TEXT("35.19mm", "61.38mm", "21.43mm", "6.88mm", "驾驶员：");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_LINE("39.69mm", 484, 150, "152.66mm", 0, 1);
+        LODOP.ADD_PRINT_TEXT("35.19mm", "114.83mm", "16.93mm", "6.88mm", "手机：");
+        LODOP.SET_PRINT_STYLEA(0, "FontName", "华文楷体");
+        LODOP.SET_PRINT_STYLEA(0, "FontSize", 13);
+        LODOP.SET_PRINT_STYLEA(0, "Bold", 1);
+        LODOP.ADD_PRINT_TEXT("35.72mm","29.74mm","26.46mm","6.09mm","沪A00000");
+        LODOP.ADD_PRINT_TEXT("35.72mm","81.49mm","26.46mm","6.09mm","驾驶员张某");
+        LODOP.ADD_PRINT_TEXT("35.72mm","129.38mm","37.04mm","6.09mm","13565633333");
+        /*表格标题*/
+        LODOP.ADD_PRINT_LINE("46.8mm","4.76mm","46.8mm","200.26mm",0,2);
+        LODOP.ADD_PRINT_LINE("55.88mm","4.79mm","47.39mm","4.79mm",0,2);
+        LODOP.ADD_PRINT_LINE("55.88mm","108.5mm","47.39mm","108.5mm",0,2);
+        LODOP.ADD_PRINT_LINE("56.09mm","82.55mm","46.8mm","82.55mm",0,2);
+        LODOP.ADD_PRINT_LINE("55.88mm","134.7mm","47.39mm","134.7mm",0,2);
+        LODOP.ADD_PRINT_LINE("56.09mm","168.01mm","46.8mm","168.01mm",0,2);
+        LODOP.ADD_PRINT_LINE("56.09mm","200.29mm","46.8mm","200.29mm",0,2);
+        LODOP.ADD_PRINT_LINE("56.09mm","4.76mm","56.09mm","200.26mm",0,2);
+
+        LODOP.ADD_PRINT_TEXT("49.21mm","35.19mm","26.46mm","6.61mm","货物名称");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT("49.21mm","85.2mm","26.46mm","6.61mm","件数（件）");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT("49.21mm","110.86mm","26.72mm","6.61mm","数量（吨）");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT("49.21mm","137.32mm","36.25mm","6.61mm","单价（元/吨）");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT("49.21mm","173.3mm","26.46mm","6.61mm","金额（元）");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        /*表格线--竖线*/
+        var sxheight = 56.09;
+        for(var k=0;k<3;k++){
+            /*竖线*/
+            LODOP.ADD_PRINT_LINE(sxheight+6.87*(k)+"mm", "4.79mm", sxheight+6.87*(k+1)+"mm", "4.79mm", 0, 2);
+            LODOP.ADD_PRINT_LINE(sxheight+6.87*(k)+"mm", "82.55mm", sxheight+6.87*(k+1)+"mm", "82.55mm", 0, 2);
+            LODOP.ADD_PRINT_LINE(sxheight+6.87*(k)+"mm", "108.48mm", sxheight+6.87*(k+1)+"mm", "108.48mm", 0, 2);
+            LODOP.ADD_PRINT_LINE(sxheight+6.87*(k)+"mm", "134.7mm", sxheight+6.87*(k+1)+"mm", "134.7mm", 0, 2);
+            LODOP.ADD_PRINT_LINE(sxheight+6.89*(k)+"mm", "168.01mm", sxheight+6.87*(k+1)+"mm", "168.01mm", 0, 2);
+            LODOP.ADD_PRINT_LINE(sxheight+6.87*(k)+"mm", "200.29mm", sxheight+6.87*(k+1)+"mm", "200.29mm", 0, 2);
+            /*横线*/
+            LODOP.ADD_PRINT_LINE(sxheight+6.91*(k+1)+"mm", "4.76mm", sxheight+6.91*(k+1)+"mm", "200mm", 0, 2);
+        }
+        /*表格下面的数据*/
+        /*竖线*/
+        /*发货单位，运输单位，收货单位*/
+        var height = 84.00;//90.64  56.09
+        LODOP.ADD_PRINT_LINE(height+"mm","4.79mm",height+7.90+"mm","4.79mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","25.11mm",height+7.90+"mm","25.11mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","69.9mm",height+7.90+"mm","69.9mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","90.49mm",height+7.90+"mm","90.49mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","134.7mm",height+7.85+"mm","134.7mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","155.28mm",height+7.90+"mm","155.28mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+"mm","200.29mm",height+7.90+"mm","200.29mm",0,2);
+        /*联系人，提货人，签收人*/
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","4.79mm",height+7.90*2+"mm","4.79mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","25.11mm",height+7.90*2+"mm","25.11mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","69.9mm",height+7.90*2+"mm","69.9mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","90.49mm",height+7.90*2+"mm","90.49mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","134.7mm",height+7.90*2+"mm","134.7mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","155.28mm",height+7.90*2+"mm","155.28mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90+"mm","200.29mm",height+7.90*2+"mm","200.29mm",0,2);
+        /*委托事项*/
+        LODOP.ADD_PRINT_LINE(height+7.90*2+"mm","4.79mm",height+7.90*3+"mm","4.79mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90*2+"mm","25.11mm",height+7.90*3+"mm","25.11mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.90*2+"mm","200.29mm",height+7.90*3+"mm","200.29mm",0,2);
+        /*备注*/
+        LODOP.ADD_PRINT_LINE(height+7.91*3+"mm","4.79mm",height+7.91*4+"mm","4.79mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91*3+"mm","25.11mm",height+7.91*4+"mm","25.11mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91*3+"mm","200.29mm",height+7.91*4+"mm","200.29mm",0,2);
+        /*横线*/
+        LODOP.ADD_PRINT_LINE(height+"mm","4.76mm",height+"mm","200.26mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91+"mm","4.76mm",height+7.91+"mm","200.26mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91*2+"mm","4.76mm",height+7.92*2+"mm","200.26mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91*3+"mm","4.76mm",height+7.92*3+"mm","200.26mm",0,2);
+        LODOP.ADD_PRINT_LINE(height+7.91*4+"mm","4.76mm",height+7.92*4+"mm","200.26mm",0,2);
+        /*数据*/
+        LODOP.ADD_PRINT_TEXT(height+1.86+"mm","5.29mm","21.43mm","6.61mm","发货单位");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+1.5+"mm","26.99mm","43.76mm","5.5mm","测试发货单位");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+1.8+"mm","70.64mm","21.43mm","6.61mm","运输单位");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+1.5+"mm","93.13mm","43.76mm","5.56mm","测试运输单位");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+1.8+"mm","135.73mm","21.43mm","6.61mm","收货单位");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+1.5+"mm","157.16mm","43.76mm","5.56mm","测试收货单位");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.8+"mm","5.29mm","21.46mm","6.61mm","联系人");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.0+"mm","26.99mm","43.76mm","5.56mm","测试联系人");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.8+"mm","70.64mm","21.43mm","6.61mm","提货人");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.0+"mm","93.13mm","43.76mm","5.56mm","测试提货人");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.8+"mm","135.73mm","21.43mm","6.61mm","签收人");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+7.91+1.0+"mm","157.43mm","43.76mm","5.56mm","测试签收人");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+7.91*2+1.8+"mm","5.03mm","26.19mm","6.61mm","委托事项");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+7.91*2+1.3+"mm","27.25mm","174.63mm","7.94mm","这是测试委托事项：阿道夫阿萨德发的 阿萨德   撒旦法阿萨德 阿萨德");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT(height+7.91*3+2+"mm","5.03mm","17.2mm","6.61mm","备注");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+        LODOP.ADD_PRINT_TEXT(height+7.91*3+1.3+"mm","26.99mm","174.63mm","7.94mm","这是备注：撒的范德萨发是打富士达 阿道夫撒的富士达富士达范德萨发生的");
+        LODOP.SET_PRINT_STYLEA(0,"LineSpacing",-5);
+        LODOP.ADD_PRINT_TEXT("119.06mm","19.05mm","168.54mm","7.94mm","备注：白色为存根联，红色为客户联，黄色为对账联。\r\n公司友情提示：请遵守道路运输法规，着装整齐，规范装运，慢速行驶。");
+        LODOP.SET_PRINT_STYLEA(0,"FontName","华文楷体");
+        LODOP.SET_PRINT_STYLEA(0,"FontSize",13);
+        LODOP.SET_PRINT_STYLEA(0,"Alignment",2);
+        LODOP.SET_PRINT_STYLEA(0,"Bold",1);
+
     }
 </script>
+<style type="text/css">
+    #printDiv{
+        position:fixed;
+        height:23px;
+        width:1210px;
+        left:0px;
+        top:30px;
+    }
 
-    <style type="text/css">
-
-        div.parentDiv {
-            clear: both;
-        }
-
-        div.tabDiv {
-            width: 950px;
-            margin-bottom: 20px;
-            padding-top: 190px;
-            text-align: right;
-        }
-
-        .cont {
-            font-family: "KaiTi_GB2312", "KaiTi", "FangSong", "Microsoft YaHei";
-            font-size: 26px;
-            text-indent: 4em;
-            font-weight: 900;
-        }
-
-        .cont2 {
-            font-family: "KaiTi_GB2312", "KaiTi", "FangSong", "Microsoft YaHei";
-            font-size: 26px;
-            font-weight: 900;
-        }
-
-        .zsh {
-            font-family: "SimHei", "Microsoft YaHei";
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .underLine {
-            text-decoration: underline;
-            letter-spacing: 2px;
-            font-weight: normal;
-            width: 150px;
-            text-align: left;
-        }
-
-        .tail {
-            font-family: "SimSun", "FangSong", "FangSong_GB2312";
-            font-size: 17px;
-            float: right;
-            width: auto;
-        }
-
-        .tailP {
-            text-align: center;
-        }
-
-        .xmmc {
-            width: 280px;
-            text-align: center;
-            display: inline-block;
-            margin: 0px;
-            padding: 0 2px;
-        }
-    </style>
-
+</style>
 <body >
 
-    <div id="printDiv" style="margin-left: 10px;">
-        <br>
-        <input type="button" style="width: 40px;height: 23px;font: 12px 'Microsoft YaHei';" name="back" value="关闭"
-               onClick="closeCurrent()">
-        <input type="button" style="width: 40px;height: 23px;font: 12px 'Microsoft YaHei';margin-left: -4px;" value="打印"
-               onClick="prn1_preview()">
-        <input type="button" style="width: 65px;height: 23px;font: 12px 'Microsoft YaHei';margin-left: -4px;"
-               onclick='printSetup()' value='打印设置'>
-        <input type="button" style="width: 40px;height: 23px;font: 12px 'Microsoft YaHei';margin-left: -4px;" value="设计"
-               onClick="Design1()">
-
-        <br>
-        <br>
-    </div>
-
-    <div class="parentDiv">
-        <div class="tabDiv" style="padding-top: 171px">
-            <p class="zsh">证书号：<span class="underLine">No.12293921</span></p>
-            <br/>
-            <br/>
-            <p class="cont">
-                <font style="color:blue">张三</font> 同志于
-                2010年01月01日 至 2012年09月30日
-            </p>
-            <br/>
-            <br/>
-            <p class="cont2">参加<span class="xmmc">二级建造师</span>培训，成绩合格，准予结业。</p>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <div class="tail">
-                <p class="tailP">上海市职业技能鉴定中心</p>
-                <p class="tailP">2012年10月30日</p>
-            </div>
-        </div>
-        <div class="pageNext" style="page-break-after:always;clear:both;">&nbsp;</div>
-    </div>
-
-
-
+<div id="printDiv" style="margin-left: 10px;">
+    <input type="button" style="width: 40px;height: 23px;font: 12px 'Microsoft YaHei';" name="back" value="关闭"
+           onClick="closeCurrent()">
+    <input type="button" style="width: 55px;height: 23px;font: 12px 'Microsoft YaHei';margin-left: -4px;" value="打印预览"
+           onClick="Preview1()">
+    <input type="button" style="width: 55px;height: 23px;font: 12px 'Microsoft YaHei';margin-left: -4px;" value="打印设计"
+           onClick="Design1()">
+</div>
 
 <div th:include="include :: footer"></div>
 
