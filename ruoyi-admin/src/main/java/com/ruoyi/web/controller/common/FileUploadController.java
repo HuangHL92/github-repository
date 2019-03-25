@@ -221,26 +221,6 @@ public class FileUploadController extends BaseController {
     }
 
 
-    /***
-     * 根据文件路径删除文件
-     * @param filePath 文件路径
-     * @return
-     */
-//    @RequestMapping(value="/removeFile", method = RequestMethod.POST)
-//    @ResponseBody
-//    public AjaxResult removeFile(String filePath) {
-//
-//        try {
-//            //删除物理文件
-//
-//        } catch (Exception e) {
-//            // TODO: handle exception
-//            return error(e.getMessage());
-//        }
-//
-//        return AjaxResult.success();
-//    }
-
 
     @RequestMapping(value="/downloadFile", method = RequestMethod.GET)
     public HttpServletResponse downloadFile(String id,String path,HttpServletResponse response) {
@@ -254,8 +234,9 @@ public class FileUploadController extends BaseController {
             }else{
                 filePath=path;
             }
+            ;
             //Hutool读取文件
-            FileReader fileReader = new FileReader(Global.getUploadPath()+filePath);
+            FileReader fileReader = new FileReader(FileUtil.file("/"+ Global.getUploadPath()+filePath));
             if(fileName.isEmpty()){
                 fileName=FileUtil.getName(fileReader.getFile());
                 //fileName=fileName.substring(31,fileName.length()-31);

@@ -1,19 +1,19 @@
 # 项目相关配置
 ruoyi:
-  # 名称
-  name: JiYun
+  # 名称（TODO 显示在首页等位置，根据项目情况自行更换）
+  name: 吉运Java开发平台3.0
   # 版本
   version: 3.2.0
   # 版权年份
   copyrightYear: 2019
   # 文件上传路径
-  profile: ruoyi/profile/
+  profile: /ruoyi/profile/
   # 获取ip地址开关
   addressEnabled: true
 
 # 开发环境配置
 server:
-  # 服务端口
+  # 服务端口 （TODO 根据项目情况自行更换）
   port: 81
   servlet:
     # 项目contextPath
@@ -154,18 +154,17 @@ gen:
   # 表前缀(类名不会包含表前缀)
   tablePrefix: biz_
 
-# websocket & 微信公众号配置
-#jiyun:
-#  websocket:
-#    url: ws://localhost:81/socketServer
-#  wechat:
-#    appid: wx2b911f070115b89a  #微驱动appid
-#    appsecret: a6d343b9592121b3c215c8301b0c3d75  #微驱动appsecret
-#    token:
-#    aeskey:
-#    thirdurl: http://wx.51e.com.cn/get-weixin-code.html  #第三中转URL（用于解决省去配置白名单问题。非必须配置）
-#  webPath: http://hahayu.natapp1.cc
+#
+jiyun:
+  notice:
+    mailto: fei.yu@51e.com.cn   #（TODO 用于接收异常通知等信息的邮件地址，根据项目情况自行更换）
+    isopen: true #是否开启邮件通知
+  websocket:
+    url: ws://localhost:81/socketServer #（TODO websocket服务地址，根据项目情况自行更换）
 
+
+
+# 微信公众号配置
 wx:
   mp:
     configs:
@@ -175,7 +174,7 @@ wx:
         aesKey: 111 #（接口配置里的EncodingAESKey值）
         webPath: http://hahayu.natapp1.cc
         thirdurl: http://wx.51e.com.cn/get-weixin-code.html
-#      - appId: 2222 （另一个公众号的appid，以下同上）
+        ##      - appId: 2222 （另一个公众号的appid，以下同上）
 #        secret: 1111
 #        token: 111
 #        aesKey: 111
@@ -185,7 +184,7 @@ api:
   overtime: 15    #接口请求失效时间
   nonceovertime: 15
   basepackage: com.ruoyi.api #restful接口扫描路径
-  appsecret: 1q2w3e4r #token验证用密钥
+  appsecret: 1q2w3e4r # （TODO token验证用密钥，根据项目情况自行更换）
 
 #Actuator相关配置
 management:

@@ -87,7 +87,6 @@ public class WxMpConfiguration {
 
             WxService service = new WxService();
             service.setWxConfigStorage(configStorage);
-            service.setWxMpConfigStorage(configStorage);
             routers.put(a.getAppId(), this.newRouter(service));
             return service;
         }).collect(Collectors.toMap(s -> s.getWxConfigStorage().getAppId(), a -> a, (o, n) -> o));
