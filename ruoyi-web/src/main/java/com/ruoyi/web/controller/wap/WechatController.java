@@ -3,6 +3,8 @@ package com.ruoyi.web.controller.wap;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.wx.mp.config.WxMpConfiguration;
 import com.ruoyi.wx.mp.service.WxService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import java.net.URLEncoder;
 @RequestMapping("/wap/wechat")
 public class WechatController extends BaseController {
 
+
     private String prefix = "wap/wechat";
 
     /**
@@ -35,6 +38,7 @@ public class WechatController extends BaseController {
     public String  access(@RequestParam(value = "appid") String appid, @RequestParam(value = "returnUrl",required = false) String returnUrl) {
         WxService wxService = WxMpConfiguration.getMpServices().get(appid);
         String webUrl = wxService.getWxConfigStorage().getWebPath();
+
         return "redirect:" + webUrl + "/wx/auth?appid=" + appid + "&returnUrl=" + URLEncoder.encode(returnUrl==null?"":returnUrl);
     }
 

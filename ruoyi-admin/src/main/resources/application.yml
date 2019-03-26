@@ -51,9 +51,11 @@ spring:
   messages:
     # 国际化资源文件路径
     basename: i18n/messages
+  #jackson
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  #profiles
   profiles: 
     active: druid
   # 文件上传
@@ -66,6 +68,24 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+  #redis
+  redis:
+    enabled: true # Redis开关/默认关闭
+    database: 0
+    password:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active:  100 # 连'   接池最大连接数（使用负值表示没有限制）
+        max-idle: 100 # 连接池中的最大空闲连接
+        min-idle: 50 # 连接池中的最小空闲连接
+        max-wait: 6000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    timeout: 3000ms
+    prefix: jy_basic  #前缀（TODO 重要：用于区分不同项目的空间，根据项目情况自行更换）
+
+  main:
+      allow-bean-definition-overriding: true #遇到相同名字，是否进行覆盖
 
 # MyBatis-Plus
 mybatis-plus:
@@ -162,8 +182,6 @@ jiyun:
   websocket:
     url: ws://localhost:81/socketServer #（TODO websocket服务地址，根据项目情况自行更换）
 
-
-
 # 微信公众号配置
 wx:
   mp:
@@ -179,7 +197,7 @@ wx:
 #        token: 111
 #        aesKey: 111
 
-# restful 配置
+# restful、jwt配置
 api:
   overtime: 15    #接口请求失效时间
   nonceovertime: 15

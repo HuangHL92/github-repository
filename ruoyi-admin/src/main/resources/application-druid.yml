@@ -44,25 +44,9 @@ spring:
                     log-slow-sql: true
                     slow-sql-millis: 1000
                     merge-sql: true
-                wall:
+                wall:   #SQL防注入
                     config:
                         multi-statement-allow: true
-
-    redis:
-        # Redis开关/默认关闭
-        enabled: true
-        database: 0
-        password:
-        host: 127.0.0.1
-        port: 6379
-        lettuce:
-            pool:
-                max-active:  100 # 连'   接池最大连接数（使用负值表示没有限制）
-                max-idle: 100 # 连接池中的最大空闲连接
-                min-idle: 50 # 连接池中的最小空闲连接
-                max-wait: 6000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        timeout: 3000ms
-        prefix: jy_basic  #前缀（TODO 重要：用于区分不同项目的空间，根据项目情况自行更换）
-
-    main:
-        allow-bean-definition-overriding: true #遇到相同名字，是否进行覆盖
+#                log4j:
+#                    enabled: true
+#                    statement-create-after-log-enabled: true
