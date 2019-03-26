@@ -22,6 +22,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageHelper;
 import com.ruoyi.area.demo.domain.Department;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.JedisUtils;
@@ -30,6 +31,7 @@ import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.workday.WorkdayUtils;
+import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 import com.ruoyi.system.domain.SysCalendar;
 import com.ruoyi.system.service.ISysCalendarService;
 import com.ruoyi.system.service.ISysPostService;
@@ -97,7 +99,9 @@ public class DemoController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(Demo demo) {
+
         startPage();
+
         return getDataTable(demoService.selectList(demo));
     }
 
