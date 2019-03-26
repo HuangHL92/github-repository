@@ -52,6 +52,13 @@ public interface ISysUserService
     public SysUser selectUserById(Long userId);
 
     /**
+     * 通过gitee查询用户
+     * @param authGitee
+     * @return
+     */
+    SysUser selectUserByAuthGitee(String authGitee);
+
+    /**
      * 通过用户ID删除用户
      * 
      * @param userId 用户ID

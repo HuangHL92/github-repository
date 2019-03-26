@@ -344,6 +344,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/pad/**", "anon");
         filterChainDefinitionMap.put("/wap/**", "anon");
         filterChainDefinitionMap.put("/wx/**", "anon");
+        filterChainDefinitionMap.put("/oauth/**", "anon");
         filterChainDefinitionMap.put("/register", "anon,captchaValidate");
 
 
