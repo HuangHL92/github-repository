@@ -116,6 +116,16 @@ public class SysUserServiceImpl implements ISysUserService
     }
 
     /**
+     * 通过gitee查询用户
+     * @param authGitee
+     * @return
+     */
+    @Override
+    public SysUser selectUserByAuthGitee(String authGitee) {
+        return userMapper.selectUserByAuthGitee(authGitee);
+    }
+
+    /**
      * 通过用户ID删除用户
      * 
      * @param userId 用户ID
