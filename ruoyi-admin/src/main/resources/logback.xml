@@ -60,6 +60,39 @@
             <pattern>${log.pattern}</pattern>
         </encoder>
     </appender>
+
+
+    <appender name="restful_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/api/info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log.path}/api/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="restful_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/api/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log.path}/api/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
 	
 	<!-- 显示形成的sql、使用的参数、结果集 -->
 	<!--
@@ -83,4 +116,10 @@
     <logger name="sys-user" level="info">
         <appender-ref ref="sys-user"/>
     </logger>
+
+    <logger name="restful_api" level="info">
+        <appender-ref ref="restful_info"/>
+        <appender-ref ref="restful_error" />
+    </logger>
+
 </configuration> 

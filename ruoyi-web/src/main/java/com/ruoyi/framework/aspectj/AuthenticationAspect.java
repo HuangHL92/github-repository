@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 
 /**
- * @Description $功能描述$
+ * @Description RestfulApi 接口验证切面
  * @Author yufei
  * @Date 2019-03-08 10:45
  **/
@@ -41,6 +41,7 @@ public class AuthenticationAspect {
 
     @Value("${api.appsecret}")
     private String appsecret;
+
 
     // 配置织入点
     @Pointcut("@annotation(com.ruoyi.common.annotation.ValidateRequest)")
@@ -59,6 +60,7 @@ public class AuthenticationAspect {
     public void doBefore(JoinPoint joinPoint) throws Exception {
         handleValidate(joinPoint, null);
     }
+
 
     /**
      * 拦截异常操作

@@ -1,5 +1,7 @@
 package com.ruoyi.api;
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.base.ApiResult;
@@ -19,6 +21,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +35,7 @@ import java.util.HashMap;
  * @Author yufei
  * @Date 2019-03-05 21:21
  **/
-@Api(value = "/auth", description = "授权服务接口")
+@Api(value = "/auth", description = "授权服务接口（基于JWT）")
 @RestController
 @RequestMapping("/api/auth/*")
 public class AuthController extends ApiBaseController {
@@ -42,6 +45,8 @@ public class AuthController extends ApiBaseController {
     private TokenService tokenService;
     @Autowired
     private SysLoginService loginService;
+    @Value("${api.token.expires}")
+    private int  expires;
 
     private String TOKEN_KEY= "tokenCache:%s";
 
@@ -62,10 +67,12 @@ public class AuthController extends ApiBaseController {
         }
 
         //3. 生成令牌写入redis
-        String token = createToken(account,password);
+        int exptime = expires*60*1000; //多少分钟后过期
+        long etime1=(System.currentTimeMillis()+exptime)/1000L;//过期时间
+        String token = createToken(account,password,exptime);
 
         HashMap map =new HashMap();
-        map.put("expires",3600);
+        map.put("expires", etime1);
         map.put("token",token);
 
         //4.返回令牌
@@ -91,12 +98,14 @@ public class AuthController extends ApiBaseController {
 
         //3.生成令牌写入redis
         String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
+        int exptime = expires*60*1000; //多少分钟后过期
+        long etime1=(System.currentTimeMillis()+exptime)/1000L;//过期时间
         if(token==null) {
-            token = createToken(account,password);
+            token = createToken(account,password,exptime);
         }
 
         HashMap map =new HashMap();
-        map.put("expires",3600);
+        map.put("expires",etime1);
         map.put("token",token);
 
         //4.返回令牌
@@ -110,13 +119,13 @@ public class AuthController extends ApiBaseController {
      * @param password
      * @return
      */
-    private String createToken(String account, String password) {
+    private String createToken(String account, String password,int exptime) {
         Account ac = new Account();
         ac.setId(account);
         ac.setUsername(account);
         ac.setPassword(password);
         String token = tokenService.getToken(ac);
-        JedisUtils.set(String.format(TOKEN_KEY,account), token,3600);
+        JedisUtils.set(String.format(TOKEN_KEY,account), token,exptime);
         return token;
     }
 
