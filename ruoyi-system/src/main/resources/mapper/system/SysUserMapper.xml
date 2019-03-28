@@ -175,6 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="orderNum != null">order_num,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
+ 			<if test="authGitee != null and authGitee != ''">auth_gitee,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -191,6 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="orderNum != null">#{orderNum},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
+ 			<if test="authGitee != null and authGitee != ''">#{authGitee},</if>
  			sysdate()
  		)
 	</insert>
@@ -205,5 +207,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
 		order by u.user_name, d.order_num
+	</select>
+	<select id="selectUserByAuthGitee" parameterType="String" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.auth_gitee = #{authGitee}
 	</select>
 </mapper> 

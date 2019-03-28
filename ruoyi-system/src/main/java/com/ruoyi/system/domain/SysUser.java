@@ -91,6 +91,9 @@ public class SysUser extends BaseEntity
     /** 岗位组 */
     private Long[] postIds;
 
+    /** 第三方登录：gitee **/
+    private String authGitee;
+
     public Long getUserId()
     {
         return userId;
@@ -321,6 +324,14 @@ public class SysUser extends BaseEntity
     public void setPostIds(Long[] postIds)
     {
         this.postIds = postIds;
+    }
+
+    public String getAuthGitee() {
+        return authGitee;
+    }
+
+    public void setAuthGitee(String authGitee) {
+        this.authGitee = authGitee;
     }
 
     @Override

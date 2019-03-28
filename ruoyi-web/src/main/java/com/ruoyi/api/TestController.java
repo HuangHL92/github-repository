@@ -7,10 +7,13 @@ import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.ApiResult;
+import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 import com.ruoyi.framework.web.base.ApiBaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -119,4 +122,29 @@ public class TestController extends ApiBaseController {
         }
         return map;
     }
+
+
+    @ApiOperation("多数据源测试（1:数据源1 2:数据源2）")
+    @GetMapping("/dds/{datasource}")
+    public Map<String, Object> dds(@PathVariable(name="datasource") Integer datasource) {
+        Map<String, Object> map = new HashMap<>();
+        String ds = datasource==1?DataSourceType.MASTER.name():DataSourceType.SLAVE.name();
+
+        //切换数据源
+        DynamicDataSourceContextHolder.setDateSoureType(ds);
+        Page<Demo> questionStudent = demoService.selectList4Page1(new Page<>(1, 100000));
+        if (questionStudent.getRecords().size() == 0) {
+            map.put("code", 400);
+        } else {
+            map.put("code", 200);
+            map.put("data", questionStudent);
+        }
+        //清空数据源
+        DynamicDataSourceContextHolder.clearDateSoureType();
+
+        return map;
+    }
+
+
+
 }

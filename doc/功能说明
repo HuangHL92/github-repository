@@ -109,3 +109,29 @@ demo实现 com/ruoyi/web/controller/wap/WechatController.java
 
 SQL打印：
 ruoyi-framework/src/main/java/com/ruoyi/framework/config/MybatisPlusConfig.java
+
+数据库相关：
+com/ruoyi/framework/config/DruidConfig.java
+com/ruoyi/framework/datasource/DynamicDataSourceContextHolder.java
+
+多数据源切换：
+注解实现数据源切换
+@DataSource(value = DataSourceType.MASTER)
+public List<SysUser> selectUserList(SysUser user)
+{
+    return userMapper.selectUserList(user);
+}
+手动实现数据源切换
+public List<SysUser> selectUserList(SysUser user)
+{
+    DynamicDataSourceContextHolder.setDataSourceType(DataSourceType.MASTER.name());
+    List<SysUser> userList = userMapper.selectUserList(user);
+    DynamicDataSourceContextHolder.clearDataSourceType();
+    return userList;
+}
+
+JustAuth：第三方登录
+1、插件文档：https://gitee.com/yadong.zhang/JustAuth
+2、demo：GiteeAuthController、AuthGiteeConfig
+3、QQ、微信的登录功能待实现
+4、逻辑:初次登录创建账号、再次访问可直接登录

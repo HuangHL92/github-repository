@@ -203,6 +203,8 @@ api:
   nonceovertime: 15
   basepackage: com.ruoyi.api #restful接口扫描路径
   appsecret: 1q2w3e4r # （TODO token验证用密钥，根据项目情况自行更换）
+  token:
+    expires: 10 #jwt token过期时间（单位：分钟）
 
 #Actuator相关配置
 management:
@@ -220,7 +222,12 @@ management:
     health:
       show-details: always
 
-
+# 第三方认证配置
+auth:
+  gitee:
+    client-id: 716db1779087e1241dd1f3fec0eb4f88619c146de42b26eb493399e4973137e2
+    client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
+    redirect-uri: http://localhost:81/oauth/gitee/login
 
 # 正则表达式(未启用)
 #regex:

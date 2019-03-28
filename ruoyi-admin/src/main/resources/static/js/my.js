@@ -656,6 +656,8 @@ var LookUpUser = function (obj) {
 
     var id= obj.attr("id");
     var val= obj.attr("value");
+    var width= obj.attr("width")||'760px';
+    var height= obj.attr("height")||"90%";
     var dispName= obj.attr("dispName");  //显示控件名称
     var hiddenName= obj.attr("hiddenName"); //选择用户ID保存控件
     var cls_disp = "js_tree_selected_" +  hiddenName;
@@ -670,7 +672,7 @@ var LookUpUser = function (obj) {
 
     $("#" + id).orgTree({
         all: true,                //人物组织都开启
-        area: ['650px','542px'],  //弹窗框宽高
+        area: [width,height],  //弹窗框宽高
         search: true,              //开启搜索
         cls_disp: cls_disp,        //已选择用户控件样式（用于查找）
         selectedids: hiddenName
