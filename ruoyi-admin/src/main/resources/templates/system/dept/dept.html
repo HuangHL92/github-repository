@@ -92,6 +92,7 @@
 		            field: 'orderNum',
 		            title: '排序',
 		            align: "left",
+                    width: '80px',
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
@@ -102,6 +103,7 @@
 		            field: 'status',
 		            title: '状态',
 		            align: "left",
+                    width: '60px',
 		            formatter: function(value, item, index) {
 		            	return $.table.selectDictLabel(datas, item.status);
 		            }
@@ -145,7 +147,7 @@
             $('#dept-form').find('tr').each(function (index, tr) {
                 var $input = $(tr).find('td input');
                 $input.each(function () {
-                    var name = 'orderNum[' + parseInt(index - 1) + ']';
+                    var name = 'orderNum' + parseInt(index - 1);
                     $(this).attr('name', name);
                 })
             })
@@ -169,8 +171,7 @@
                     url: prefix + "/edit",
                     success: function (result) {
                         if (result.code == web_status.SUCCESS) {
-                            $.modal.msgSuccess(result.msg);
-                            $.treeTable.refresh();
+                            // do nothing
                         } else {
                             $.modal.msgError(result.msg);
                         }

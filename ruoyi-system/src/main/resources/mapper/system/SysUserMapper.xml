@@ -58,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 	
 	<select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
-		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.order_num, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name
+		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.order_num, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.update_time, u.remark, d.dept_name
 			   ,GROUP_CONCAT(p.post_name) as post
 		from sys_user u
 			left join sys_dept d on u.dept_id = d.dept_id

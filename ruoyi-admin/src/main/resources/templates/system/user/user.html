@@ -167,6 +167,7 @@
 				{
 					field: 'avatar',
 					title: '照片',
+					width: 60,
                     formatter: function (value, row, index) {
                         var actions = [];
 						var url = '';
@@ -185,9 +186,15 @@
                                 }
                             })
                         } else {
-                            url = '/img/profile.jpg';
+                            if (row.sex == '0') {
+                                url = '/img/male.png';
+                            } else if (row.sex == '1') {
+                                url = '/img/female.png';
+                            } else {
+                                url = '/img/profile.jpg';
+                            }
                         }
-                        actions.push('<img style="width: 100px;height: 60px;" src="'+url+'" onclick="viewImage(this)" alt="图片加载异常" />');
+                        actions.push('<img style="width: 48px;height: 48px;" src="'+url+'" onclick="viewImage(this)" alt="图片加载异常" />');
 						console.log(actions.join(''))
                         return actions.join('');
                     }
@@ -196,6 +203,7 @@
 					field: 'orderNum',
 					title: '排序',
 					align: "left",
+					width: 80,
 					formatter: function (value, row, index) {
 						var actions = [];
 						actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.userId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
@@ -204,11 +212,13 @@
 				},
 		        {
 		            field: 'updateTime',
-		            title: '修改时间'
+		            title: '修改时间',
+					width: 150
 		        },
 		        {
 		            title: '操作',
 		            align: 'center',
+					width: '20%',
 		            formatter: function(value, row, index) {
 		                var actions = [];
 		                actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.userId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
@@ -226,7 +236,7 @@
             $('#user-form').find('tr').each(function (index, tr) {
                 var $input = $(tr).find('td input');
                 $input.each(function () {
-                    var name = 'orderNum[' + parseInt(index - 1) + ']';
+                    var name = 'orderNum' + parseInt(index - 1);
                     $(this).attr('name', name);
                 })
             })
@@ -250,8 +260,7 @@
                     url: prefix + "/edit/userInfo",
                     success: function (result) {
                         if (result.code == web_status.SUCCESS) {
-                            $.modal.msgSuccess(result.msg);
-                            $.table.refresh();
+                            // do nothing
                         } else {
                             $.modal.msgError(result.msg);
                         }
