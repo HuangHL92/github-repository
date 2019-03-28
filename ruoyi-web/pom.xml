@@ -23,24 +23,26 @@
             <artifactId>ruoyi-framework</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
+        <!--通用模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
-
+        <!--swagger-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
             <version>1.9.1</version>
         </dependency>
+        <!--微信模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-wx</artifactId>
             <version>3.2</version>
             <scope>compile</scope>
         </dependency>
-
+        <!--第三方授权-->
         <dependency>
             <groupId>me.zhyd.oauth</groupId>
             <artifactId>JustAuth</artifactId>

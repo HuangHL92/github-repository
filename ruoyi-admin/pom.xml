@@ -13,8 +13,8 @@
 	
 	<description>
 	    web服务入口
+        系统管理的功能在此模块中，然后将web业务模块引入到此模块中进行运行。
 	</description>
-
 
     <dependencies>
 
@@ -25,26 +25,20 @@
 			<!--<optional>true</optional> &lt;!&ndash; 表示依赖不会传递 &ndash;&gt;-->
 		<!--</dependency>-->
 
-		<!-- 核心模块-->
+        <!--tomcat下部署需要的配置-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
+		<!-- 业务模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-web</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
 
-        <!--微信模板-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-wx</artifactId>
-            <version>${ruoyi.version}</version>
-        </dependency>
-
-        <!--tomcat下部署需要的配置-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
 
     </dependencies>
 
