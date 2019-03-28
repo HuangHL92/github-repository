@@ -662,7 +662,7 @@ var LookUpUser = function (obj) {
 
     $("#" + id).orgTree({
         all: true,                //人物组织都开启
-        area: ['650px','542px'],  //弹窗框宽高
+        area: ['730px','90%'],  //弹窗框宽高(宽度可以使用百分比)
         search: true,              //开启搜索
         cls_disp: cls_disp,        //已选择用户控件样式（用于查找）
         selectedids: hiddenName
