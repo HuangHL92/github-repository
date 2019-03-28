@@ -42,7 +42,7 @@
             			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}"> 
             				<div class="hide" th:text="个人中心"></div>
 					        <div class="pull-left image">
-		                    	<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{/profile/avatar/} + ${user.avatar}" class="img-circle" alt="User Image">
+		                    	<img th:src="${user.avatar == ''} ? ( ${user.sex == '0'} ? @{/img/male.png} : (${user.sex == '1'} ? @{/img/female.png} : @{/img/profile.jpg}) ): @{/common/upload/getBase64Img?path=}+${user.avatar}" class="img-circle" alt="User Image">
 					        </div>
 				        </a>
 				        <div class="pull-left info">
@@ -99,7 +99,7 @@
 	                <li><a title="全屏显示" id="fullScreen"><i class="fa fa-arrows-alt"></i> 全屏显示</a></li>
                     <li class="dropdown user-menu">
 						<a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
-							<img th:src="(${user.avatar} == '') ? @{/img/profile.jpg} : @{/profile/avatar/} + ${user.avatar}" class="user-image">
+							<img th:src="${user.avatar == ''} ? ( ${user.sex == '0'} ? @{/img/male.png} : (${user.sex == '1'} ? @{/img/female.png} : @{/img/profile.jpg}) ): @{/common/upload/getBase64Img?path=}+${user.avatar}" class="user-image">
 							<span class="hidden-xs">[[${user.userName}]]</span>
 						</a>
 						<ul class="dropdown-menu">

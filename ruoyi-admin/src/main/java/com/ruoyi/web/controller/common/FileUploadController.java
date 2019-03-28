@@ -2,35 +2,30 @@ package com.ruoyi.web.controller.common;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import cn.hutool.core.io.file.*;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.framework.web.base.BaseController;
-import com.ruoyi.framework.web.domain.server.Sys;
 import com.ruoyi.system.domain.SysAttachment;
 import com.ruoyi.system.service.ISysAttachmentService;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.sql.Struct;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.BufferedOutputStream;
 import java.util.Map;
 
 @CrossOrigin
@@ -297,6 +292,40 @@ public class FileUploadController extends BaseController {
         json.put("attachmentNo",attachment.getAttachmentNo());
         json.put("fileList",rlist);
         return json;
+    }
+
+    /**
+     * 输出图片
+     * @param path
+     * @param response
+     */
+    @RequestMapping("/getBase64Img")
+    @ResponseBody
+    public void showBase64Image(String path, HttpServletResponse response) {
+        if (StrUtil.isNotEmpty(path)) {
+            SysAttachment att = new SysAttachment();
+            try {
+                FileReader fileReader = new FileReader(Global.getUploadPath() + path);
+                String fileName = FileUtil.getName(fileReader.getFile());
+                att.setFileName(fileName);
+                att.setPath(path);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            String ext = FileUtil.extName(att.getFileName());
+            if ("png".equals(ext) || "jpg".equals(ext) || "jpeg".equals(ext) || "bmp".equals(ext)) {
+                try {
+                    byte[] b = FileUtil.readBytes(Global.getUploadPath() + att.getPath());
+                    String data = "data:image/jpg;base64," + Base64.encode(b);
+                    String base64Image = data.split(",")[1];
+                    byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
+                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
+                    ImageIO.write(img, ext, response.getOutputStream());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
 

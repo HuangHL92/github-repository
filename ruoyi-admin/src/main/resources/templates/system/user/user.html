@@ -11,7 +11,7 @@
 	}
 
 	#bootstrap-table td label.error {
-		top: 30px;
+		top: 25px;
 	}
 </style>
 <body class="gray-bg">
@@ -172,19 +172,7 @@
                         var actions = [];
 						var url = '';
                         if (value) {
-                            $.ajax({
-                                url: ctx + "common/upload/getFileList?path=" + value,
-                                async: false,
-                                success: function (res) {
-                                    if (res.code == web_status.SUCCESS) {
-                                        $.each(res.fileList, function (i, file) {
-                                            if (file.byte) {
-                                                url = 'data:image/jpg;base64,' + file.byte;
-                                            }
-                                        })
-                                    }
-                                }
-                            })
+                            url = '/common/upload/getBase64Img?path=' + value;
                         } else {
                             if (row.sex == '0') {
                                 url = '/img/male.png';
@@ -203,7 +191,7 @@
 					field: 'orderNum',
 					title: '排序',
 					align: "left",
-					width: 80,
+					width: 135,
 					formatter: function (value, row, index) {
 						var actions = [];
 						actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.userId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
@@ -236,7 +224,7 @@
             $('#user-form').find('tr').each(function (index, tr) {
                 var $input = $(tr).find('td input');
                 $input.each(function () {
-                    var name = 'orderNum' + parseInt(index - 1);
+                    var name = 'orderNum_' + parseInt(index - 1);
                     $(this).attr('name', name);
                 })
             })

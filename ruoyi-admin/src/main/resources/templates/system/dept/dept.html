@@ -92,7 +92,7 @@
 		            field: 'orderNum',
 		            title: '排序',
 		            align: "left",
-                    width: '80px',
+                    width: '135px',
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
@@ -147,7 +147,7 @@
             $('#dept-form').find('tr').each(function (index, tr) {
                 var $input = $(tr).find('td input');
                 $input.each(function () {
-                    var name = 'orderNum' + parseInt(index - 1);
+                    var name = 'orderNum_' + parseInt(index - 1);
                     $(this).attr('name', name);
                 })
             })
