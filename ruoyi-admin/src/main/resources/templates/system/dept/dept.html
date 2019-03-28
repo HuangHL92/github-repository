@@ -91,11 +91,11 @@
 		        {
 		            field: 'orderNum',
 		            title: '排序',
-		            align: "left",
-                    width: '135px',
+		            align: "right",
+                    width: '80px',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
+                        actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
                         return actions.join('');
                     }
 		        },
@@ -122,6 +122,7 @@
 		            field: 'createTime',
 		            title: '创建时间',
 		            align: "left"
+
 		        },
 		        {
 		            title: '操作',

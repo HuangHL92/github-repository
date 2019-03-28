@@ -11,15 +11,20 @@ import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
 import com.ruoyi.framework.web.base.ApiBaseController;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
 
 
 @Api(value = "/test", description = "测试接口")
@@ -30,6 +35,12 @@ public class TestController extends ApiBaseController {
 
     @Autowired
     private  IDemoService  demoService;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+
+
 
     @ApiOperation("get测试")
     @GetMapping("get")
@@ -145,6 +156,90 @@ public class TestController extends ApiBaseController {
         return map;
     }
 
+
+    @ApiOperation("事务处理模拟测试（输入1可以模拟异常）")
+    @GetMapping("/trans/{hasError}")
+    @Transactional(rollbackFor = Exception.class)
+    public ApiResult trans(@PathVariable(name="hasError") Integer hasError) {
+
+        int i=1;
+        String name  = RandomUtil.randomNumbers(6);
+
+        //第1次插入
+        Demo demo =new Demo();
+        demo.setId(UUID.randomUUID().toString());
+        demo.setName(name + "_" + i++);
+        demoService.save(demo);
+
+
+        //TODO 模式错误
+        if(hasError==1) {
+            i = 1/0;
+        }
+
+        //第2次插入
+        demo.setId(UUID.randomUUID().toString());
+        demo.setName(name + "_" + i++);
+        demoService.save(demo);
+
+        return ApiResult.success("提交成功！查看sys_demo表或综合实例列表，验证结果（插入2条记录）。");
+    }
+
+
+
+    @ApiOperation("批量插入测试(JdbcTemplate)")
+    @GetMapping("/batchJdbc/{size}")
+    public ApiResult batchJdbc(@PathVariable(name="size") Integer size) {
+
+
+
+        String sql = "INSERT INTO sys_demo " +
+                "(id, name) VALUES (?, ?)";
+
+        List<Demo> list = new ArrayList();
+        String name = "test_" + RandomUtil.randomNumbers(6);
+        for(int i=0;i<size;i++) {
+            Demo demo =new Demo();
+            demo.setId(UUID.randomUUID().toString());
+            demo.setName(name + "_" + i++);
+            list.add(demo);
+        }
+
+        int[] rs = jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setString(1, list.get(i).getId());
+                ps.setString(2, list.get(i).getName());
+            }
+            @Override
+            public int getBatchSize() {
+                return list.size();
+            }
+        });
+
+
+        return ApiResult.success("成功插入" + size + "条记录！" );
+    }
+
+
+    @ApiOperation("批量插入测试(MP)")
+    @GetMapping("/batchmp/{size}")
+    public ApiResult batchmp(@PathVariable(name="size") Integer size) {
+
+        List<Demo> list = new ArrayList();
+        String name = "test_" + RandomUtil.randomNumbers(6);
+        for(int i=0;i<size;i++) {
+            Demo demo =new Demo();
+            demo.setId(UUID.randomUUID().toString());
+            demo.setName(name + "_" + i++);
+            list.add(demo);
+        }
+
+
+        demoService.saveBatch(list);
+
+
+        return ApiResult.success("成功插入" + size + "条记录！");
+    }
 
 
 }

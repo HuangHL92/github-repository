@@ -101,7 +101,6 @@ public class DemoController extends BaseController {
     public TableDataInfo list(Demo demo) {
 
         startPage();
-
         return getDataTable(demoService.selectList(demo));
     }
 

@@ -28,7 +28,10 @@ public class DemoServiceImpl extends ServiceImpl<DemoMapper, Demo> implements ID
         if(StringUtils.isNotEmpty(demo.getName())) {
             query.lambda()
                     .likeRight(Demo::getName, demo.getName());
+
         }
+        query.lambda().orderByDesc(Demo::getCreateTime);
+        //query.orderByDesc("update_time");
 
         return list(query);
     }

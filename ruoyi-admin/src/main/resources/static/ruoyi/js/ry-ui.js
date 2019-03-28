@@ -47,7 +47,16 @@
                     queryParams: $.table._params,                       // 传递参数（*）
                     columns: options.columns,                           // 显示列信息（*）
                     responseHandler: $.table.responseHandler,            // 回调函数
-                    onLoadSuccess: $.table.onLoadSuccess
+                    onLoadSuccess: $.table.onLoadSuccess,
+                    contextMenu: options.context_Menu,
+                    onContextMenuItem: function(row, $el){
+                        if($el.data("item") == "edit"){
+                            alert(row.id);
+                        }
+                        if($el.data("item") == "delete"){
+                            alert(row.id);
+                        }
+                    }
                 });
             },
             // 查询条件
