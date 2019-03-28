@@ -2,6 +2,22 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org"
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
+<style>
+
+    pre {outline: 1px solid #ccc; padding: 5px; margin: 5px; }
+
+    .string { color: green; }
+
+    .number { color: darkorange; }
+
+    .boolean { color: blue; }
+
+    .null { color: magenta; }
+
+    .key { color: red; }
+
+</style>
+
 <head th:include="include :: header"></head>
 <body class="gray-bg" id="test">
     <div class="wrapper wrapper-content">
@@ -47,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
@@ -93,7 +109,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
@@ -133,7 +149,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
@@ -182,7 +198,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
@@ -236,7 +252,7 @@
                 <div class="col-sm-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>健康状态</h5>
+                            <h5>健康状态(基于actuator)</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -251,20 +267,8 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <table class="table table-hover margin bottom">
-                                        <tbody>
-                                        <tr>
-                                            <td>数据库状态</td>
-                                            <td th:text="${health.details.db.status=='UP'?'已开启':'已关闭'}">已开启</td>
-                                            <!--<td>数据库类型</td>-->
-                                            <!--<td th:text="${health.details.db.details.database}">MYSQL</td>-->
-                                        </tr>
-                                        <tr>
-                                            <td>redis状态</td>
-                                            <td th:text="${health.details.redis.status=='UP'?'已开启':'已关闭'}">已关闭</td>
-                                            <td>redis版本号</td>
-                                            <td th:text="${health.details.redis.status=='UP'?health.details.redis.details.version:'已关闭'}">已关闭</td>
-                                        </tr>
-                                        </tbody>
+                                        <input th:type="hidden" name="health" id="health" th:value="${health}">
+                                        <pre id="result"></pre>
                                     </table>
                                 </div>
                             </div>
@@ -291,5 +295,35 @@
 		var div_ibox = $(this).closest("div.ibox");
 		div_ibox.remove()
 	});
+
+</script>
+<script type="text/javascript">
+    var songResJson = $("#health").val();
+
+    document.getElementById('result').innerHTML = syntaxHighlight(songResJson);
+    //格式化json字符串
+    function syntaxHighlight(json) {
+        if (typeof json != 'string') {
+            json = JSON.stringify(JSON.parse(json), null, 2);
+        }
+        json = JSON.stringify(JSON.parse(json), null, 2);
+        json = json.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+
+        });
+    }
 </script>
 </html>

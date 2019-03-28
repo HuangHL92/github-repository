@@ -1,10 +1,8 @@
 package com.ruoyi.web.controller.monitor;
 
 import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.ruoyi.common.utils.http.HttpUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -34,11 +32,12 @@ public class ServerController extends BaseController
     public String server(ModelMap mmap, HttpServletRequest request) throws Exception
     {
         try{
+            //调用/actuator/health 拿到json数据
             String jsonObj = HttpUtil.get(request.getScheme()+"://"+request.getServerName()+":"+port+"/actuator/health");
             JSONObject health = JSONUtil.parseObj(jsonObj);
             mmap.put("health",health);
         }catch (Exception e){
-            e.printStackTrace();
+            //todo 此处特殊处理,不须抛出异常
         }
         Server server = new Server();
         server.copyTo();
