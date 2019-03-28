@@ -2,6 +2,13 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
+<style>
+    /*取消显示百度地图版权标志*/
+    .BMap_cpyCtrl {display: none;}
+    .anchorBL {display: none;}
+    .no_padding{padding-left: 0 !important;padding-right: 0 !important;}
+</style>
+
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
 		<form class="form-horizontal m" id="form-dept-add">
@@ -51,12 +58,53 @@
 					</div>
 				</div>
 			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label">地址：</label>
+				<div class="col-sm-4">
+					<input type="text"  name="address" id="address" class="form-control" placeholder="请输入地址">
+				</div>
+				<div class="layui-form-mid layui-word-aux">
+					<i id="mapMaker" class="glyphicon glyphicon-map-marker" style="font-size: 135%;color: red"></i>
+				</div>
+				<div class="col-sm-2 no_padding">
+                    <div class="layui-form-mid layui-word-aux col-sm-1" style="margin-right: 5px;">X</div>
+                    <div class="layui-input-inline col-sm-10 no_padding">
+                        <input type="text" name="coordinateX" id="longitude" value="" placeholder="经度" class="form-control" readonly="true">
+                    </div>
+					</div>
+				<div class="col-sm-2 no_padding" style="margin-left: 10px;">
+                    <div class="layui-form-mid layui-word-aux col-sm-1" style="margin-right: 5px;">Y</div>
+                    <div class="layui-input-inline col-sm-10 no_padding">
+                        <input type="text" name="coordinateY" id="latitude" value="" placeholder="纬度" class="form-control" readonly="true">
+                    </div>
+				</div>
+			</div>
+
 		</form>
 	</div>
+	<div id="baidu_map" data-id="baidu_map" style="margin: auto;width: 95%;height:300px;" data-toggle="map" data-longitudeid="longitude" data-latitudeid="latitude" data-mark-type="markPoint"  data-makerid="mapMaker"/>
 	<div th:include="include::footer"></div>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=dohAgcOnkdkg9H8hW9TK9tbz"></script>
+	<!--加载鼠标绘制工具-->
+	<script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+	<link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+	<script th:src="@{/js/map.js}"></script>
+
 	<script type="text/javascript">
+        //页面控件初始化
+        initMap();
+
+        $(function () {
+            $('input#address').on('keydown', function (e) {
+                if (e.key == 'Enter') {
+                    $('#mapMaker').click();
+                }
+            })
+        })
+
 		var prefix = ctx + "system/dept";
-		
+
 		$("#form-dept-add").validate({
 			rules:{
 				deptName:{
@@ -95,13 +143,13 @@
 		        }
 		    }
 		});
-		
+
 		function submitHandler() {
 	        if ($.validate.form()) {
 	        	$.operate.save(prefix + "/add", $('#form-dept-add').serialize());
 	        }
 	    }
-	
+
 		/*部门管理-新增-选择父部门树*/
 		function selectDeptTree() {
 			var options = {
@@ -112,7 +160,7 @@
 			};
 			$.modal.openOptions(options);
 		}
-		
+
 		function doSubmit(index, layero){
 			var body = layer.getChildFrame('body', index);
    			$("#treeId").val(body.find('#treeId').val());

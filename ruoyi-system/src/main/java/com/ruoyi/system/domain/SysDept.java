@@ -5,6 +5,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.base.BaseEntity;
 
+import java.math.BigDecimal;
+
 /**
  * 部门表 sys_dept
  * 
@@ -37,6 +39,15 @@ public class SysDept extends BaseEntity
     
     /** 邮箱 */
     private String email;
+
+    /** 地址 */
+    private String address;
+
+    /** X_坐标 */
+    private BigDecimal coordinateX;
+
+    /** Y_坐标 */
+    private BigDecimal coordinateY;
 
     /** 部门状态:0正常,1停用 */
     private String status;
@@ -140,6 +151,30 @@ public class SysDept extends BaseEntity
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public BigDecimal getCoordinateX() {
+        return coordinateX;
+    }
+
+    public void setCoordinateX(BigDecimal coordinateX) {
+        this.coordinateX = coordinateX;
+    }
+
+    public BigDecimal getCoordinateY() {
+        return coordinateY;
+    }
+
+    public void setCoordinateY(BigDecimal coordinateY) {
+        this.coordinateY = coordinateY;
     }
 
     public String getStatus()

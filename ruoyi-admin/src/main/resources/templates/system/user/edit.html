@@ -8,6 +8,12 @@
 			<input name="userId"  type="hidden"  th:field="*{userId}" />
 			<input name="deptId"  type="hidden"  th:field="*{deptId}" id="treeId"/>
 			<div class="form-group">
+				<label class="col-sm-3 control-label">头像上传：</label>
+				<div class="col-sm-8">
+					<input type="hidden" name="avatar" data-toggle="fileupload" data-multiple="false" data-btn-text="" data-accept="image" th:field="*{avatar}"/>
+				</div>
+			</div>
+			<div class="form-group">
 				<label class="col-sm-3 control-label ">登录名称：</label>
 				<div class="col-sm-8">
 					<input class="form-control" type="text" readonly="true" th:field="*{loginName}"/>
@@ -79,6 +85,28 @@
 	<div th:include="include::footer"></div>
 	<script th:src="@{/ajax/libs/select/select2.js}"></script>
 	<script>
+
+        UploadFile.prototype.delFile = function (data, obj, defaultEvent) {
+            var userId = $("input[name='userId']").val();
+            // 删除用户头像(置为空字符串)
+            $.ajax({
+                type: 'POST',
+                url: ctx + "system/user/edit/userInfo",
+                dataType: 'json',
+                data: {userId: userId, avatar: ''},
+                success: function (res) {
+                    if (res.code == web_status.SUCCESS) {
+                        defaultEvent(); // 同步请求，删除文件 更新attachment
+                        return layer.msg('删除成功', {icon: 1});
+                    } else {
+                        return layer.msg("服务器发生异常，删除失败", {
+                            icon: 2
+                            , shift: 6
+                        })
+                    }
+                }
+            })
+        }
         $("#form-user-edit").validate({
         	rules:{
         		userName:{
@@ -153,6 +181,7 @@
         	var userName = $("input[name='userName']").val();
         	var email = $("input[name='email']").val();
         	var phonenumber = $("input[name='phonenumber']").val();
+            var avatar = $("input[name='avatar']").val();
         	var sex = $("#sex option:selected").val();
         	var status = $("input[name='status']").is(':checked') == true ? 0 : 1;
         	var roleIds = $.form.selectCheckeds("role");
@@ -168,6 +197,7 @@
         			"email": email,
         			"phonenumber": phonenumber,
         			"sex": sex,
+                    "avatar": avatar,
         			"status": status,
         			"roleIds": roleIds,
         			"postIds": postIds

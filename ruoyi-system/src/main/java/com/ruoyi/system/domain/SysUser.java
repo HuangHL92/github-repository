@@ -61,6 +61,9 @@ public class SysUser extends BaseEntity
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /** 排序 */
+    private Long orderNum;
+
     /** 删除标志（0代表存在 2代表删除） */
 //    private String delFlag;
 
@@ -77,6 +80,10 @@ public class SysUser extends BaseEntity
     private SysDept dept;
 
     private List<SysRole> roles;
+
+    private List<SysPost> posts;
+
+    private String post;
 
     /** 角色组 */
     private Long[] roleIds;
@@ -214,6 +221,16 @@ public class SysUser extends BaseEntity
         this.status = status;
     }
 
+    public Long getOrderNum()
+    {
+        return orderNum;
+    }
+
+    public void setOrderNum(Long orderNum)
+    {
+        this.orderNum = orderNum;
+    }
+
     /*public String getDelFlag()
     {
         return delFlag;
@@ -256,6 +273,24 @@ public class SysUser extends BaseEntity
     public void setDept(SysDept dept)
     {
         this.dept = dept;
+    }
+
+    public List<SysPost> getPosts()
+    {
+        return posts;
+    }
+
+    public void setPosts(List<SysPost> roles)
+    {
+        this.posts = roles;
+    }
+
+    public String getPost() {
+        return post;
+    }
+
+    public void setPost(String post) {
+        this.post = post;
     }
 
     public List<SysRole> getRoles()

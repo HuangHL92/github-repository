@@ -5,7 +5,15 @@
 <head th:include="include :: header"></head>
 <link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
 <link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+<style>
+	#bootstrap-table td{
+		position: relative;
+	}
 
+	#bootstrap-table td label.error {
+		top: 30px;
+	}
+</style>
 <body class="gray-bg">
 	<div class="ui-layout-west">
 		<div class="main-content">
@@ -30,8 +38,8 @@
 	
 	<div class="container-div ui-layout-center">
 		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="user-form">
+			<form id="user-form">
+				<div class="col-sm-12 search-collapse">
 					<input type="hidden" id="deptId" name="deptId">
 	                <input type="hidden" id="parentId" name="parentId">
 					<div class="select-list">
@@ -60,30 +68,31 @@
 							</li>
 						</ul>
 					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-	        	<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:user:add">
-	                <i class="fa fa-plus"></i> 新增
-	            </a>
-	             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:user:edit">
-		            <i class="fa fa-edit"></i> 修改
-		        </a>
-	            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:user:remove">
-	                <i class="fa fa-remove"></i> 删除
-	            </a>
-	            <a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
-		            <i class="fa fa-upload"></i> 导入
-		        </a>
-	            <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
-		            <i class="fa fa-download"></i> 导出
-		        </a>
-	        </div>
-	        
-	        <div class="col-sm-12 select-table table-striped">
-			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
+
+				</div>
+
+				<div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+					<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:user:add">
+						<i class="fa fa-plus"></i> 新增
+					</a>
+					 <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:user:edit">
+						<i class="fa fa-edit"></i> 修改
+					</a>
+					<a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:user:remove">
+						<i class="fa fa-remove"></i> 删除
+					</a>
+					<a class="btn btn-info" onclick="$.table.importExcel()" shiro:hasPermission="system:user:import">
+						<i class="fa fa-upload"></i> 导入
+					</a>
+					<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:user:export">
+						<i class="fa fa-download"></i> 导出
+					</a>
+				</div>
+
+				<div class="col-sm-12 select-table table-striped">
+					<table id="bootstrap-table" data-mobile-responsive="true"></table>
+				</div>
+			</form>
 		</div>
 	</div>
 	
@@ -96,6 +105,7 @@
 		var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
 		var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "system/user";
+
 
 		$(function() {
 		    var panehHidden = false;
@@ -116,8 +126,8 @@
 		        exportUrl: prefix + "/export",
 		        importUrl: prefix + "/importData",
 		        importTemplateUrl: prefix + "/importTemplate",
-		        sortName: "createTime",
-		        sortOrder: "desc",
+		        sortName: "u.orderNum, u.userName, d.orderNum",
+		        sortOrder: "asc",
 		        modalName: "用户",
 		        search: false,
 		        showExport: false,
@@ -126,42 +136,75 @@
 		        },
 		        {
 		            field: 'userId',
-		            title: '用户ID'
-		        },
-		        {
-		            field: 'loginName',
-		            title: '登录名称',
-		            sortable: true
-		        },
+		            title: '用户ID',
+					visible: false
+		      	},
 		        {
 		            field: 'userName',
-		            title: '用户名称'
+		            title: '姓名'
 		        },
 		        {
 		            field: 'dept.deptName',
-		            title: '部门'
+		            title: '单位'
 		        },
+				{
+					field: 'post',
+					title: '职务',
+
+				},
+				{
+					field: 'phonenumber',
+					title: '电话'
+				},
+				{
+					visible: editFlag == 'hidden' ? false : true,
+					title: '状态',
+					align: 'center',
+					formatter: function (value, row, index) {
+						return statusTools(row);
+					}
+				},
+				{
+					field: 'avatar',
+					title: '照片',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+						var url = '';
+                        if (value) {
+                            $.ajax({
+                                url: ctx + "common/upload/getFileList?path=" + value,
+                                async: false,
+                                success: function (res) {
+                                    if (res.code == web_status.SUCCESS) {
+                                        $.each(res.fileList, function (i, file) {
+                                            if (file.byte) {
+                                                url = 'data:image/jpg;base64,' + file.byte;
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        } else {
+                            url = '/img/profile.jpg';
+                        }
+                        actions.push('<img style="width: 100px;height: 60px;" src="'+url+'" onclick="viewImage(this)" alt="图片加载异常" />');
+						console.log(actions.join(''))
+                        return actions.join('');
+                    }
+				},
+				{
+					field: 'orderNum',
+					title: '排序',
+					align: "left",
+					formatter: function (value, row, index) {
+						var actions = [];
+						actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.userId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative" />');
+						return actions.join('');
+					}
+				},
 		        {
-		            field: 'email',
-		            title: '邮箱',
-		            visible: false
-		        },
-		        {
-		            field: 'phonenumber',
-		            title: '手机'
-		        },
-		        {
-		        	visible: editFlag == 'hidden' ? false : true,
-		        	title: '用户状态',
-		        	align: 'center',
-		        	formatter: function (value, row, index) {
-		        		return statusTools(row);
-		        	}
-		        },
-		        {
-		            field: 'createTime',
-		            title: '创建时间',
-		            sortable: true
+		            field: 'updateTime',
+		            title: '修改时间'
 		        },
 		        {
 		            title: '操作',
@@ -177,7 +220,52 @@
 		    };
 		    $.table.init(options);
 		}
-		
+
+        // 重建name，避免因为name导致的validate验证显示问题
+        function reCreateOrderNumName() {
+            $('#user-form').find('tr').each(function (index, tr) {
+                var $input = $(tr).find('td input');
+                $input.each(function () {
+                    var name = 'orderNum[' + parseInt(index - 1) + ']';
+                    $(this).attr('name', name);
+                })
+            })
+        }
+
+        var oldValue = '';
+        // 记录旧值
+        function recordOldValue(value) {
+            oldValue = value;
+        }
+
+        function updateOrderAjax(userId, input) {
+            reCreateOrderNumName();
+            $('#user-form').validate();
+            // valid单个校验
+            if ($(input).valid() && oldValue != input.value) {
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    data: {userId: userId, orderNum: input.value},
+                    url: prefix + "/edit/userInfo",
+                    success: function (result) {
+                        if (result.code == web_status.SUCCESS) {
+                            $.modal.msgSuccess(result.msg);
+                            $.table.refresh();
+                        } else {
+                            $.modal.msgError(result.msg);
+                        }
+                    }
+                })
+            }
+        }
+
+        function viewImage(img) {
+            layer.photos({
+                photos: {data: [{'src': img.src}]}
+            });
+        }
+
 		function queryDeptTree()
 		{
 			var url = ctx + "system/dept/treeData";

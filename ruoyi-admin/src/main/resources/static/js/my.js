@@ -270,8 +270,6 @@ UploadFile.prototype.init = function () {
                     });
                 }
                 ,done: function(res, index, upload){
-                    console.log(res);
-                    console.log(config.input);
                     if(res.code == 0){ //上传成功
                         var tr = config.appendArea.find('#upload-'+ index)
                             ,deldata=null;
@@ -350,28 +348,38 @@ UploadFile.prototype.init = function () {
         ,delFile=function(data,obj){//删除文件
         layer.confirm('确定要删除？', {
             btn: ['确定', '取消'] //按钮
-        }, function () {
-            $.ajax({
-                type: 'POST',
-                url: '/common/upload/delFile',
-                dataType: 'json',
-                async: false,
-                data: data,
-                success: function (res) {
-                    if (res.code == 0) {
-                        obj.remove();
-                        if("image"===config.accept&&!config.multiple){
-                            config.appendArea.find('.upload-btn').removeClass('layui-hide');
+        }, function (index) {
+            var hasMsg = true; //是否显示默认提示信息
+            function del() {
+                $.ajax({
+                    type: 'POST',
+                    url: '/common/upload/delFile',
+                    dataType: 'json',
+                    async: false,
+                    data: data,
+                    success: function (res) {
+                        if (res.code == 0) {
+                            config.input.val(''); //对应隐藏域置空
+                            obj.remove();
+                            if("image"===config.accept&&!config.multiple){
+                                config.appendArea.find('.upload-btn').removeClass('layui-hide');
+                            }
+                            return hasMsg ? layer.msg('删除成功', {icon: 1}) : layer.close(index);
+                        }else{
+                            return layer.msg("服务器发生异常，删除失败", {
+                                icon: 2
+                                ,shift: 6
+                            })
                         }
-                        return layer.msg('删除成功', {icon: 1});
-                    }else{
-                        return layer.msg("服务器发生异常，删除失败", {
-                            icon: 2
-                            ,shift: 6
-                        })
                     }
-                }
-            });
+                });
+            }
+            if (that.delFile && typeof that.delFile == 'function') {
+                hasMsg = false;
+                that.delFile(data,obj,del);
+            } else {
+                del();
+            }
         });
 
     }

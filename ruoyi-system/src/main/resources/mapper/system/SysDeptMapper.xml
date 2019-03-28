@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectDeptVo">
-        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time 
+        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.address, d.coordinate_x, d.coordinate_y, d.status, d.del_flag, d.create_by, d.create_time
         from sys_dept d
     </sql>
     
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status,
+		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.address, d.coordinate_x, d.coordinate_y, d.status,
 			(select dept_name from sys_dept where dept_id = d.parent_id) parent_name
 		from sys_dept d
 		where d.dept_id = #{deptId}
@@ -101,6 +101,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="leader != null and leader != ''">leader,</if>
  			<if test="phone != null and phone != ''">phone,</if>
  			<if test="email != null and email != ''">email,</if>
+			<if test="address != null and address != ''">address,</if>
+			<if test="coordinateX != null and coordinateX != ''">coordinate_x,</if>
+			<if test="coordinateY != null and coordinateY != ''">coordinate_y,</if>
  			<if test="status != null">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			create_time
@@ -113,6 +116,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="leader != null and leader != ''">#{leader},</if>
  			<if test="phone != null and phone != ''">#{phone},</if>
  			<if test="email != null and email != ''">#{email},</if>
+ 			<if test="address != null and address != ''">#{address},</if>
+ 			<if test="coordinateX != null and coordinateX != ''">#{coordinateX},</if>
+ 			<if test="coordinateY != null and coordinateY != ''">#{coordinateY},</if>
  			<if test="status != null">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			sysdate()
@@ -129,6 +135,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="leader != null">leader = #{leader},</if>
  			<if test="phone != null">phone = #{phone},</if>
  			<if test="email != null">email = #{email},</if>
+ 			<if test="address != null">address = #{address},</if>
+ 			<if test="coordinateX != null">coordinate_x = #{coordinateX},</if>
+ 			<if test="coordinateY != null">coordinate_y = #{coordinateY},</if>
  			<if test="status != null and status != ''">status = #{status},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			update_time = sysdate()

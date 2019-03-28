@@ -181,6 +181,15 @@ public class SysUserController extends BaseController
         return toAjax(userService.updateUser(user));
     }
 
+    @RequiresPermissions("system:user:edit")
+    @Log(title = "用户管理", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit/userInfo")
+    @Transactional(rollbackFor = Exception.class)
+    @ResponseBody
+    public AjaxResult editSaveUserInfo(SysUser user){
+        return toAjax(userService.updateUserInfo(user));
+    }
+
     @RequiresPermissions("system:user:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
