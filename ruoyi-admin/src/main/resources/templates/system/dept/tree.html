@@ -39,10 +39,20 @@ button{font-family: "SimSun","Helvetica Neue",Helvetica,Arial;}
 		
 		function zOnClick(event, treeId, treeNode) {
 		    var treeId = treeNode.id;
-		    var treeName = treeNode.name;
 		    $("#treeId").val(treeId);
-		    $("#treeName").val(treeName);
+		    $("#treeName").val(getOrgName(treeNode));
 		}
+
+        //获取子节点，所有父节点的name的拼接字符串（忽略顶级）
+        function getOrgName(treeObj) {
+            if (treeObj == null) return "";
+            var filename = treeObj.name;
+            var pNode = treeObj.getParentNode();
+            if (pNode != null && pNode.id != 100) {
+                filename = getOrgName(pNode) + "/" + filename;
+            }
+            return filename;
+        }
 	</script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataScope;
@@ -169,13 +170,17 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public int insertDept(SysDept dept)
     {
+        // 查找父节点
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为"正常"状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus()))
         {
             throw new BusinessException("部门停用，不允许新增");
         }
+        // 设置祖先列表
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
+        // 设置组织架构（忽略顶级部门）
+        dept.setOrgStructure(100L == dept.getParentId() ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName());
         return deptMapper.insertDept(dept);
     }
 
@@ -188,12 +193,19 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public int updateDept(SysDept dept)
     {
+        // 查询父节点
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
+        // 父节点不为空
         if (StringUtils.isNotNull(info))
         {
+            // 更新该节点的祖先列表
             String ancestors = info.getAncestors() + "," + info.getDeptId();
             dept.setAncestors(ancestors);
-            updateDeptChildren(dept.getDeptId(), ancestors);
+            // 设置组织架构（忽略顶级部门）
+            String orgStructure = 100L == dept.getParentId() ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName();
+            dept.setOrgStructure(orgStructure);
+            // 更新该节点的所有子节点
+            updateDeptChildren(dept.getDeptId(), ancestors, orgStructure);
         }
         int result = deptMapper.updateDept(dept);
         if (UserConstants.DEPT_NORMAL.equals(dept.getStatus()))
@@ -222,8 +234,9 @@ public class SysDeptServiceImpl implements ISysDeptService
      * 
      * @param deptId 部门ID
      * @param ancestors 元素列表
+     * @param orgStructure 组织架构
      */
-    public void updateDeptChildren(Long deptId, String ancestors)
+    public void updateDeptChildren(Long deptId, String ancestors, String orgStructure)
     {
         SysDept dept = new SysDept();
         dept.setParentId(deptId);
@@ -231,6 +244,9 @@ public class SysDeptServiceImpl implements ISysDeptService
         for (SysDept children : childrens)
         {
             children.setAncestors(ancestors + "," + dept.getParentId());
+            children.setOrgStructure(orgStructure + "/" + children.getDeptName());
+            // 递归更新子节点
+            updateDeptChildren(children.getDeptId(), children.getAncestors(), children.getOrgStructure());
         }
         if (childrens.size() > 0)
         {

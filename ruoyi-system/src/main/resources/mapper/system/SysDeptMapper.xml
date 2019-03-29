@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="parentId"   column="parent_id"   />
 		<result property="ancestors"  column="ancestors"   />
 		<result property="deptName"   column="dept_name"   />
+		<result property="orgStructure"   column="org_structure"   />
 		<result property="orderNum"   column="order_num"   />
 		<result property="leader"     column="leader"      />
 		<result property="phone"      column="phone"       />
@@ -85,7 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
-		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.address, d.coordinate_x, d.coordinate_y, d.status,
+		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.org_structure, d.order_num, d.leader, d.phone, d.email, d.address, d.coordinate_x, d.coordinate_y, d.status,
 			(select dept_name from sys_dept where dept_id = d.parent_id) parent_name
 		from sys_dept d
 		where d.dept_id = #{deptId}
@@ -97,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="parentId != null and parentId != 0">parent_id,</if>
  			<if test="deptName != null and deptName != ''">dept_name,</if>
  			<if test="ancestors != null and ancestors != ''">ancestors,</if>
+			<if test="orgStructure != null and orgStructure != ''">org_structure,</if>
  			<if test="orderNum != null and orderNum != ''">order_num,</if>
  			<if test="leader != null and leader != ''">leader,</if>
  			<if test="phone != null and phone != ''">phone,</if>
@@ -112,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="parentId != null and parentId != 0">#{parentId},</if>
  			<if test="deptName != null and deptName != ''">#{deptName},</if>
  			<if test="ancestors != null and ancestors != ''">#{ancestors},</if>
+			<if test="orgStructure != null and orgStructure != ''">#{org_structure},</if>
  			<if test="orderNum != null and orderNum != ''">#{orderNum},</if>
  			<if test="leader != null and leader != ''">#{leader},</if>
  			<if test="phone != null and phone != ''">#{phone},</if>
@@ -131,6 +134,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="parentId != null and parentId != 0">parent_id = #{parentId},</if>
  			<if test="deptName != null and deptName != ''">dept_name = #{deptName},</if>
  			<if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
+ 			<if test="orgStructure != null and orgStructure != ''">org_structure = #{orgStructure},</if>
  			<if test="orderNum != null and orderNum != ''">order_num = #{orderNum},</if>
  			<if test="leader != null">leader = #{leader},</if>
  			<if test="phone != null">phone = #{phone},</if>
@@ -150,7 +154,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    <foreach collection="depts" item="item" index="index"
 	        separator=" " open="case dept_id" close="end">
 	        when #{item.deptId} then #{item.ancestors}
-	    </foreach>
+	    </foreach>,
+		org_structure =
+		<foreach collection="depts" item="item" index="index"
+				 separator=" " open="case dept_id" close="end">
+			when #{item.deptId} then #{item.orgStructure}
+		</foreach>
 	    where dept_id in
 	    <foreach collection="depts" item="item" index="index"
 	        separator="," open="(" close=")">
