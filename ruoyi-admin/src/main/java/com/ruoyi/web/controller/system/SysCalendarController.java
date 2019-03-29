@@ -5,9 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.poi.excel.ExcelFileUtil;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.utils.workday.WorkdayUtils;
+import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,7 @@ import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.support.Convert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,6 +78,38 @@ public class SysCalendarController extends BaseController
         return util.exportExcel(list, "canlendar");
     }
 
+	/**
+	 * 导入日历
+	 * @param file
+	 * @param updateSupport
+	 * @return
+	 * @throws Exception
+	 */
+	@Log(title = "日历管理", businessType = BusinessType.IMPORT)
+	@RequiresPermissions("system:calendar:import")
+	@PostMapping("/importData")
+	@ResponseBody
+	public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+	{
+		ExcelUtil<SysCalendar> util = new ExcelUtil<SysCalendar>(SysCalendar.class);
+		List<SysCalendar> calendarList = util.importExcel(file.getInputStream());
+		String operName = String.valueOf(getSysUser().getUserId());
+		String message = sysCalendarService.importCalendar(calendarList, updateSupport, operName);
+		return AjaxResult.success(message);
+	}
+
+	/**
+	 * 下载模板
+	 * @return
+	 */
+	@RequiresPermissions("system:calendar:view")
+	@GetMapping("/importTemplate")
+	@ResponseBody
+	public AjaxResult importTemplate()
+	{
+		ExcelUtil<SysCalendar> util = new ExcelUtil<SysCalendar>(SysCalendar.class);
+		return util.importTemplateExcel("日历数据");
+	}
 	/**
 	 * 新增日历
 	 */

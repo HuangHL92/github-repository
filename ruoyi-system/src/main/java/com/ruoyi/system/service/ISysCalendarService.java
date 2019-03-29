@@ -13,5 +13,19 @@ import java.util.List;
  */
 public interface ISysCalendarService extends IService<SysCalendar>
 {
+    /**
+     * 查询列表
+     * @param sysCalendar
+     * @return
+     */
     List<SysCalendar> selectList(SysCalendar sysCalendar);
+
+    /**
+     * 导入数据
+     * @param calendarList
+     * @param updateSupport
+     * @param operName
+     * @return
+     */
+    String importCalendar(List<SysCalendar> calendarList, boolean updateSupport, String operName);
 }
