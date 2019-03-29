@@ -20,6 +20,7 @@ import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.hssf.usermodel.HSSFDataValidation;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -320,7 +321,8 @@ public class ExcelUtil<T>
                         Font font = wb.createFont();
                         font.setColor(HSSFFont.COLOR_RED);
                         cellStyle.setFont(font);
-                        cellStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+                        //cellStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_YELLOW.getIndex());报错,已修改
+                        cellStyle.setFillForegroundColor(HSSFColor.HSSFColorPredefined.LIGHT_YELLOW.getIndex());
                         sheet.setColumnWidth(i, 6000);
                     }
                     else
