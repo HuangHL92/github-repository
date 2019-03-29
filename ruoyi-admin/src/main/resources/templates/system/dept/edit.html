@@ -172,10 +172,18 @@
 		
 		function doSubmit(index, layero){
 			var tree = layero.find("iframe")[0].contentWindow.$._tree;
+            var selfDeptId = $('input[name="deptId"]').val();
 			if ($.tree.notAllowLastLevel(tree)) {
+			    // 不能选择自身节点
 	   			var body = layer.getChildFrame('body', index);
-	   			$("#treeId").val(body.find('#treeId').val());
-	   			$("#treeName").val(body.find('#treeName').val());
+                var selectedId = body.find('#treeId').val();
+                var selectedName = body.find('#treeName').val();
+                if (selectedId == selfDeptId) {
+                    $.modal.msgError("不能选择自身节点（" + selectedName + "）");
+                    return false;
+                }
+	   			$("#treeId").val(selectedId);
+	   			$("#treeName").val(selectedName);
 	   			layer.close(index);
 			}
 		}
