@@ -62,17 +62,16 @@
 
 
     <ul id="context-menu">
-        <li data-item = "edit">编辑</li>
-        <li data-item = "delete">删除</li>
+        <li data-item = "edit" onclick="$.operate.addFull()" shiro:hasPermission="system:demo:add">新增</li>
+        <li data-item = "delete">修改</li>
     </ul>
 
 	<div th:include="include :: footer"></div>
+
 	<script th:inline="javascript">
 		var editFlag = [[${@permission.hasPermi('system:demo:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('system:demo:remove')}]];
-		var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "demo/all";
-		
 
 		$(function() {
 		    var options = {
@@ -127,46 +126,29 @@
 		        }]
 		    };
 		    $.table.init(options);
-		});
 
 
-		function batchData() {
-			var url =ctx + "demo/all/batchData";
-			$.operate.post(url,$("#form-demo-redis").serialize());
-		}
-
-		function clearAll() {
-			var url =ctx + "demo/all/clearAll";
-			$.operate.post(url,$("#form-demo-redis").serialize());
-		}
-
-
-        //菜单使用的数据格式
-        /**
-         * content  [string]   : 菜单项目显示文本，支持HTML格式（设置内容为“sm_divider”可生成分隔栏）
-         * header   [boolean]  : 是否为子标题栏
-         * url      [string]   : 需要跳转的链接
-         * callback [function] : 需要执行的回调函数
-         * disabled [boolean]  : 是否禁用菜单项目
-         */
-
-        var menuData = [
-            //{content:'News Site',header: true},//定义子标题栏
-            //{content:'修改',url : 'http://www.163.com'},//链接跳转型菜单项目
-            {content:'修改',callback : function(){
-                    //doEdit(this);
-                }},
-            {content:'sm_divider'},//分隔栏
-            //点击后执行回调的菜单项目
-            {content:'删除',callback : function(){
-                    alert('you can do anything in callback!');
-                }}
-        ];
-
-
-
-        $(function(){
-            //javascript 设置
+            //下拉菜单绑定
+            /**
+             * 菜单使用的数据格式
+             * content  [string]   : 菜单项目显示文本，支持HTML格式（设置内容为“sm_divider”可生成分隔栏）
+             * header   [boolean]  : 是否为子标题栏
+             * url      [string]   : 需要跳转的链接
+             * callback [function] : 需要执行的回调函数
+             * disabled [boolean]  : 是否禁用菜单项目
+             */
+            var menuData = [
+                //{content:'News Site',header: true},//定义子标题栏
+                //{content:'修改',url : 'http://www.163.com'},//链接跳转型菜单项目
+                {content:'新增',callback : function(){
+                        $.operate.addFull();
+                    }},
+                {content:'sm_divider'},//分隔栏
+                //点击后执行回调的菜单项目
+                {content:'修改',callback : function(){
+                        alert('you can do anything in callback!');
+                    }}
+            ];
             $('#menuBtn').click(function(){
                 $(this).selectMenu({
                     //设置常规菜单模式
@@ -182,13 +164,20 @@
             //             alert(row.itemid);
             //         }
             //     }
-            //
             // });
 
+		});
 
-        });
 
+		function batchData() {
+			var url =ctx + "demo/all/batchData";
+			$.operate.post(url,$("#form-demo-redis").serialize());
+		}
 
+		function clearAll() {
+			var url =ctx + "demo/all/clearAll";
+			$.operate.post(url,$("#form-demo-redis").serialize());
+		}
 
     </script>
 </body>
