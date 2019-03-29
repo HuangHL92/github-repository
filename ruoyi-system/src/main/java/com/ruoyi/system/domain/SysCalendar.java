@@ -32,7 +32,7 @@ public class SysCalendar extends BaseEntity
 	/** 年度 */
 	private Integer years;
 	/** 日期 */
-	@Excel(name = "日期")
+	@Excel(name = "日期(如20190329)",width = 25)
     private Integer days;
 	/** 日期类型 */
 	@Excel(name = "日期类型(节假日/工作日)",readConverterExp = "3=节假日,4=工作日",width = 25,type = Excel.Type.EXPORT)
