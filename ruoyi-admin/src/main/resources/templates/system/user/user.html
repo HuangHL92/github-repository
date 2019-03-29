@@ -147,7 +147,7 @@
                         var actions = [];
                         var url = '';
                         if (value) {
-                            url = '/common/upload/getBase64Img?path=' + value;
+                            url = '/profile/upload/' + value;
                         } else {
                             if (row.sex == '0') {
                                 url = '/img/male.png';
@@ -169,8 +169,8 @@
                     width: 150
 		        },
 		        {
-		            field: 'dept.deptName',
-		            title: '单位'
+		            field: 'dept.orgStructure',
+		            title: '单位/部门'
 		        },
 				// {
 				// 	field: 'post',
@@ -205,7 +205,7 @@
 		        {
 		            field: 'loginDate',
 		            title: '登录时间',
-                    width: 100
+                    width: 150
 		        },
 		        {
 		            title: '操作',

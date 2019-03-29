@@ -28,6 +28,9 @@ public class SysDept extends BaseEntity
     /** 部门名称 */
     private String deptName;
 
+    /** 组织架构 */
+    private String orgStructure;
+
     /** 显示顺序 */
     private String orderNum;
 
@@ -111,6 +114,14 @@ public class SysDept extends BaseEntity
     public void setDeptName(String deptName)
     {
         this.deptName = deptName;
+    }
+
+    public String getOrgStructure() {
+        return orgStructure;
+    }
+
+    public void setOrgStructure(String orgStructure) {
+        this.orgStructure = orgStructure;
     }
 
     public String getOrderNum()

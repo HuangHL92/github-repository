@@ -231,7 +231,7 @@ public class FileUploadController extends BaseController {
             }
             ;
             //Hutool读取文件
-            FileReader fileReader = new FileReader(FileUtil.file("/"+ Global.getUploadPath()+filePath));
+            FileReader fileReader = new FileReader(FileUtil.file( Global.getUploadPath()+filePath));
             if(fileName.isEmpty()){
                 fileName=FileUtil.getName(fileReader.getFile());
                 //fileName=fileName.substring(31,fileName.length()-31);
@@ -292,40 +292,6 @@ public class FileUploadController extends BaseController {
         json.put("attachmentNo",attachment.getAttachmentNo());
         json.put("fileList",rlist);
         return json;
-    }
-
-    /**
-     * 输出图片
-     * @param path
-     * @param response
-     */
-    @RequestMapping("/getBase64Img")
-    @ResponseBody
-    public void showBase64Image(String path, HttpServletResponse response) {
-        if (StrUtil.isNotEmpty(path)) {
-            SysAttachment att = new SysAttachment();
-            try {
-                FileReader fileReader = new FileReader(Global.getUploadPath() + path);
-                String fileName = FileUtil.getName(fileReader.getFile());
-                att.setFileName(fileName);
-                att.setPath(path);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            String ext = FileUtil.extName(att.getFileName());
-            if ("png".equals(ext) || "jpg".equals(ext) || "jpeg".equals(ext) || "bmp".equals(ext)) {
-                try {
-                    byte[] b = FileUtil.readBytes(Global.getUploadPath() + att.getPath());
-                    String data = "data:image/jpg;base64," + Base64.encode(b);
-                    String base64Image = data.split(",")[1];
-                    byte[] imageBytes = javax.xml.bind.DatatypeConverter.parseBase64Binary(base64Image);
-                    BufferedImage img = ImageIO.read(new ByteArrayInputStream(imageBytes));
-                    ImageIO.write(img, ext, response.getOutputStream());
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
     }
 
 
