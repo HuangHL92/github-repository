@@ -11,7 +11,10 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								关键字：<input type="text" name="params[keyword]" placeholder="年度/日期"/>
+								检索年份：<select name="years" th:with="type=${@dict.getType('biz_calendar_years')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"th:width="100"></option>
+							</select>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -77,9 +80,8 @@
 					sortable: true
 				},
 				{
-					field : 'days',
+					field : 'dateStr',
 					title : '日期',
-					sortable: true
 				},
 				{
 					field : 'dayType', 
@@ -109,8 +111,7 @@
 	<div class="col-xs-offset-1">
 		<input type="file" id="file" name="file"/>
 		<div class="mt10 pt5">
-			<input type="checkbox" id="updateSupport" name="updateSupport" title="如果日历已经存在，更新这条数据。"> 是否更新已经存在的日历数据
-			&nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+			<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
 		</div>
 		<font color="red" class="pull-left mt10">
 			提示：仅允许导入“xls”或“xlsx”格式文件！

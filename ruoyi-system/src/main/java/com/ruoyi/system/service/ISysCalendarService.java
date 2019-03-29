@@ -23,9 +23,9 @@ public interface ISysCalendarService extends IService<SysCalendar>
     /**
      * 导入数据
      * @param calendarList
-     * @param updateSupport
+     * @param
      * @param operName
      * @return
      */
-    String importCalendar(List<SysCalendar> calendarList, boolean updateSupport, String operName);
+    String importCalendar(List<SysCalendar> calendarList, String operName);
 }

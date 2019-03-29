@@ -75,13 +75,13 @@ public class SysCalendarController extends BaseController
     {
     	List<SysCalendar> list = sysCalendarService.selectList(sysCalendar);
         ExcelUtil<SysCalendar> util = new ExcelUtil<SysCalendar>(SysCalendar.class);
-        return util.exportExcel(list, "canlendar");
+        return util.exportExcel(list, "日历数据");
     }
 
 	/**
 	 * 导入日历
 	 * @param file
-	 * @param updateSupport
+	 * @param
 	 * @return
 	 * @throws Exception
 	 */
@@ -89,12 +89,12 @@ public class SysCalendarController extends BaseController
 	@RequiresPermissions("system:calendar:import")
 	@PostMapping("/importData")
 	@ResponseBody
-	public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+	public AjaxResult importData(MultipartFile file) throws Exception
 	{
 		ExcelUtil<SysCalendar> util = new ExcelUtil<SysCalendar>(SysCalendar.class);
 		List<SysCalendar> calendarList = util.importExcel(file.getInputStream());
 		String operName = String.valueOf(getSysUser().getUserId());
-		String message = sysCalendarService.importCalendar(calendarList, updateSupport, operName);
+		String message = sysCalendarService.importCalendar(calendarList, operName);
 		return AjaxResult.success(message);
 	}
 
