@@ -11,5 +11,24 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SysCalendarMapper extends BaseMapper<SysCalendar>
 {
-	
+    /**
+     * 插入日历
+     * @param sysCalendar
+     * @return
+     */
+    int insertCalendar(SysCalendar sysCalendar);
+
+    /**
+     * 根据日期查询日历
+     * @param days
+     * @return
+     */
+    SysCalendar selectCalendarByDays(Integer days);
+
+    /**
+     * 更新日历
+     * @param calendar
+     * @return
+     */
+    int updateCalendar(SysCalendar calendar);
 }

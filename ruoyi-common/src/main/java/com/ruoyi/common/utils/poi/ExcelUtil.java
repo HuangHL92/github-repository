@@ -330,7 +330,7 @@ public class ExcelUtil<T>
                         font.setBold(true);
                         // 选择需要用到的字体格式
                         cellStyle.setFont(font);
-                        cellStyle.setFillForegroundColor(HSSFColorPredefined.LIGHT_YELLOW.getIndex());
+                        cellStyle.setFillForegroundColor((short) 0x2B);
                         // 设置列宽
                         sheet.setColumnWidth(i, (int) ((attr.width() + 0.72) * 256));
                         row.setHeight((short) (attr.height() * 20));
