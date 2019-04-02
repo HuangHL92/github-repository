@@ -229,6 +229,10 @@ auth:
     client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
     redirect-uri: http://localhost:81/oauth/gitee/login
 
+#新浪:shorturl地址
+sina:
+  shortapi:
+      url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
 # 正则表达式(未启用)
 #regex:
 #  password: ^[a-zA-Z0-9]{6,20}$

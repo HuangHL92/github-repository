@@ -2,8 +2,10 @@ package com.ruoyi.api;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.extra.mail.MailUtil;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.ApiResult;
@@ -22,12 +24,15 @@ import com.ruoyi.system.domain.SysCalendar;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysCalendarService;
 import com.ruoyi.system.service.impl.SysCalendarServiceImpl;
+import com.ruoyi.wx.mp.utils.JsonUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sound.midi.Soundbank;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +47,8 @@ import java.util.List;
 @RequestMapping("/api/comm/*")
 public class CommController extends ApiBaseController {
 
-
+    @Value("${sina.shortapi.url}")
+    private String sinaShortApiUrl;
 
     @Autowired
     private ISysCalendarService calendarService;
@@ -191,6 +197,40 @@ public class CommController extends ApiBaseController {
         }
 
         return ApiResult.success(days);
+    }
+
+    /**
+     * 短网址计算
+     * @param url
+     * @return short_url
+     */
+    @ApiOperation("短网址计算（计算目标url的短网址）")
+    @PostMapping("getShortUrl")
+    public ApiResult sinaShortUrl(@RequestParam(name="url") String url)
+    {
+        //1.参数验证
+        if(StringUtils.isEmpty(url)) {
+            return ApiResult.error(ResponseCode.ERROR_REQUEST);
+        }
+        //验证url是否有效
+        if (!RegexUtils.isUrl(url)){
+            return ApiResult.error("无效的url!");
+        }
+
+        try {
+            //拼接url拿到url_short字段
+            String result = HttpUtil.get(sinaShortApiUrl + url);
+            JSONObject jsonObject = JSONUtil.parseArray(result).getJSONObject(0);
+            String shortUrl = (String) jsonObject.get("url_short");
+
+            if (StringUtils.isEmpty(shortUrl)){
+                return ApiResult.error("无效的url!");
+            }
+
+            return ApiResult.success(shortUrl);
+        }catch (Exception ex) {
+            return ApiResult.error("无效的url!");
+        }
     }
 
 }
