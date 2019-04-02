@@ -37,7 +37,7 @@ import java.lang.reflect.Method;
 @Component
 public class AuthenticationAspect {
 
-    private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationAspect.class);
 
     @Value("${api.appsecret}")
     private String appsecret;

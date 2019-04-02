@@ -14,7 +14,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务端口 （TODO 根据项目情况自行更换）
-  port: 81
+  port: 83
   servlet:
     # 项目contextPath
     context-path: /
@@ -154,7 +154,7 @@ shiro:
     # 相隔多久检查一次session的有效性，默认就是10分钟
     validationInterval: 10
     # 是否将用户在线信息写入数据库
-    dbSyncflag: true
+    dbSyncflag: false
 
 # 防止XSS攻击
 xss: 

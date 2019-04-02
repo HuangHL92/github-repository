@@ -59,6 +59,7 @@
         <module>ruoyi-common</module>
         <module>ruoyi-web</module>
         <module>ruoyi-wx</module>
+        <module>ruoyi-api</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -129,14 +129,8 @@
             <artifactId>ruoyi-system</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
-        
-        <!-- 定时任务-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-quartz</artifactId>
-            <version>${ruoyi.version}</version>
-        </dependency>
-        
+
+
         <!-- 代码生成-->
         <dependency>
             <groupId>com.ruoyi</groupId>
@@ -168,19 +162,7 @@
 			<artifactId>jna-platform</artifactId>
 		</dependency>
 
-		<!-- swagger2-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-		
-		<!-- swagger2-UI-->
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
+
 
 		<!-- spring-boot-starter-data-redis 加入redis缓存 -->
 		<dependency>
