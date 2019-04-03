@@ -5,10 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.security.cert.X509Certificate;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -16,6 +13,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -216,6 +215,30 @@ public class HttpUtils
             log.error("调用HttpsUtil.sendSSLPost Exception, url=" + url + ",param=" + param, e);
         }
         return result.toString();
+    }
+
+
+    public static String getClientIP(HttpServletRequest httpservletrequest) {
+        if (httpservletrequest == null)
+            return null;
+        String s = httpservletrequest.getHeader("X-Forwarded-For");
+        if (s == null || s.length() == 0 || "unknown".equalsIgnoreCase(s))
+            s = httpservletrequest.getHeader("Proxy-Client-IP");
+        if (s == null || s.length() == 0 || "unknown".equalsIgnoreCase(s))
+            s = httpservletrequest.getHeader("WL-Proxy-Client-IP");
+        if (s == null || s.length() == 0 || "unknown".equalsIgnoreCase(s))
+            s = httpservletrequest.getHeader("HTTP_CLIENT_IP");
+        if (s == null || s.length() == 0 || "unknown".equalsIgnoreCase(s))
+            s = httpservletrequest.getHeader("HTTP_X_FORWARDED_FOR");
+        if (s == null || s.length() == 0 || "unknown".equalsIgnoreCase(s))
+            s = httpservletrequest.getRemoteAddr();
+        if ("127.0.0.1".equals(s) || "0:0:0:0:0:0:0:1".equals(s))
+            try {
+                s = InetAddress.getLocalHost().getHostAddress();
+            }
+            catch (UnknownHostException unknownhostexception) {
+            }
+        return s;
     }
 
     private static class TrustAnyTrustManager implements X509TrustManager

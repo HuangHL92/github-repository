@@ -34,7 +34,7 @@ spring:
             validationQuery: SELECT 1 FROM DUAL
             testWhileIdle: true
             testOnBorrow: false
-            testOnReturn: false      
+            testOnReturn: false
             statViewServlet:
                 enabled: true
                 url-pattern: /monitor/druid/*

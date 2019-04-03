@@ -1,10 +1,10 @@
 package com.ruoyi.framework.aspectj;
 
 import cn.hutool.core.date.DateTime;
-import cn.hutool.http.HttpUtil;
 import com.google.gson.Gson;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.http.HttpUtils;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.aspectj.lang.JoinPoint;
@@ -109,7 +109,8 @@ public class ApiLogAspect
             eu.bitwalker.useragentutils.DeviceType deviceType = operatingSystem.getDeviceType(); // 设备类型
             String url = request.getRequestURL().toString();
             // 请求的地址
-            String ip = HttpUtil.getClientIP(request);
+            //String ip = HttpUtil.getClientIP(request);
+            String ip = HttpUtils.getClientIP(request);
             sb.append("\r\n").append("*******************************请求信息-S***************************").append("\r\n");
             sb.append("URL：" + url).append("\r\n");
             sb.append("IP：" + ip).append("\r\n");
