@@ -78,6 +78,12 @@
             <artifactId>spring-web</artifactId>
         </dependency>
 
+        <!--session共享-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
+        </dependency>
+
 
         <!-- SpringBoot集成mybatis-plus框架 -->
 		<dependency>
