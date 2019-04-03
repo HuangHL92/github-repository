@@ -7,7 +7,6 @@ import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.mapper.DemoMapper;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.common.utils.StringUtils;
-import javafx.scene.control.Pagination;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
