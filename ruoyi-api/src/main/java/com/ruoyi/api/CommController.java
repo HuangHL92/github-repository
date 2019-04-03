@@ -195,8 +195,8 @@ public class CommController extends ApiBaseController {
      * @return short_url
      */
     @ApiOperation("短网址计算（计算目标url的短网址）")
-    @PostMapping("getShortUrl")
-    public ApiResult sinaShortUrl(@RequestParam(name="url") String url)
+    @GetMapping("getShortUrl")
+    public ApiResult getShortUrl(@RequestParam(name="url") String url)
     {
         //1.参数验证
         if(StringUtils.isEmpty(url)) {
