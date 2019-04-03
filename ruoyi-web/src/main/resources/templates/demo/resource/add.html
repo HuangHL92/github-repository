@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<!--头部引用-->
+<head th:include="include :: header"></head>
+
+<body class="white-bg">
+
+<!--表单区域-->
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <!--如果页面有多个form（默认提交第一个），这种情况下想强制提交某一个请将id命名为****-MAIN-->
+    <form class="form-horizontal m" id="form-demo-add" th:action="*{formAction}" th:object="${demo}">
+
+        <input id="id" name="id" type="hidden" th:field="*{id}"/>
+
+        <input id="create_by" name="create_by" type="hidden" value=""/>
+        <div class="layui-form-mid layui-word-aux">信息项字段修改后，请手动更新相关应用，否则可能影响数据写入。</div>
+        <!--非明细数据-->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>基本信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">名称：</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" name="name" id="name" class="form-control required"
+                                       th:field="*{name}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">来源单位：</label>
+                            <div class="col-sm-4">
+                                <select data-toggle="select" data-type="dept" id="depts" th:value="*{depts}">
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">来源系统：</label>
+                            <div class="col-sm-4">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reporter"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">责任单位：</label>
+                            <div class="col-sm-4">
+                                <select data-toggle="select" data-type="dept" id="dept" th:value="*{depts}">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">描述：</label>
+                            <div class="col-sm-10">
+                                    <textarea id="remark" name="remark" class="form-control" rows="3"
+                                              th:field="*{remark}"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--配置信息-->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>配置信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">数据分类：</label>
+                            <div class="col-sm-2">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reporterss"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reporteree"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reporterqq"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">该数据项归类到的选择的分类中</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">接入方式：</label>
+                            <div class="col-sm-2">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reportercc"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                            <label class="col-sm-2 control-label">更新频率：</label>
+                            <div class="col-sm-2">
+                                <input type="text" name="Name" id="asdf1" class="form-control required"
+                                       th:field="*{name}" placeholder="输入文字描述">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">此处只启说明作用，不作为实际参数</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">保留最新：</label>
+                            <div class="col-sm-2">
+                                <input type="text" name="Name" id="asdf" class="form-control required"
+                                       th:field="*{name}">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">数据保留最新N天数据（0:代表不限制）</div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">共享方式：</label>
+                            <div class="col-sm-2">
+                                <select data-toggle="select" data-type="user" data-radio="true" id="reporter11"
+                                        th:value="*{reporter}" data-class="required" data-skin="warm">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--数据项信息-->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>数据项信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">表名(物理)：</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="Name" id="cadsfs" class="form-control required"
+                                       th:field="*{name}"/>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="layui-form-mid layui-word-aux">数据保留最新N天数据（0:代表不限制）</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">表名(中文)：</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="NameChina" id="NameChina" class="form-control required"
+                                       th:field="*{name}"/>
+
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="checkbox i-checks">
+                                    <input type="checkbox" name="ckb1" value="" checked="">
+                                    勾选后，数据库表结构修改才起效。
+                                </div>
+                            </div>
+                            <div class="btn-group-sm hidden-xs" id="toolbar" role="group"
+                                 style="margin-right: 9px; margin-top: 20px; float: right;">
+                                <a class="btn btn-info" onclick="$.table.importExcel()">
+                                    <i class="fa fa-upload"></i> 导入数据
+                                </a>
+                                <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                                    <i class="fa fa-download"></i> 导出数据
+                                </a>
+                                <a class="btn btn-success" onclick="addtr('mytable')">
+                                    <i class="fa fa-plus"></i> 添加字段
+                                </a>
+                            </div>
+                            <div class="ibox-content">
+                                <table class="table table-bordered" id="mytable">
+                                    <thead>
+                                    <tr>
+                                        <th>字段名(英文)</th>
+                                        <th>中文名</th>
+                                        <th th:width="100">类型</th>
+                                        <th th:width="80">长度</th>
+                                        <th>描述</th>
+                                        <th th:width="80">列表显示</th>
+                                        <th th:width="80">显示顺序</th>
+                                        <th th:width="80" style="text-align: center">
+                                            <small style="align:center;">
+                                                <button class="btn btn-primary btn-xs" type="button"
+                                                        onclick="addtr('mytable')">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            </small>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="position: relative">
+                                            <input type="text" data-name="num"
+                                                   class="form-control number"
+                                                   maxlength="9"></td>
+                                        <input type="hidden" class="form-control" maxlength="64" data-type="id"
+                                               data-name="productId"/>
+                                        <input type="hidden" class="form-control required" maxlength="300"
+                                               data-type="name"
+                                               data-name="product"/>
+                                        </td>
+
+                                        <td style="position: relative"><input type="text" data-name="num"
+                                                                              class="form-control number"
+                                                                              maxlength="9"></td>
+                                        <td style="position: relative">
+                                            <select class="form-control required bill-add-select2">
+                                                <option value="">选择</option>
+                                            </select>
+                                        </td>
+                                        <td style="position: relative"><input type="text" data-name="price"
+                                                                              class="form-control number"
+                                                                              value="100" maxlength="10"></td>
+                                        <td style="position: relative"><input type="text" data-name="amount"
+                                                                              class="form-control number"
+                                                                              maxlength="10"></td>
+                                        <td style="position: relative">
+                                            <div class="checkbox i-checks" style="" align="center">
+                                                <input type="checkbox" name="ckb1" value="" >
+                                            </div>
+                                        </td>
+                                        <td style="position: relative"><input type="text" data-name="price"
+                                                                              class="form-control number"
+                                                                              maxlength="10"></td>
+                                        <td style="text-align: center">
+                                            <button class="btn btn-danger btn-xs" type="button"
+                                                    onclick="deltr(this)">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!--底部引用-->
+<div th:include="include::footer"></div>
+
+<!--页面JS-->
+<script type="text/javascript">
+
+    var $copy = {};
+
+    $(function () {
+        removeFirstRowDelBtn(); // 执行删除
+        // 复制tr对象保存副本
+        var trlength = $("#mytable tr").length - 1; // 去除th那行
+        $copy = $("#mytable tr").eq(trlength).clone(); // 复制最后一行
+    })
+
+    // 定义操作栏的移除按钮
+    var rmbtn = '<button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">' +
+        '<i class="fa fa-times"></i>\n' +
+        '</button>';
+
+    function addtr(tableid, refreshIndex) {
+        if ($copy) {
+            var $$copy = $copy.clone();
+            $$copy.appendTo("#" + tableid);
+            // 检查复制行是否有btn没有就添加btn
+            var btncount = $$copy.find('td button').length;
+            if (btncount == 0) {
+                $(rmbtn).appendTo($$copy.children('td').eq(-1));
+            }
+        }
+    }
+
+    function deltr(obj) {
+        var tr = obj.parentNode.parentNode;//obj.parentNode.parentNode是<tr>
+        var trlength = $('#mytable tr').length - 1; // 去除th那行
+        if (trlength > 1) {
+            tr.remove();
+            removeFirstRowDelBtn
+        }
+
+    }
+
+    // 删除第一行的btn
+    function removeFirstRowDelBtn() {
+        $('#mytable tr').eq(1).find('td button').remove();
+    }
+</script>
+
+</body>
+</html>
