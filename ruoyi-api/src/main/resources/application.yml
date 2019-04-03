@@ -14,7 +14,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务端口 （TODO 根据项目情况自行更换）
-  port: 81
+  port: 83
   servlet:
     # 项目contextPath
     context-path: /
@@ -154,7 +154,7 @@ shiro:
     # 相隔多久检查一次session的有效性，默认就是10分钟
     validationInterval: 10
     # 是否将用户在线信息写入数据库
-    dbSyncflag: true
+    dbSyncflag: false
 
 # 防止XSS攻击
 xss: 
@@ -231,10 +231,6 @@ auth:
     client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
     redirect-uri: http://localhost:81/oauth/gitee/login
 
-#新浪:shorturl地址
-sina:
-  shortapi:
-      url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
 # 正则表达式(未启用)
 #regex:
 #  password: ^[a-zA-Z0-9]{6,20}$

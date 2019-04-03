@@ -21,11 +21,9 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.*;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.shiro.realm.UserRealm;
@@ -38,8 +36,6 @@ import com.ruoyi.framework.shiro.web.filter.sync.SyncOnlineSessionFilter;
 import com.ruoyi.framework.shiro.web.session.OnlineWebSessionManager;
 import com.ruoyi.framework.shiro.web.session.SpringSessionValidationScheduler;
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
-import org.springframework.core.env.Environment;
-import org.springframework.core.type.AnnotatedTypeMetadata;
 
 /**
  * 权限配置加载
@@ -346,6 +342,7 @@ public class ShiroConfig
         filterChainDefinitionMap.put("/wx/**", "anon");
         filterChainDefinitionMap.put("/oauth/**", "anon");
         filterChainDefinitionMap.put("/register", "anon,captchaValidate");
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
 
 
         // 系统权限列表

@@ -376,7 +376,8 @@ public class DemoController extends BaseController {
     @ResponseBody
     public AjaxResult saveRedis(HttpServletRequest request) {
 
-        String key = request.getParameter("key");
+        String key = request.getParameter("" +
+                "key");
         String value = request.getParameter("value");
         if (StringUtils.isAnyBlank(key, value)) {
             return error("请输入key和value!");

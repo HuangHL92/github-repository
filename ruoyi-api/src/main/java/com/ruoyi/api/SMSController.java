@@ -1,13 +1,9 @@
 package com.ruoyi.api;
 
-import cn.hutool.core.util.RandomUtil;
-import com.ruoyi.common.annotation.ValidateRequest;
-import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

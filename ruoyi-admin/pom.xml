@@ -39,6 +39,20 @@
             <version>${ruoyi.version}</version>
         </dependency>
 
+        <!-- 接口模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-api</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
+
+
+        <!-- 定时任务-->
+        <dependency>
+        <groupId>com.ruoyi</groupId>
+        <artifactId>ruoyi-quartz</artifactId>
+        <version>${ruoyi.version}</version>
+        </dependency>
 
     </dependencies>
 
