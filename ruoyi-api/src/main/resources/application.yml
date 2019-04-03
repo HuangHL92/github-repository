@@ -183,7 +183,9 @@ jiyun:
     isopen: true #是否开启邮件通知
   websocket:
     url: ws://localhost:81/socketServer #（TODO websocket服务地址，根据项目情况自行更换）
-
+  #shorturl地址
+  shortapi:
+    url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
 # 微信公众号配置
 wx:
   mp:
