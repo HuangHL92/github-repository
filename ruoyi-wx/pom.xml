@@ -13,18 +13,6 @@
 
     <dependencies>
 
-        <!-- 核心模块-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-framework</artifactId>
-            <version>${ruoyi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-common</artifactId>
-            <version>${ruoyi.version}</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on -->
         <dependency>
             <groupId>org.bouncycastle</groupId>

@@ -1,5 +1,6 @@
 package com.ruoyi.api;
 
+import com.ruoyi.base.ApiBaseController;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.utils.StringUtils;
 import io.swagger.annotations.Api;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "/sms", description = "短信接口服务")
 @RestController
 @RequestMapping("/api/sms/*")
-public class SMSController {
+public class SMSController extends ApiBaseController {
 
 
     @ApiOperation("发送短信（单条）")

@@ -54,9 +54,11 @@ public class AuthController extends ApiBaseController {
         }
 
         //3. 生成令牌写入redis
-        int exptime = expires*60*1000; //多少分钟后过期
-        long etime1=(System.currentTimeMillis()+exptime)/1000L;//过期时间
-        String token = createToken(account,password,exptime);
+        //多少分钟后过期
+        int etime = expires*60*1000;
+        //过期时间
+        long etime1=(System.currentTimeMillis()+etime)/1000L;
+        String token = createToken(account,password,etime);
 
         HashMap map =new HashMap();
         map.put("expires", etime1);
@@ -85,10 +87,12 @@ public class AuthController extends ApiBaseController {
 
         //3.生成令牌写入redis
         String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
-        int exptime = expires*60*1000; //多少分钟后过期
-        long etime1=(System.currentTimeMillis()+exptime)/1000L;//过期时间
+        //多少分钟后过期
+        int etime = expires*60*1000;
+        //过期时间
+        long etime1=(System.currentTimeMillis()+etime)/1000L;
         if(token==null) {
-            token = createToken(account,password,exptime);
+            token = createToken(account,password,etime);
         }
 
         HashMap map =new HashMap();
