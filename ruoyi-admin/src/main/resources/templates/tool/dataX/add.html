@@ -51,7 +51,7 @@
                                        type="text" placeholder="输入源数据数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
                             </div>
                         </div>
-                       
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">用户名：</label>
                             <div class="col-sm-8">
@@ -60,7 +60,7 @@
                                        type="text" placeholder="输入数据库用户名">
                             </div>
                         </div>
-                    
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">密码：</label>
                             <div class="col-sm-8">
@@ -69,7 +69,7 @@
                                        type="text" placeholder="输入数据库密码">
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">源数据表名：</label>
                             <div class="col-sm-8">
@@ -78,15 +78,6 @@
                                        type="text" placeholder="输入源数据库数据表名">
                             </div>
                         </div>
-                 
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">Sql条件：</label>
-                            <div class="col-sm-8">
-                                <textarea id="readerWhere" name="readerWhere" th:field="*{readerWhere}" rows="5"
-                                          class="form-control" placeholder="输入源数据增量Sql"></textarea>
-                            </div>
-                        </div>
-                        
                         <div class="form-group">
                             <label class="col-sm-3 control-label">源数据列名：</label>
                             <div class="col-sm-8">
@@ -95,7 +86,18 @@
                                        type="text" placeholder="输入源数据数据库列名,多列请用','隔开">
                             </div>
                         </div>
-                        
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Sql条件：</label>
+                            <div class="col-sm-4">
+                                <textarea id="readerWhere" name="readerWhere" th:field="*{readerWhere}" rows="5"
+                                          class="form-control" placeholder="输入源数据增量Sql"></textarea>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">
+                                例:只想同步表中某几列数据只需写入：<br>
+                                SELECT column1, column2, column3 FROM table WHERE 1=1<br>
+                                填写该行同步更新时会忽略数据源列名及表名
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">源数据数据库主键：</label>
                             <div class="col-sm-8">
@@ -127,7 +129,7 @@
                                        type="text" placeholder="输入写入数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">用户名：</label>
                             <div class="col-sm-8">
@@ -136,7 +138,7 @@
                                        type="text" placeholder="输入数据库用户名">
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">密码：</label>
                             <div class="col-sm-8">
@@ -160,13 +162,13 @@
                             <div class="col-sm-8">
                                 <select class="form-control required" id="writerMode" name="writerMode"
                                         th:field="*{writerMode}">
-                                    <option value="insert" label="insert">insert</option>
-                                    <option value="replace" label="replace">replace</option>
-                                    <option value="update" label="update">update</option>
+                                    <option value="insert" label="insert">插入</option>
+                                    <option value="replace" label="replace">覆盖</option>
+                                    <option value="update" label="update">更新</option>
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <label class="col-sm-3 control-label">执行前SQL：</label>
                             <div class="col-sm-8">
@@ -174,7 +176,7 @@
                                           rows="5" placeholder="输入执行前需要执行的SQL"></textarea>
                             </div>
                         </div>
-                        
+
 
                     </div>
                 </div>
