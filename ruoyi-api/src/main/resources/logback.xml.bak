@@ -10,7 +10,7 @@
 			<pattern>${log.pattern}</pattern>
 		</encoder>
 	</appender>
-	
+
 	<!-- 系统日志输出 -->
 	<appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
 	    <file>${log.path}/sys-info.log</file>
@@ -29,7 +29,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
 	</appender>
-	
+
 	<appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
 	    <file>${log.path}/sys-error.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -46,7 +46,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
     </appender>
-	
+
 	<!-- 用户访问日志输出  -->
     <appender name="sys-user" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${log.path}/sys-user.log</file>
@@ -93,7 +93,7 @@
         </filter>
     </appender>
 
-	
+
 	<!-- 显示形成的sql、使用的参数、结果集 -->
 	<!--
 		<logger name="java.sql" level="debug" />
@@ -105,13 +105,13 @@
 	<root level="info">
 		<appender-ref ref="console" />
 	</root>
-	
+
 	<!--系统操作日志-->
     <root level="info">
         <appender-ref ref="file_info" />
         <appender-ref ref="file_error" />
     </root>
-	
+
 	<!--系统用户操作日志-->
     <logger name="sys-user" level="info">
         <appender-ref ref="sys-user"/>
@@ -122,4 +122,4 @@
         <appender-ref ref="restful_error" />
     </logger>
 
-</configuration> 
+</configuration>

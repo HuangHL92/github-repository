@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-dsonJobIn-add" th:action="*{formAction}" th:object="${dsonJobIn}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <h3>源数据表信息:</h3>
+        <hr style="border:1px dashed gray;height:1px">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据库连接：</label>
+            <div class="col-sm-8">
+                <input id="readerPort" name="readerPort" th:field="*{readerPort}" class="form-control required"
+                       type="text" placeholder="输入源数据数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据库用户名：</label>
+            <div class="col-sm-8">
+                <input id="readerUserName" name="readerUserName" th:field="*{readerUserName}"
+                       class="form-control required"
+                       type="text" placeholder="输入数据库用户名">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据库密码：</label>
+            <div class="col-sm-8">
+                <input id="readerPassword" name="readerPassword" th:field="*{readerPassword}"
+                       class="form-control required"
+                       type="text" placeholder="输入数据库密码">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据表名：</label>
+            <div class="col-sm-8">
+                <input id="readerTableName" name="readerTableName" th:field="*{readerTableName}"
+                       class="form-control required"
+                       type="text" placeholder="输入源数据库数据表名">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据增量Sql：</label>
+            <div class="col-sm-8">
+                <input id="readerWhere" name="readerWhere" th:field="*{readerWhere}" class="form-control"
+                       type="text" placeholder="输入源数据增量Sql">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据列名：</label>
+            <div class="col-sm-8">
+                <input id="readerColumn" name="readerColumn" th:field="*{readerColumn}" class="form-control required"
+                       type="text" placeholder="输入源数据数据库列名,多列请用','隔开">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">源数据数据库主键：</label>
+            <div class="col-sm-8">
+                <input id="splitPk" name="splitPk" th:field="*{splitPk}" class="form-control required"
+                       type="text" placeholder="输入源数据数据库主键">
+            </div>
+        </div>
+
+        <h3>写入表信息:</h3>
+        <hr style="border:1px dashed gray;height:1px">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">写入表链接：</label>
+            <div class="col-sm-8">
+                <input id="writerPort" name="writerPort" th:field="*{writerPort}" class="form-control required"
+                       type="text" placeholder="输入写入数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">同步表用户名：</label>
+            <div class="col-sm-8">
+                <input id="writerUserName" name="writerUserName" th:field="*{writerUserName}"
+                       class="form-control required"
+                       type="text" placeholder="输入数据库用户名">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">同步表密码：</label>
+            <div class="col-sm-8">
+                <input id="writerPassword" name="writerPassword" th:field="*{writerPassword}"
+                       class="form-control required"
+                       type="text" placeholder="输入数据库密码">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行模式：</label>
+            <div class="col-sm-8">
+                <select class="form-control required" id="writerMode" name="writerMode" th:field="*{writerMode}">
+                    <option value="insert" label="insert">insert</option>
+                    <option value="replace" label="replace">replace</option>
+                    <option value="update" label="update">update</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">执行前SQL：</label>
+            <div class="col-sm-8">
+                <input id="perSql" name="perSql" th:field="*{perSql}" class="form-control required"
+                       type="text" placeholder="输入执行前需要执行的SQL">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">写入表名：</label>
+            <div class="col-sm-8">
+                <input id="writerTableName" name="writerTableName" th:field="*{writerTableName}"
+                       class="form-control required"
+                       type="text" placeholder="输入写入数据表名">
+            </div>
+        </div>
+
+        <h3>作业文件名:</h3>
+        <hr style="border:1px dashed gray;height:1px">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">配置文件名：</label>
+            <div class="col-sm-8">
+                <input id="fileName" name="fileName" th:field="*{fileName}" class="form-control required" type="text">
+            </div>
+        </div>
+        <h3>定时任务管理:</h3>
+        <div class="form-group">
+
+            <input type="hidden" name="isSchedule" id="isSchedule">
+            <label class="col-sm-3 control-label">定时任务状态：</label>
+            <div class="col-sm-8">
+                <div class="onoffswitch">
+                    <input type="checkbox" th:checked="*{isSchedule == 1}? true : false" class="onoffswitch-checkbox"
+                           id="isSchedule_N" name="isSchedule_N">
+                    <label class="onoffswitch-label" for="isSchedule_N">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <hr style="border:1px dashed gray;height:1px">
+
+        <div class="form-group" id="scheduleCronDiv">
+            <label class="col-sm-3 control-label">定时表达式：</label>
+            <div class="col-sm-8">
+                <input id="scheduleCron" name="scheduleCron" th:field="*{scheduleCron}" class="form-control required"
+                       type="text">
+                <div style="margin-top: 10px;" class="alert alert-info alert-dismissable">
+                    <strong>Cron示例：</strong>前后不要有空格<br>
+                    &nbsp;*/5 * * * * ? 每隔5秒执行<br>
+                    &nbsp;0 */1 * * * ? 每隔1分钟执行<br>
+                    &nbsp;0 0 23 * * ? 每天23点执行<br>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "dsonJobIn";
+    var cronPrefix = ctx + "monitor/job"
+
+    $(function () {
+        if ([[${dsonJobIn.isSchedule==0}]] || [[${dsonJobIn.isSchedule==null}]]) {
+            $("#scheduleCron").parents(".form-group").hide();
+            $("#scheduleCron").val('')
+        }
+
+        $("#form-dsonJobIn-add").click(function (event) {
+            if ($("#isSchedule_N").is(":checked") == false) {
+                $("#scheduleCron").parents(".form-group").hide();
+            } else {
+                $("#scheduleCron").parents(".form-group").show();
+            }
+        })
+
+    })
+    $("#form-dsonJobIn-add").validate({
+        rules: {
+            scheduleCron: {
+                required: true,
+                remote: {
+                    url: cronPrefix + "/checkCronExpressionIsValid",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "cronExpression": function () {
+                            return $.common.trim($("#scheduleCron").val());
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return data;
+                    }
+                }
+            },
+            fileName: {
+                remote: {
+                    url: prefix + "/validateFileName",
+                    type: "post",
+                    dataType: "json",
+                    data: {
+                        "fileName": function () {
+                            return $.common.trim($("#fileName").val());
+                        },
+                        "oldFileName": function () {
+                            return $.common.trim([[${dsonJobIn.fileName}]]);
+                        }
+                    },
+                    dataFilter: function (data, type) {
+                        return $.validate.unique(data);
+                    }
+                }
+            }
+        },
+        messages: {
+            "fileName": {
+                remote: "文件名已存在"
+            },
+            "scheduleCron": {
+                remote: "corn表达式不正确"
+            }
+        }
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $("#isSchedule").val($("#isSchedule_N").is(':checked') == true ? 1 : 0);
+            $("#scheduleCron").val($("#isSchedule_N").is(':checked') == true ? $("#scheduleCron").val() : '');
+            $.operate.save(prefix + "/add", $('#form-dsonJobIn-add').serialize());
+        }
+    }
+</script>
+</body>
+</html>

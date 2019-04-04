@@ -59,6 +59,7 @@
         <module>ruoyi-common</module>
         <module>ruoyi-web</module>
         <module>ruoyi-wx</module>
+        <module>ruoyi-api</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -75,6 +76,12 @@
 		<dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <!--session共享-->
+        <dependency>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
 
 

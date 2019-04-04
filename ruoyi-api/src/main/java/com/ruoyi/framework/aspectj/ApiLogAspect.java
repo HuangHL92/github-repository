@@ -2,32 +2,21 @@ package com.ruoyi.framework.aspectj;
 
 import cn.hutool.core.date.DateTime;
 import com.google.gson.Gson;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.annotation.ValidateRequest;
-import com.ruoyi.common.enums.BusinessStatus;
-import com.ruoyi.common.json.JSON;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.manager.AsyncManager;
-import com.ruoyi.framework.manager.factory.AsyncFactory;
-import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysOperLog;
-import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.common.utils.http.HttpUtils;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
-import java.util.Map;
 
 /**
  * 接口访问日志记录处理
@@ -120,8 +109,8 @@ public class ApiLogAspect
             eu.bitwalker.useragentutils.DeviceType deviceType = operatingSystem.getDeviceType(); // 设备类型
             String url = request.getRequestURL().toString();
             // 请求的地址
-            String ip = ShiroUtils.getIp();
-
+            //String ip = HttpUtil.getClientIP(request);
+            String ip = HttpUtils.getClientIP(request);
             sb.append("\r\n").append("*******************************请求信息-S***************************").append("\r\n");
             sb.append("URL：" + url).append("\r\n");
             sb.append("IP：" + ip).append("\r\n");

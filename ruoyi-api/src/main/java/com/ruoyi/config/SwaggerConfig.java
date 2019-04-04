@@ -1,9 +1,9 @@
-package com.ruoyi.web.core.config;
+package com.ruoyi.config;
 
+import com.ruoyi.common.config.Global;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.ruoyi.common.config.Global;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
