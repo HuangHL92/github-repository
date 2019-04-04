@@ -60,7 +60,8 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean insertTable(GenTable genTable) {
-        checkIsTableExist(genTable);
+        if (checkIsTableExist(genTable))
+            throw new BusinessException("表单已存在");
         genTable.setIsSync(GenTable.UN_SYNCHED);
         boolean result = save(genTable);
         List<GenTableColumn> columnList = genTable.getColumnList();
@@ -83,7 +84,8 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         List<GenTableColumn> oldColumns = old.getAllColumnList(); // 全部column
 
         // 验证表单是否存在
-        checkIsTableExist(genTable);
+        if (checkIsTableExist(genTable))
+            throw new BusinessException("表单已存在");
 
         // 验证是否有字段变更
         if (checkNeedSynch(genTable,old)) {
@@ -100,6 +102,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
                     oldColumn.setName(newColumn.getName());
                     oldColumn.setComments(newColumn.getComments());
                     oldColumn.setIsPk(newColumn.getIsPk());
+                    oldColumn.setListshow(newColumn.getListshow());
                     // 必须要之前同步过的table才能设置old*
                     if (!oldColumn.getName().equals(newColumn.getName())
                             && GenTable.SYNCHED.equals(genTable.getIsSync())) {
@@ -388,6 +391,8 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
             }
             // 强制同步或是没被创建过的新表（没有oldName意味着新表）
             else {
+                // 建表时先将默认字段添加到allColumnList中
+                setDefaultColumns(allColumnList);
                 sb = new StringBuffer();
                 if (StringUtils.isNotBlank(orgTable.getOldName())) {
                     sb.append("drop table if exists " + orgTable.getOldName() + " ;");
@@ -450,6 +455,19 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     }
 
     /**
+     * 添加每张表都有的默认字段
+     * @param allColumnList
+     */
+    private void setDefaultColumns(List<GenTableColumn> allColumnList) {
+        allColumnList.add(new GenTableColumn("create_by", "创建者", "varchar(64)"));
+        allColumnList.add(new GenTableColumn("create_time", "创建时间", "datetime"));
+        allColumnList.add(new GenTableColumn("update_by", "更新者", "varchar(64)"));
+        allColumnList.add(new GenTableColumn("update_time", "更新时间", "datetime"));
+        allColumnList.add(new GenTableColumn("remark", "备注信息", "nvarchar(255)"));
+        allColumnList.add(new GenTableColumn("del_flag", "删除标志（0代表存在 1代表删除)", "char(1)"));
+    }
+
+    /**
      * 同步完成后更新记录
      * @param genTable
      */
@@ -503,22 +521,18 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
      * 验证table是否已经存在
      * @param table
      */
-    private void checkIsTableExist(GenTable table) {
+    public boolean checkIsTableExist(GenTable table) {
         // gen_table中是否存在
         QueryWrapper<GenTable> query = new QueryWrapper<>();
         query.lambda().eq(GenTable::getName, table.getName());
         List<GenTable> list = list(query);
         if (list != null && list.size() > 0) {
             if (list.get(0).getId().equals(table.getId())) {
-                return;
+                return false;
             }
-            throw new BusinessException("表单已存在");
+            return true;
         }
-        // 物理表单是否被创建
-        List<GenTable> genTables = this.getBaseMapper().selectByTableName(table.getName());
-        if (genTables != null && genTables.size() > 0) {
-            throw new BusinessException("表单已存在");
-        }
+        return false;
     }
 
     /**

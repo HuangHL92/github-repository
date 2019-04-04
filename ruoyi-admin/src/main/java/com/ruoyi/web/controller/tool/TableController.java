@@ -102,4 +102,15 @@ public class TableController extends BaseController {
         return AjaxResult.success();
     }
 
+    @GetMapping("/checkTable")
+    @ResponseBody
+    public AjaxResult checkTableExist(@RequestParam String tableName,
+                                      @RequestParam(required = false) String tableId) {
+        GenTable genTable = new GenTable();
+        genTable.setName(tableName);
+        genTable.setId(tableId);
+        // 表存在就返回error
+        return toAjax(!genTableService.checkIsTableExist(genTable));
+    }
+
 }
