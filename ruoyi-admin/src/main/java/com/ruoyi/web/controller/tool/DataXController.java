@@ -1,24 +1,25 @@
-package com.ruoyi.web.controller.dataX;
+package com.ruoyi.web.controller.tool;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ruoyi.area.dataX.domain.DsonJobIn;
-import com.ruoyi.area.dataX.service.IDsonJobInService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.jsonIO.DataXJsonCommon;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.base.BaseController;
+import com.ruoyi.system.common.DataXJsonCommon;
+import com.ruoyi.system.domain.SysDataX;
+import com.ruoyi.system.service.ISysDataXService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.Arrays;
@@ -31,41 +32,41 @@ import java.util.List;
  * @date 2019-04-02
  */
 @Controller
-@RequestMapping("dsonJobIn")
-public class DsonJobInController extends BaseController {
-    private String prefix = "dataX";
+@RequestMapping("/tool/dataX")
+public class DataXController extends BaseController {
+    private String prefix = "tool/dataX";
 
     @Autowired
-    private IDsonJobInService dsonJobInService;
+    private ISysDataXService sysDataXService;
 
-    @RequiresPermissions("dsonJobIn:view")
+    @RequiresPermissions("tool:dataX:view")
     @GetMapping()
-    public String dsonJobIn() {
+    public String dataX() {
         return prefix + "/list";
     }
 
     /**
      * 查询Datax配置列表
      */
-    @RequiresPermissions("dsonJobIn:list")
+    @RequiresPermissions("tool:dataX:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(DsonJobIn dsonJobIn) {
+    public TableDataInfo list(SysDataX sysDataX) {
         startPage();
-        return getDataTable(dsonJobInService.selectList(dsonJobIn));
+        return getDataTable(sysDataXService.selectList(sysDataX));
     }
 
 
     /**
      * 导出Datax配置列表
      */
-    @RequiresPermissions("dsonJobIn:export")
+    @RequiresPermissions("tool:dataX:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(DsonJobIn dsonJobIn) {
-        List<DsonJobIn> list = dsonJobInService.selectList(dsonJobIn);
-        ExcelUtil<DsonJobIn> util = new ExcelUtil<DsonJobIn>(DsonJobIn.class);
-        return util.exportExcel(list, "dsonJobIn");
+    public AjaxResult export(SysDataX sysDataX) {
+        List<SysDataX> list = sysDataXService.selectList(sysDataX);
+        ExcelUtil<SysDataX> util = new ExcelUtil<SysDataX>(SysDataX.class);
+        return util.exportExcel(list, "sysDataX");
     }
 
     /**
@@ -73,30 +74,30 @@ public class DsonJobInController extends BaseController {
      */
     @GetMapping("/add")
     public String add(ModelMap mmap) {
-        DsonJobIn dsonJobIn = new DsonJobIn();
+        SysDataX sysDataX = new SysDataX();
         //表单Action指定
-        dsonJobIn.setFormAction(prefix + "/add");
-        mmap.put("dsonJobIn", dsonJobIn);
+        sysDataX.setFormAction(prefix + "/add");
+        mmap.put("sysDataX", sysDataX);
         return prefix + "/add";
     }
 
     /**
      * 新增保存Datax配置
      */
-    @RequiresPermissions("dsonJobIn:add")
+    @RequiresPermissions("tool:dataX:add")
     @Log(title = "Datax配置", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(DsonJobIn dsonJobIn, HttpServletRequest request, Model model) {
-        if (StringUtils.isNotBlank(dsonJobIn.getId())) {
+    public AjaxResult addSave(SysDataX sysDataX, HttpServletRequest request, Model model) {
+        if (StringUtils.isNotBlank(sysDataX.getId())) {
             //生成json文件
-            DataXJsonCommon.dataxJsonMod(dsonJobIn);
-            dsonJobIn.setLog("");
-            return toAjax(dsonJobInService.saveOrUpdate(dsonJobIn));
+            DataXJsonCommon.dataxJsonMod(sysDataX);
+            sysDataX.setLog("");
+            return toAjax(sysDataXService.saveOrUpdate(sysDataX));
         } else {
             //生成json文件
-            DataXJsonCommon.dataxJsonMod(dsonJobIn);
-            return toAjax(dsonJobInService.save(dsonJobIn));
+            DataXJsonCommon.dataxJsonMod(sysDataX);
+            return toAjax(sysDataXService.save(sysDataX));
         }
 
     }
@@ -106,35 +107,35 @@ public class DsonJobInController extends BaseController {
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") String id, ModelMap mmap) {
-        DsonJobIn dsonJobIn = dsonJobInService.getById(id);
+        SysDataX sysDataX = sysDataXService.getById(id);
         //表单Action指定
-        dsonJobIn.setFormAction(prefix + "/edit");
+        sysDataX.setFormAction(prefix + "/edit");
         //主键加密（配合editSave方法使用）- 如果需防止数据ID泄露，请放开，否则请删除此处代码
-        //dsonJobIn.setId(pk_encrypt(dsonJobIn.getId()));
+        //sysDataX.setId(pk_encrypt(sysDataX.getId()));
 
-        mmap.put("dsonJobIn", dsonJobIn);
+        mmap.put("sysDataX", sysDataX);
         return prefix + "/add";
     }
 
     /**
      * 修改保存Datax配置
      */
-    @RequiresPermissions("dsonJobIn:edit")
+    @RequiresPermissions("tool:dataX:edit")
     @Log(title = "Datax配置", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
-    public AjaxResult editSave(DsonJobIn dsonJobIn) {
+    public AjaxResult editSave(SysDataX sysDataX) {
 
         //主键解密（配合edit方法使用，请确认edit方法中加密了）- 如果需防止数据ID泄露，请放开，否则请删除此处代码
-        //dsonJobIn.setId(pk_decrypt(dsonJobIn.getId()));
+        //sysDataX.setId(pk_decrypt(sysDataX.getId()));
 
-        return toAjax(dsonJobInService.saveOrUpdate(dsonJobIn));
+        return toAjax(sysDataXService.saveOrUpdate(sysDataX));
     }
 
     /**
      * 删除Datax配置
      */
-    @RequiresPermissions("dsonJobIn:remove")
+    @RequiresPermissions("tool:dataX:remove")
     @Log(title = "Datax配置", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
@@ -143,9 +144,9 @@ public class DsonJobInController extends BaseController {
         for (String id : Arrays.asList(ids.split(","))
         ) {
             //删除文件
-            DataXJsonCommon.delJsonAndLog(dsonJobInService.getById(id).getFileName());
+            DataXJsonCommon.delJsonAndLog(sysDataXService.getById(id).getFileName());
         }
-        return toAjax(dsonJobInService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
+        return toAjax(sysDataXService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 
 
     }
@@ -163,7 +164,7 @@ public class DsonJobInController extends BaseController {
         if (StringUtils.isNotEmpty(oldFileName) && oldFileName.equals(fileName)) {
             return "0";
         }
-        if (dsonJobInService.getOne(new QueryWrapper<DsonJobIn>().eq("file_name", fileName)) == null
+        if (sysDataXService.getOne(new QueryWrapper<SysDataX>().eq("file_name", fileName)) == null
         ) {
             return "0";
         }
@@ -174,15 +175,20 @@ public class DsonJobInController extends BaseController {
     @ResponseBody
     public AjaxResult syc(String id, String fileName) {
         if (StrUtil.isNotBlank(fileName) && StrUtil.isNotBlank(id)) {
-            DsonJobIn dsonJobIn = new DsonJobIn();
-            dsonJobIn.setId(id);
+            SysDataX sysDataX = new SysDataX();
+            sysDataX.setId(id);
             String log = DataXJsonCommon.exeDataX(fileName);
-            dsonJobIn.setLog(log);
-            return toAjax(dsonJobInService.saveOrUpdate(dsonJobIn));
+            sysDataX.setLog(log);
+            return toAjax(sysDataXService.saveOrUpdate(sysDataX));
         } else {
             //文件名空返回失败
             return toAjax(false);
         }
     }
 
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable("id") String id, ModelMap mmap, String showLog) {
+        mmap.put("sysDataX", sysDataXService.getById(id));
+        return prefix + "/detail";
+    }
 }
