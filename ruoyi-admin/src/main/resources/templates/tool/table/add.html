@@ -26,26 +26,26 @@
                     </div>
 
                     <div class="ibox-content">
-                        <div class="form-group">
+                        <div class="form-group" style="margin-bottom: 0;">
                             <label class="col-sm-2 control-label"><font color="red">*</font>表名：</label>
                             <div class="col-sm-4">
-                                <input name="name" class="form-control required" type="text">
+                                <input name="name" class="form-control required" type="text" onblur="checkTableExist(this.value)" >
                             </div>
                             <label class="col-sm-2 control-label"><font color="red">*</font>说明：</label>
                             <div class="col-sm-4">
                                 <input name="comments" class="form-control required" type="text">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">主键策略：</label>
-                            <div class="col-sm-4">
-                                <select class="form-control required" id="genIdTypeSelect">
-                                    <option value="UUID">UUID</option>
-                                    <option value="AUTO">自增长</option>
-                                </select>
-                                <input type="hidden" name="genIdType" id="genIdType" />
-                            </div>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-sm-2 control-label">主键策略：</label>-->
+                            <!--<div class="col-sm-4">-->
+                                <!--<select class="form-control required" id="genIdTypeSelect">-->
+                                    <!--<option value="UUID">UUID</option>-->
+                                    <!--<option value="AUTO">自增长</option>-->
+                                <!--</select>-->
+                                <!--<input type="hidden" name="genIdType" id="genIdType" />-->
+                            <!--</div>-->
+                        <!--</div>-->
                     </div>
                 </div>
             </div>
@@ -55,8 +55,9 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>数据库属性
+                        <h5>字段属性
                             <small style="margin-left: 10px">
+                                <span style="margin-right: 5px;">拖拽可排序</span>
                                 <button class="btn btn-primary btn-xs" type="button" onclick="addtr()">
                                     <i class="fa fa-plus"></i>
                                 </button>
@@ -72,12 +73,18 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>序号</th>
+                                <th th:width="50">序号</th>
                                 <th><font color="red">*</font>列名</th>
                                 <th><font color="red">*</font>说明</th>
-                                <th>物理类型</th>
-                                <th>主键</th>
-                                <th>操作</th>
+                                <th th:width="100">物理类型</th>
+                                <th th:width="80">长度</th>
+                                <th th:width="80">主键</th>
+                                <th th:width="80">列表显示</th>
+                                <th th:width="60" style="text-align: center;">
+                                    <button class="btn btn-primary btn-xs" type="button" onclick="addtr()">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </th>
                             </tr>
                             </thead>
 
@@ -86,198 +93,37 @@
 
                             <tbody>
                             <tr>
-                                <td style="position: relative">
+                                <td style="position: relative; text-align: center;">
                                     <label class="label-index"></label>
                                     <input type="hidden" data-name="orderNum" value="" />
                                 </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="id">
+                                <td style="position: relative; text-align: center;">
+                                    <input type="text" class="form-control required" readonly data-name="name" value="id">
                                 </td>
                                 <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="主键">
+                                    <input type="text" class="form-control required" readonly data-name="comments" value="主键">
                                 </td>
                                 <td style="position: relative">
                                     <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="varchar(64)" />
+                                    <input type="hidden" data-name="viewJdbc" value="varchar" />
                                 </td>
                                 <td style="position: relative">
+                                    <input type="text" class="form-control required" readonly data-name="length" value="64" />
+                                </td>
+                                <td style="position: relative; text-align: center;">
                                     <div class="checkbox i-checks">
                                         <!--默认选中checked和value都要设置-->
-                                        <input type="checkbox" checked >
+                                        <input type="checkbox" checked disabled >
                                         <input type="hidden" data-name="isPk" value="1" >
                                     </div>
                                 </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="create_by">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="创建者">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="varchar(64)" />
-                                </td>
-                                <td style="position: relative">
-                                    <div class="checkbox i-checks">
-                                        <!--isPk默认值为0-->
-                                        <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
-                                    </div>
-                                </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="create_time">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="创建时间">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="datetime" />
-                                </td>
-                                <td style="position: relative">
-                                    <div class="checkbox i-checks">
-                                        <!--isPk默认值为0-->
-                                        <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
-                                    </div>
-                                </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="update_by">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="更新者">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="varchar(64)" />
-                                </td>
-                                <td style="position: relative">
-                                    <div class="checkbox i-checks">
-                                        <!--isPk默认值为0-->
-                                        <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
-                                    </div>
-                                </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="update_time">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="更新时间">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="datetime" />
-                                </td>
-                                <td style="position: relative">
-                                    <div class="checkbox i-checks">
-                                        <!--isPk默认值为0-->
-                                        <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
-                                    </div>
-                                </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="remark">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="备注信息">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="nvarchar(255)" />
-                                </td>
-                                <td style="position: relative">
+                                <td style="position: relative; text-align: center;">
                                     <div class="checkbox i-checks">
                                         <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
+                                        <input type="hidden" data-name="listshow" value="0" >
                                     </div>
                                 </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="position: relative">
-                                    <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="name" value="del_flag">
-                                </td>
-                                <td style="position: relative">
-                                    <input type="text" class="form-control required" data-name="comments" value="删除标志（0代表存在 2代表删除）">
-                                </td>
-                                <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="jdbcType" value="varchar(64)" />
-                                </td>
-                                <td style="position: relative">
-                                    <div class="checkbox i-checks">
-                                        <!--isPk默认值为0-->
-                                        <input type="checkbox" >
-                                        <input type="hidden" data-name="isPk" value="0" >
-                                    </div>
-                                </td>
-                                <td style="position: relative">
-                                    <button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)">
-                                        <i class="fa fa-times"></i>
-                                    </button>
+                                <td style="position: relative; text-align: center;">
                                 </td>
                             </tr>
                             </tbody>
@@ -294,12 +140,14 @@
     var prefix = ctx + "tool/table";
     var selectdata = [[${@dict.getType('sys_field_type')}]];
     // 定义第一行tr副本
-    var copy = '<tr><td style="position: relative"><label class="label-index"></label><input type="hidden" data-name="orderNum" value="" /></td>' +
+    var copy = '<tr><td style="position: relative; text-align: center;"><label class="label-index"></label><input type="hidden" data-name="orderNum" value="" /></td>' +
         '<td style="position: relative"><input type="text" class="form-control required" data-name="name" value=""></td>' +
         '<td style="position: relative"><input type="text" class="form-control required" data-name="comments" value=""></td>' +
-        '<td style="position: relative"><select class="form-control required"></select><input type="hidden" data-name="jdbcType" /></td>' +
-        '<td style="position: relative"><div class="checkbox i-checks"><input type="checkbox" value="" data-name="isPk"></div></td>' +
-        '<td style="position: relative"><button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)"><i class="fa fa-times"></i></button></td>' +
+        '<td style="position: relative"><select class="form-control required"></select><input type="hidden" data-name="viewJdbc" /></td>' +
+        '<td style="position: relative"><input type="text" class="form-control required" data-name="length" /></td>' +
+        '<td style="position: relative; text-align: center;"><div class="checkbox i-checks"><input type="checkbox" value="" data-name="isPk"></div></td>' +
+        '<td style="position: relative; text-align: center;"><div class="checkbox i-checks"><input type="checkbox" ><input type="hidden" data-name="listshow" value="0" ></div></td>'+
+        '<td style="position: relative; text-align: center;"><button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)"><i class="fa fa-times"></i></button></td>' +
         '</tr>';
     // 定义操作栏的移除按钮
     var rmbtn = '<button class="btn btn-danger btn-xs" type="button" onclick="deltr(this)"><i class="fa fa-times"></i></button>';
@@ -308,7 +156,7 @@
         $("table tr").each(function (index, tr) {
             initTableWidget(tr);
         })
-        $("table").sortable({items: "tr", cursor: 'move', axis: "y",stop:function () {restIndexAndBtn();}}); // 可拖拽排序
+        $("table").sortable({items: "tbody tr", cursor: 'move', axis: "y",stop:function () {restIndexAndBtn();}}); // 可拖拽排序
         restIndexAndBtn();
     })
 
@@ -350,7 +198,6 @@
             _data.unshift(tagData);
         }
         $select.select2({
-            tags: true,
             data: _data
         });
     }
@@ -387,8 +234,21 @@
         })
     }
 
+    function checkTableExist(tableName) {
+        if (tableName)
+            $.ajax({
+                type: 'get',
+                url: prefix + '/checkTable?tableName=' + tableName,
+                success: function (result) {
+                    if (result.code == '1') {
+                        $.modal.alertError(tableName + ' 表已存在');
+                    }
+                }
+            })
+    }
+
     function doBeforeSubmit() {
-        $('#genIdType').val($('#genIdTypeSelect').val());
+        // $('#genIdType').val($('#genIdTypeSelect').val());
         var colFieldName = 'columnList';
         $('table tr').each(function (index, tr) {
             var $select = $(tr).find('select');
@@ -397,7 +257,6 @@
             $input.each(function (i, input) {
                 $(input).attr("name", colFieldName + '[' + parseInt(index - 1) + '].' + $(input).data("name"));
             })
-
         })
     }
 

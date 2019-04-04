@@ -65,4 +65,11 @@ public interface IGenTableService {
      */
     void synchDb(String id, boolean isForce);
 
+    /**
+     * 验证表是否存在
+     * @param table
+     * @return
+     */
+    public boolean checkIsTableExist(GenTable table);
+
 }

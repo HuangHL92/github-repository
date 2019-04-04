@@ -37,6 +37,14 @@ public class GenTableColumn extends BaseEntity {
 
     private String jdbcType;
 
+    private String listshow;
+
+    @TableField(exist = false)
+    private String viewJdbc; // 合成jdbcType的作用
+
+    @TableField(exist = false)
+    private String length; // 合成jdbcType的作用
+
     private String oldJdbcType;
 
     private String isPk; //数据库默认为0
@@ -50,11 +58,67 @@ public class GenTableColumn extends BaseEntity {
     @TableField(exist = false)
     private GenTable genTable;
 
-    public GenTableColumn() {
+    public GenTableColumn(){
+
+    }
+
+    public GenTableColumn(String name, String comments, String jdbcType) {
+        this.name = name;
+        this.comments = comments;
+        this.jdbcType = jdbcType;
+        this.setIsPk("0");
+        this.setDelFlag("0");
     }
 
     public GenTableColumn(GenTable genTable) {
         this.genTable = genTable;
+    }
+
+
+    public String getViewJdbc() {
+        if (this.viewJdbc == null) {
+            if (this.getJdbcType().indexOf("(") > -1) {
+                return this.getJdbcType().substring(0, this.getJdbcType().indexOf("("));
+            } else {
+                return this.getJdbcType();
+            }
+        }
+        return this.viewJdbc;
+    }
+
+    public void setViewJdbc(String viewJdbc) {
+        this.viewJdbc = viewJdbc;
+    }
+
+    public String getLength() {
+        if (this.length == null ) {
+            if (this.getJdbcType().indexOf("(") > -1) {
+                return this.getJdbcType().substring(this.getJdbcType().indexOf("(") + 1, this.getJdbcType().indexOf(")"));
+            } else {
+                return "";
+            }
+        }
+        return this.length;
+    }
+
+    public void setLength(String length) {
+        this.length = length;
+    }
+
+    public String getJdbcType() {
+        if (this.jdbcType == null) {
+            if ("LONGTEXT".equals(StringUtils.upperCase(this.getViewJdbc())) ||
+                    "LONGBLOB".equals(StringUtils.upperCase(this.getViewJdbc()))) {
+                this.jdbcType = this.getViewJdbc();
+            } else {
+                this.jdbcType = this.getViewJdbc() + "(" + this.getLength() + ")";
+            }
+        }
+        return this.jdbcType;
+    }
+
+    public void setJdbcType(String jdbcType) {
+        this.jdbcType = jdbcType;
     }
 
     public String getNameAndComments() {
