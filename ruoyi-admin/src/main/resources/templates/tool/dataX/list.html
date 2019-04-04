@@ -5,13 +5,15 @@
 <body class="gray-bg">
 
 <div class="container-div">
+
     <div class="row">
+        <div class="col-sm-12 alert alert-warning">此功能需配合DataX使用，请确保DataX已经部署并配置。</div>
         <div class="col-sm-12 search-collapse">
             <form id="formId">
                 <div class="select-list">
                     <ul>
                         <li>
-                            关键字：<input type="text" name="params[keyword]" placeholder="配置文件名"/>
+                            关键字：<input type="text" name="params[keyword]" placeholder="作业名称"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -25,9 +27,7 @@
         </div>
 
         <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-            <a id="sync" class="btn btn-success btn-edit disabled" onclick="sync()">
-                <i class="fa fa-plus"></i> 同步
-            </a>
+
             <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="tool:dataX:add">
                 <i class="fa fa-plus"></i> 添加
             </a>
@@ -39,6 +39,9 @@
                shiro:hasPermission="tool:dataX:remove">
                 <i class="fa fa-remove"></i> 删除
             </a>
+            <!--<a id="sync" class="btn btn-success btn-edit disabled" onclick="sync()">-->
+                <!--<i class="fa fa-edit"></i> 同步-->
+            <!--</a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -73,23 +76,24 @@
                 },
                 {
                     field: 'fileName',
-                    title: '配置文件'
+                    title: '作业名称'
+                },
+                {
+                    field: 'readerPort',
+                    title: '源数据库'
                 },
                 {
                     field: 'readerTableName',
                     title: '源数据表'
                 },
-                {
-                    field: 'readerPort',
-                    title: '源数据库链接'
-                },
+
                 {
                     field: 'writerPort',
-                    title: '写入库链接'
+                    title: '目标数据库'
                 },
                 {
                     field: 'writerTableName',
-                    title: '写入表'
+                    title: '目标表'
                 },
                 {
                     field: 'writerMode',
@@ -97,19 +101,19 @@
                 },
                 {
                     field: 'scheduleName',
-                    title: '定时任务名'
+                    title: '定时任务'
                 },
                 {
                     field: 'scheduleCron',
-                    title: '定时任务表达式'
+                    title: '执行频率'
                 },
-                {
-                    field: 'finalDo',
-                    title: '最后执行时间'
-                },
+                // {
+                //     field: 'finalDo',
+                //     title: '最后执行'
+                // },
                 {
                     field: 'nextDo',
-                    title: '下次执行时间'
+                    title: '下次执行'
                 },
                 {
                     field: 'log',
