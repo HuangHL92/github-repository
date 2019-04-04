@@ -13,7 +13,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement(proxyTargetClass = true)
 @Configuration
-@MapperScan({"com.ruoyi.*.mapper","com.ruoyi.area.*.mapper"})
+@MapperScan({"com.ruoyi.*.mapper","com.ruoyi.*.*.mapper","com.ruoyi.area.*.mapper"})
 public class MybatisPlusConfig
 {
     /*

@@ -1,7 +1,7 @@
-package com.ruoyi.generator.mapper;
+package com.ruoyi.tool.table.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.generator.domain.GenTableColumn;
+import com.ruoyi.tool.table.domain.GenTableColumn;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
