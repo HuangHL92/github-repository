@@ -82,13 +82,14 @@ public class DataXJsonCommon {
         try {
             String line;
             String filePath = LOG_PATH + fileName + "_json.log";
-            File file = new File(filePath);
+//            File file = new File(filePath);
             //文件不存在则创建文件，先创建目录
-            if (!file.exists()) {
-                File dir = new File(file.getParent());
-                dir.mkdirs();
-                file.createNewFile();
+            if (FileUtil.exist(filePath)) {
+                //存在删除文件
+                FileUtil.del(JSON_PATH + fileName+ "_json.log");
             }
+            //创建新的log文件
+            File file = FileUtil.touch(filePath);
             //文件输出流用于将数据写入文件
             FileOutputStream outStream = new FileOutputStream(file);
             System.out.println("------------------start----------------------");

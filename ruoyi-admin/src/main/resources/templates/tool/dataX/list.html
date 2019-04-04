@@ -151,6 +151,7 @@
         if (ids.length == 0 && id==null) {
             $.modal.alertWarning("请至少选择一条记录");
             $.modal.closeLoading();
+            $.table.refresh();
             return;
         } else {
             fileName ==null? getIdSelections()[0].fileName:fileName;
@@ -167,13 +168,16 @@
                         if (data.code == 0) {
                             $.modal.closeLoading();
                             $.modal.alertSuccess("执行完成，详见同步日志");
+                            $.table.refresh();
                         } else {
                             $.modal.closeLoading();
                             $.modal.alertError("同步失败，详见同步日志");
+                            $.table.refresh();
                         }
                     } else {
                         $.modal.closeLoading();
                         $.modal.alertWarning("同步失败，文件名不能为空");
+                        $.table.refresh();
                     }
 
                 }
