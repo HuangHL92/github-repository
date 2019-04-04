@@ -1,4 +1,4 @@
-package com.ruoyi.area.dataX.domain.dType;
+package com.ruoyi.system.domain.SysDataXType;
 
 
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Map;
  * @Date: 2018/10/29 16:23
  */
 @Data
-public class DsonJob {
+public class SysDataXInfo {
 
 
     private Job job;

@@ -1,10 +1,11 @@
-package com.ruoyi.common.jsonIO;
+package com.ruoyi.system.common;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
-import com.ruoyi.area.dataX.domain.dType.DsonJob;
-import com.ruoyi.area.dataX.domain.DsonJobIn;
+
 import com.ruoyi.common.config.Global;
+import com.ruoyi.system.domain.SysDataX;
+import com.ruoyi.system.domain.SysDataXType.SysDataXInfo;
 
 import java.io.*;
 import java.sql.Connection;
@@ -187,21 +188,21 @@ public class DataXJsonCommon {
     /**
      * 生成dataX做业基础模板只支持Mysql
      *
-     * @param dsonJobIn
+     * @param sysDataX
      */
-    public static Boolean dataxJsonMod(DsonJobIn dsonJobIn) {
+    public static Boolean dataxJsonMod(SysDataX sysDataX) {
         //准备数据 开始
-        String fileNames = dsonJobIn.getFileName() + ".json";
-        String readerPort = "jdbc:mysql://" + dsonJobIn.getReaderPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
-        String writerPort = "jdbc:mysql://" + dsonJobIn.getWriterPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
-        String cols = dsonJobIn.getReaderColumn().replace('，', ',');
+        String fileNames = sysDataX.getFileName() + ".json";
+        String readerPort = "jdbc:mysql://" + sysDataX.getReaderPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
+        String writerPort = "jdbc:mysql://" + sysDataX.getWriterPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
+        String cols = sysDataX.getReaderColumn().replace('，', ',');
         String[] columns = cols.split(",");
         List<String> column = Arrays.asList(columns);
-        List<DsonJob.Job.Content.Reader.Parameter.Connection> readerConnectionList = new ArrayList<>();
-        DsonJob.Job.Content.Reader.Parameter.Connection readerConnection = new DsonJob.Job.Content.Reader.Parameter.Connection();
+        List<SysDataXInfo.Job.Content.Reader.Parameter.Connection> readerConnectionList = new ArrayList<>();
+        SysDataXInfo.Job.Content.Reader.Parameter.Connection readerConnection = new SysDataXInfo.Job.Content.Reader.Parameter.Connection();
         List<String> readerTable = new ArrayList<>();
         //pojo
-        readerTable.add(dsonJobIn.getReaderTableName());
+        readerTable.add(sysDataX.getReaderTableName());
         List<String> readerJdbcUrl = new ArrayList<>();
         readerConnectionList.add(readerConnection);
         //pojo
@@ -209,77 +210,77 @@ public class DataXJsonCommon {
         readerConnection.setTable(readerTable);
         readerConnection.setJdbcUrl(readerJdbcUrl);
 
-        DsonJob.Job.Content.Reader.Parameter readerParameter = new DsonJob.Job.Content.Reader.Parameter();
+        SysDataXInfo.Job.Content.Reader.Parameter readerParameter = new SysDataXInfo.Job.Content.Reader.Parameter();
         //pojo
-        readerParameter.setUsername(dsonJobIn.getReaderUserName());
+        readerParameter.setUsername(sysDataX.getReaderUserName());
         //pojo
-        readerParameter.setPassword(dsonJobIn.getReaderPassword());
+        readerParameter.setPassword(sysDataX.getReaderPassword());
         readerParameter.setColumn(column);
         //pojo
-        readerParameter.setSplitPk(dsonJobIn.getSplitPk());
+        readerParameter.setSplitPk(sysDataX.getSplitPk());
         readerParameter.setConnection(readerConnectionList);
         //pojo
-        readerParameter.setWhere(dsonJobIn.getReaderWhere());
+        readerParameter.setWhere(sysDataX.getReaderWhere());
 
 
-        List<DsonJob.Job.Content.Writer.Parameter.Connection> writerConnectionList = new ArrayList<>();
-        DsonJob.Job.Content.Writer.Parameter.Connection writerConnection = new DsonJob.Job.Content.Writer.Parameter.Connection();
+        List<SysDataXInfo.Job.Content.Writer.Parameter.Connection> writerConnectionList = new ArrayList<>();
+        SysDataXInfo.Job.Content.Writer.Parameter.Connection writerConnection = new SysDataXInfo.Job.Content.Writer.Parameter.Connection();
         List<String> writerTable = new ArrayList<>();
         //pojo
-        writerTable.add(dsonJobIn.getReaderTableName());
+        writerTable.add(sysDataX.getReaderTableName());
         writerConnectionList.add(writerConnection);
         writerConnection.setTable(writerTable);
         writerConnection.setJdbcUrl(writerPort);
 
-        DsonJob.Job.Content.Writer.Parameter writerParameter = new DsonJob.Job.Content.Writer.Parameter();
+        SysDataXInfo.Job.Content.Writer.Parameter writerParameter = new SysDataXInfo.Job.Content.Writer.Parameter();
         List<String> writerPreSql = new ArrayList<>();
         //pojo
-        writerPreSql.add(dsonJobIn.getPerSql());
+        writerPreSql.add(sysDataX.getPerSql());
         //pojo
-        writerParameter.setWriteMode(dsonJobIn.getWriterMode());
+        writerParameter.setWriteMode(sysDataX.getWriterMode());
         //pojo
-        writerParameter.setUsername(dsonJobIn.getWriterUserName());
+        writerParameter.setUsername(sysDataX.getWriterUserName());
         //pojo
-        writerParameter.setPassword(dsonJobIn.getWriterPassword());
+        writerParameter.setPassword(sysDataX.getWriterPassword());
         writerParameter.setColumn(column);
         writerParameter.setPreSql(writerPreSql);
         writerParameter.setConnection(writerConnectionList);
 
-        DsonJob.Job.Content.Reader reader = new DsonJob.Job.Content.Reader();
+        SysDataXInfo.Job.Content.Reader reader = new SysDataXInfo.Job.Content.Reader();
         reader.setParameter(readerParameter);
 
-        DsonJob.Job.Content.Writer writer = new DsonJob.Job.Content.Writer();
+        SysDataXInfo.Job.Content.Writer writer = new SysDataXInfo.Job.Content.Writer();
         writer.setParameter(writerParameter);
 
-        DsonJob.Job.Content content = new DsonJob.Job.Content();
+        SysDataXInfo.Job.Content content = new SysDataXInfo.Job.Content();
         content.setReader(reader);
         content.setWriter(writer);
 
         Map<String, Object> speedMap = new HashMap<>();
-        speedMap.put(dsonJobIn.getSpeedByteName(), dsonJobIn.getSpeed());
-        speedMap.put(dsonJobIn.getChannelName(), dsonJobIn.getChannel());
+        speedMap.put(sysDataX.getSpeedByteName(), sysDataX.getSpeed());
+        speedMap.put(sysDataX.getChannelName(), sysDataX.getChannel());
         //errorLimit
-        DsonJob.Job.Setting.ErrorLimit errorLimit = new DsonJob.Job.Setting.ErrorLimit();
+        SysDataXInfo.Job.Setting.ErrorLimit errorLimit = new SysDataXInfo.Job.Setting.ErrorLimit();
         //errorLimit
-        DsonJob.Job.Setting setting = new DsonJob.Job.Setting();
+        SysDataXInfo.Job.Setting setting = new SysDataXInfo.Job.Setting();
         setting.setSpeed(speedMap);
         setting.setErrorLimit(errorLimit);
 
-        List<DsonJob.Job.Content> contentList = new ArrayList<>();
+        List<SysDataXInfo.Job.Content> contentList = new ArrayList<>();
         contentList.add(content);
         //准备数据 结束
         //判断数据库链接正确
         if (getConnection(readerPort, readerParameter.getUsername(), readerParameter.getPassword()) != null && getConnection(writerPort, writerParameter.getUsername(), writerParameter.getPassword()) != null) {
             //job
-            DsonJob.Job job = new DsonJob.Job();
+            SysDataXInfo.Job job = new SysDataXInfo.Job();
             job.setSetting(setting);
             job.setContent(contentList);
 
-            DsonJob dsonJob = new DsonJob();
-            dsonJob.setJob(job);
+            SysDataXInfo sysDataXInfo = new SysDataXInfo();
+            sysDataXInfo.setJob(job);
 
 
-            createJson(dsonJob, fileNames);
+            createJson(sysDataXInfo, fileNames);
 //            ExportJson.readJson(fileNames);
             //连接正常
             return true;
