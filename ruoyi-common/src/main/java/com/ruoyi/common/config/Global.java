@@ -146,7 +146,9 @@ public class Global {
     {
         return getJsonPath() + "dataXLog/";
     }
-
+    public static String getDataXExePath(){
+        return getConfig("ruoyi.dataX");
+    }
     /**
      * 获取作者
      */

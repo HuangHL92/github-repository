@@ -1,15 +1,13 @@
 package com.ruoyi.web.controller.dataX;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.cron.CronUtil;
-import cn.hutool.cron.pattern.CronPatternUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.area.dataX.domain.DsonJobIn;
 import com.ruoyi.area.dataX.service.IDsonJobInService;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.base.AjaxResult;
-import com.ruoyi.common.dataX.DataXJsonCommon;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.jsonIO.DataXJsonCommon;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.StringUtils;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
 import java.util.Arrays;

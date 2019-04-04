@@ -18,7 +18,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("dson_job_in")
+@TableName("sys_datax_json")
 public class DsonJobIn extends BaseEntity
 {
     private static final long serialVersionUID = 1L;

@@ -112,7 +112,16 @@
                 },
                 {
                     field: 'log',
-                    title: '日志'
+                    title: '日志',
+                    formatter: function (value, row, index) {
+                        if (value == null || value == '') {
+                            return "未执行同步作业";
+                        } else {
+                            // return "<a href='javascript:showLog(\"" + row.id + "\")'>" + row.fileName + "_json.log</a>";
+                            return row.fileName + "_json.log";
+                        }
+
+                    }
                 },
                 {
                     title: '操作',
