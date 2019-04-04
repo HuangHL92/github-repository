@@ -1,4 +1,4 @@
-package com.ruoyi.generator.service.impl;
+package com.ruoyi.tool.table.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -7,11 +7,11 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.generator.domain.GenTable;
-import com.ruoyi.generator.domain.GenTableColumn;
-import com.ruoyi.generator.mapper.GenTableColumnMapper;
-import com.ruoyi.generator.mapper.GenTableMapper;
-import com.ruoyi.generator.service.IGenTableService;
+import com.ruoyi.tool.table.domain.GenTable;
+import com.ruoyi.tool.table.domain.GenTableColumn;
+import com.ruoyi.tool.table.mapper.GenTableColumnMapper;
+import com.ruoyi.tool.table.mapper.GenTableMapper;
+import com.ruoyi.tool.table.service.IGenTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -434,7 +434,9 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
                     }
                 }
 
-                sb.append("primary key (" + pk.substring(0, pk.length() - 1) + ") ");
+                if (StringUtils.isNotEmpty(pk)) {
+                    sb.append("primary key (" + pk.substring(0, pk.length() - 1) + ") ");
+                }
                 sb.append(") comment '" + orgTable.getComments() + "' DEFAULT CHARSET=utf8");
                 this.buildTable(sb.toString()); // 重新建表成功!
             }

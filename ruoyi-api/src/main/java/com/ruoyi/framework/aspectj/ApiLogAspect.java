@@ -30,16 +30,13 @@ public class ApiLogAspect
 
     private static final Logger log = LoggerFactory.getLogger("restful_api");
 
-    ThreadLocal<Long> startTime = new ThreadLocal<>();// 开始时间
-//    @Value("${api.basepackage}")
-//    private String basepackage;
-//
-//    private String getBasepackage() {
-//        return basepackage+ "..*";
-//    }
+    // 开始时间
+    ThreadLocal<Long> startTime = new ThreadLocal<>();
 
 
-    // 配置织入点
+    /***
+     * 配置织入点
+     */
     @Pointcut("within(com.ruoyi.api..*)")
     public void logPointCut()
     {
@@ -57,7 +54,7 @@ public class ApiLogAspect
 
         handleLog(joinPoint, null);
 
-        Object args[] = joinPoint.getArgs();
+        Object[] args = joinPoint.getArgs();
         MethodSignature signature  = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
         log.info("{}.{}: 请求参数：{}",method.getDeclaringClass().getName(),method.getName(),StringUtils.join(args,";"));
@@ -74,7 +71,7 @@ public class ApiLogAspect
     {
         long end = System.currentTimeMillis();
         long total =end - startTime.get();
-
+        startTime.remove();
         MethodSignature signature  = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
         log.info("{}.{}: 耗时：{}毫秒 返回参数：{}",method.getDeclaringClass().getName(),method.getName(),total,new Gson().toJson(rvt));
@@ -89,7 +86,7 @@ public class ApiLogAspect
     @AfterThrowing(value = "logPointCut()", throwing = "e")
     public void doAfter(JoinPoint joinPoint, Exception e)
     {
-        Object args[] = joinPoint.getArgs();
+
         MethodSignature signature  = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
         log.error("{}.{}: 异常：{}",method.getDeclaringClass().getName(),method.getName(),e.toString());
@@ -109,7 +106,6 @@ public class ApiLogAspect
             eu.bitwalker.useragentutils.DeviceType deviceType = operatingSystem.getDeviceType(); // 设备类型
             String url = request.getRequestURL().toString();
             // 请求的地址
-            //String ip = HttpUtil.getClientIP(request);
             String ip = HttpUtils.getClientIP(request);
             sb.append("\r\n").append("*******************************请求信息-S***************************").append("\r\n");
             sb.append("URL：" + url).append("\r\n");

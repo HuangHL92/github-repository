@@ -1,6 +1,7 @@
-package com.ruoyi.generator.service;
+package com.ruoyi.tool.table.service;
 
-import com.ruoyi.generator.domain.GenTable;
+
+import com.ruoyi.tool.table.domain.GenTable;
 
 import java.util.List;
 
