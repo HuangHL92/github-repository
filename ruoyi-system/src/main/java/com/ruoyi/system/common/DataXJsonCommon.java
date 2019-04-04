@@ -95,7 +95,7 @@ public class DataXJsonCommon {
             /**
              * 执行Python命令
              */
-            String windowCmd = "python27" + " " + DATAX_PATH + "datax.py" + " " + JSON_PATH + fileName + ".json";
+            String windowCmd = "python" + " " + DATAX_PATH + "datax.py" + " " + JSON_PATH + fileName + ".json";
             Process pr = Runtime.getRuntime().exec(windowCmd);
             BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
 
@@ -128,7 +128,7 @@ public class DataXJsonCommon {
             System.out.println("------------------start----------------------");
             String[] str = getFileName(JSON_PATH);
             for (String name : str) {
-                String windowcmd = "python27" + " " + DATAX_PATH + "datax.py" + " " + JSON_PATH + "/" + name + ".json";
+                String windowcmd = "python" + " " + DATAX_PATH + "datax.py" + " " + JSON_PATH + "/" + name + ".json";
                 System.out.println(windowcmd);
                 Process pr = Runtime.getRuntime().exec(windowcmd);
                 BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
