@@ -1,4 +1,4 @@
-package com.ruoyi.area.dataX.domain;
+package com.ruoyi.system.domain;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -7,6 +7,7 @@ import com.ruoyi.common.base.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("sys_datax_json")
-public class DsonJobIn extends BaseEntity
+public class SysDataX extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

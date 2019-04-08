@@ -1,4 +1,4 @@
-package com.ruoyi.area.dataX.domain.dType;
+package com.ruoyi.system.domain.SysDataXType;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @Date: 2018/10/30 15:29
  */
 @Data
-public class DsonJobInBase {
+public class SysDataXBase {
 
     private String splitPk;//"id"
     private String readerColumn;// "*"

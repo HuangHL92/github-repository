@@ -36,7 +36,7 @@ public class GenTable extends BaseEntity {
 
     private String isSync;
 
-    private String genIdType;
+    private String genIdType = IDTYPE_UUID; // 默认生成策略UUID
 
     private String oldGenIdType;
 
