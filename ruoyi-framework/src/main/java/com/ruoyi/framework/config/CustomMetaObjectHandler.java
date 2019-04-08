@@ -5,6 +5,7 @@ import com.ruoyi.common.enums.UserStatus;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
 import org.apache.ibatis.reflection.MetaObject;
+import org.apache.shiro.UnavailableSecurityManagerException;
 
 import java.util.Date;
 
@@ -27,7 +28,12 @@ public class CustomMetaObjectHandler implements MetaObjectHandler
     @Override
     public void insertFill(MetaObject metaObject)
     {
-        SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser currentUser = null;
+        try {
+            currentUser = ShiroUtils.getSysUser();
+        } catch (UnavailableSecurityManagerException e) {
+
+        }
         Date date = new Date();
         // 创建者
         Object fieldValue = getFieldValByName(COMMON_FIELD_CREATE_BY, metaObject);
@@ -64,7 +70,12 @@ public class CustomMetaObjectHandler implements MetaObjectHandler
     @Override
     public void updateFill(MetaObject metaObject)
     {
-        SysUser currentUser = ShiroUtils.getSysUser();
+        SysUser currentUser = null;
+        try {
+            currentUser = ShiroUtils.getSysUser();
+        } catch (UnavailableSecurityManagerException e) {
+
+        }
         Date date = new Date();
         // 更新者
         Object fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_BY, metaObject);
@@ -72,11 +83,11 @@ public class CustomMetaObjectHandler implements MetaObjectHandler
         {
             setFieldValByName(COMMON_FIELD_UPDATE_BY, currentUser.getUserId().toString(), metaObject);
         }
-        // 更新时间
-        fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_TIME, metaObject);
-        if (fieldValue == null)
-        {
+        // 更新时间：必须要更新
+//        fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_TIME, metaObject);
+//        if (fieldValue == null)
+//        {
             setFieldValByName(COMMON_FIELD_UPDATE_TIME, date, metaObject);
-        }
+//        }
     }
 }
