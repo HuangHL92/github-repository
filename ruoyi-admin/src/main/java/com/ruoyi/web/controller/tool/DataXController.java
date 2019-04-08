@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.tool;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.Log;
@@ -10,6 +11,8 @@ import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.base.BaseController;
+import com.ruoyi.quartz.domain.SysJob;
+import com.ruoyi.quartz.service.ISysJobService;
 import com.ruoyi.system.common.DataXJsonCommon;
 import com.ruoyi.system.domain.SysDataX;
 import com.ruoyi.system.service.ISysDataXService;
@@ -22,8 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.websocket.server.PathParam;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Datax配置 信息操作处理
@@ -35,9 +37,13 @@ import java.util.List;
 @RequestMapping("/tool/dataX")
 public class DataXController extends BaseController {
     private String prefix = "tool/dataX";
-
+    private static final String SYS_JOB_NAME="sysDataxTask";
+    private static final String SYS_JOB_MTHOD_NAME="sysDataxParams";
+    private static final String SYS_JOB_AFTER_NAME = "_Datax";
     @Autowired
     private ISysDataXService sysDataXService;
+    @Autowired
+    private ISysJobService sysJobService;
 
     @RequiresPermissions("tool:dataX:view")
     @GetMapping()
@@ -78,6 +84,10 @@ public class DataXController extends BaseController {
         //表单Action指定
         sysDataX.setFormAction(prefix + "/add");
         mmap.put("sysDataX", sysDataX);
+        SysJob sysJob = new SysJob();
+        sysJob.setJobName(SYS_JOB_NAME);
+        List<SysJob> sysJobs = sysJobService.selectJobList(sysJob);
+        mmap.put("sysJobs", sysJobs);
         return prefix + "/add";
     }
 
@@ -95,9 +105,40 @@ public class DataXController extends BaseController {
             sysDataX.setLog("");
             return toAjax(sysDataXService.saveOrUpdate(sysDataX));
         } else {
-            //生成json文件
-            DataXJsonCommon.dataxJsonMod(sysDataX);
+            //是否要加入定时任务
+            if (sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
+                //生成json文件
+                DataXJsonCommon.dataxJsonMod(sysDataX);
+                sysDataX.setId(UUID.randomUUID().toString());
+                //如果为新增定时任务
+                if (StrUtil.isBlank(sysDataX.getScheduleId())) {
+                    //增加一个定时任务 任务名\任务组\任务方法\任务参数(文件名、sysDataXId)\执行表达式
+                    SysJob sysJob = new SysJob();
+                    sysJob.setJobName(SYS_JOB_NAME);
+                    sysJob.setJobGroup(sysDataX.getFileName()+SYS_JOB_AFTER_NAME);
+                    sysJob.setMethodName(SYS_JOB_MTHOD_NAME);
+                    sysJob.setMethodParams(sysDataX.getFileName());
+                    sysJob.setCronExpression(sysDataX.getScheduleCron());
+                    sysJobService.insertJobCron(sysJob);
+                    sysDataX.setScheduleName(sysJob.getJobName());
+                } else {
+                    //如果为加入旧的定时任务
+                    //根据任务id查找任务
+                    SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
+                    if (job != null) {
+                        //增加参数（文件名） 修改任务
+                        String fileNames = job.getMethodParams() + "," + sysDataX.getFileName();
+                        job.setMethodParams(fileNames);
+                        sysJobService.updateJobCron(job);
+                        sysDataX.setScheduleName(job.getJobName());
+                    }
+
+                }
+
+            }
+
             return toAjax(sysDataXService.save(sysDataX));
+
         }
 
     }
@@ -114,6 +155,10 @@ public class DataXController extends BaseController {
         //sysDataX.setId(pk_encrypt(sysDataX.getId()));
 
         mmap.put("sysDataX", sysDataX);
+        SysJob sysJob = new SysJob();
+        sysJob.setJobName(SYS_JOB_NAME);
+        List<SysJob> sysJobs = sysJobService.selectJobList(sysJob);
+        mmap.put("sysJobs", sysJobs);
         return prefix + "/add";
     }
 
@@ -140,11 +185,32 @@ public class DataXController extends BaseController {
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids) {
+
         //删除对应的文件
         for (String id : Arrays.asList(ids.split(","))
         ) {
-            //删除文件
-            DataXJsonCommon.delJsonAndLog(sysDataXService.getById(id).getFileName());
+            String newMethodParams;
+            SysDataX sysDataX = sysDataXService.getById(id);
+            //删除定时任务 捕获转换异常
+            try {
+                SysJob sysJob = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
+                if (sysJob != null) {
+                    List<String> methodParamsList = new ArrayList<String>();
+                    Collections.addAll(methodParamsList, sysJob.getMethodParams().split(","));
+                    if (methodParamsList.contains(sysDataX.getFileName())) {
+                        methodParamsList.remove(sysDataX.getFileName());
+                        newMethodParams = String.join(",", methodParamsList);
+                        sysJob.setMethodParams(newMethodParams);
+                        sysJobService.updateJobCron(sysJob);
+                    }
+                }
+                DataXJsonCommon.delJsonAndLog(sysDataX.getFileName());
+            } catch (NumberFormatException e) {
+                //删除文件
+                DataXJsonCommon.delJsonAndLog(sysDataX.getFileName());
+            }
+
+
         }
         return toAjax(sysDataXService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 
@@ -191,4 +257,5 @@ public class DataXController extends BaseController {
         mmap.put("sysDataX", sysDataXService.getById(id));
         return prefix + "/detail";
     }
+
 }

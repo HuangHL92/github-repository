@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * Datax配置表 dson_job_in
- * 
+ *
  * @author jiyunsoft
  * @date 2019-04-02
  */
@@ -23,7 +23,8 @@ import java.util.Date;
 public class SysDataX extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
+    public  static final Integer DATAX_SCHEDULE_YES = 1;
+    public  static final Integer DATAX_SCHEDULE_NO = 0;
 	/** 主键 */
     @TableId
 	private String id;
