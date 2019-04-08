@@ -5,14 +5,13 @@ import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.system.service.ISysPostService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.page.TableDataInfo;
 
-//
+
 @Controller
 @RequestMapping("/demo/resource")
 public class ResourceController extends BaseController {
@@ -50,6 +49,22 @@ public class ResourceController extends BaseController {
         Demo demo = new Demo();
         //表单Action指定
         demo.setFormAction(prefix + "/add");
+        mmap.put("demo", demo);
+        return prefix + "/add";
+    }
+
+    /**
+     * 修改测试
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") String id, ModelMap mmap) {
+
+        Demo demo = demoService.getById(id);
+        //主键加密（TODO：配合editSave方法使用）
+        demo.setId(pk_encrypt(demo.getId()));
+        //表单Action指定
+        demo.setFormAction(prefix + "/edit");
+
         mmap.put("demo", demo);
         return prefix + "/add";
     }

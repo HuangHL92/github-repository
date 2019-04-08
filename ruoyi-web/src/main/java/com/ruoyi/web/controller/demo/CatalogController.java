@@ -11,27 +11,23 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-//
-@Controller
-@RequestMapping("/demo/app")
-public class AppController extends BaseController {
 
-    private String prefix = "demo/app";
+@Controller
+@RequestMapping("/demo/catalog")
+public class CatalogController extends BaseController {
+
+    private String prefix = "demo/catalog";
 
     @Autowired
     private ISysPostService postService;
-
     @Autowired
     private IDemoService demoService;
 
     @GetMapping()
     public String demo() {
-        return prefix + "/all";
+        return prefix + "/list";
     }
 
-    /**
-     * 查询测试列表
-     */
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(Demo demo) {
@@ -65,21 +61,6 @@ public class AppController extends BaseController {
         demo.setFormAction(prefix + "/edit");
 
         mmap.put("demo", demo);
-        return prefix + "/edit";
-    }
-
-    /**
-     * 修改测试
-     */
-    @GetMapping("/check")
-    public String check(@RequestParam("id") String id, ModelMap mmap) {
-        Demo demo = demoService.getById(id);
-        //主键加密（TODO：配合editSave方法使用）
-        demo.setId(pk_encrypt(demo.getId()));
-        //表单Action指定
-        /*demo.setFormAction(prefix + "/edit");*/
-
-        mmap.put("demo", demo);
-        return prefix + "/check";
+        return prefix + "/add";
     }
 }

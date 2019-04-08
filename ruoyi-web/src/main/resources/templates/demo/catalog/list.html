@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+      xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
+<link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
+
+<body class="gray-bg">
+
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="demo-form">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            名称：<input type="text" name="name"/>
+                        </li>
+                        <div class="layui-form-mid layui-word-aux">提醒：只有状态为【待提交】的数据可以修改</div>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;查询</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;刷新</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm hidden-xs" id="toolbar" demo="group">
+            <a class="btn btn-success" onclick="$.operate.addFull()">
+                <i class="fa fa-plus"></i> 新增
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.editFull()">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del disabled" onclick="$.operate.removeAll()">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+
+        </div>
+
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+
+<div th:include="include :: footer"></div>
+
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:demo:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:demo:remove')}]];
+    var prefix = ctx + "demo/catalog";
+
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            detailUrl: prefix + "/detail/{id}",
+            modalName: "编目",
+            search: false,
+            showExport: false,
+            context_Menu: '#context-menu',
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'name',
+                    title: '编号',
+                    width: 200,
+
+                },
+                {
+                    field: 'createTime',
+                    title: '名称',
+                    width: 50,
+                },
+                {
+                    field: 'createTime',
+                    title: '提供单位',
+                    width: 250,
+                },
+                {
+                    field: 'createTime',
+                    title: '采集方式',
+                    width: 100,
+                },
+                {
+                    field: 'createTime',
+                    title: '所属分类',
+                    width: 10,
+                },
+                {
+                    field: 'createTime',
+                    title: '最近访问时间',
+                    width: 10,
+                },
+                {
+                    field: 'createTime',
+                    title: '状态',
+                    width: 10,
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    width: 200,
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        /*判断编目状态(待提交),暂时写死*/
+                        if (row.name == "姓名4991") {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>修改</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="#" onclick="searchLog(\'' + row.id + '\')"><i class="fa fa-book"></i>日志</a> ');
+                        }
+                        /*判断状态是否为待审核*/
+                        if (row.name == "姓名4989") {
+                            actions.push('<a class="btn btn-info btn-xs " onclick="doCheck(\'' + row.id + '\')"><i class="fa fa-log"></i>审核</a> ');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function doCheck(id) {
+        window.location.href = ctx + "demo/app/check?id=" + id;
+    }
+</script>
+</body>
+</html>
