@@ -52,7 +52,7 @@
                                 </select>
                             </div>
                             <div class="col-sm-2" style="margin-top: 8px;">
-                                <a url="/system/tSystem/form" toggle="dialog">添加</a>
+                                <a onclick="addSystem();">添加系统</a>
                             </div>
                         </div>
 
@@ -308,10 +308,14 @@
         }
 
     }
-
     // 删除第一行的btn
     function removeFirstRowDelBtn() {
         $('#mytable tr').eq(1).find('td button').remove();
+    }
+
+    function addSystem() {
+        alert("lailelaodi")
+        window.location.href = ctx + "/demo/system/add";
     }
 </script>
 

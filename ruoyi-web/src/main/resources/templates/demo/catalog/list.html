@@ -58,7 +58,7 @@
     $(function () {
         var options = {
             url: prefix + "/list",
-            createUrl: prefix + "/add",
+            createUrl: prefix + "/form",
             updateUrl: prefix + "/edit/{id}",
             detailUrl: prefix + "/detail/{id}",
             modalName: "编目",
@@ -82,7 +82,10 @@
                 {
                     field: 'createTime',
                     title: '名称',
-                    width: 50,
+                    width: 200,
+                    formatter:function (value, row, index) {
+                        return link_detail(row.name,row.id);
+                    }
                 },
                 {
                     field: 'createTime',
@@ -133,7 +136,7 @@
     });
 
     function doCheck(id) {
-        window.location.href = ctx + "demo/app/check?id=" + id;
+        window.location.href = ctx + "demo/resource/edit/" + id;
     }
 </script>
 </body>
