@@ -3,20 +3,20 @@ package com.ruoyi.web.controller.demo;
 
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
+import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.system.service.ISysPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import com.ruoyi.common.page.TableDataInfo;
 
 
 @Controller
-@RequestMapping("/demo/resource")
-public class ResourceController extends BaseController {
+@RequestMapping("/demo/scheduler")
+public class SchedulerController extends BaseController {
 
-    private String prefix = "demo/resource";
+    private String prefix = "demo/scheduler";
 
     @Autowired
     private ISysPostService postService;
@@ -26,7 +26,7 @@ public class ResourceController extends BaseController {
 
     @GetMapping()
     public String demo() {
-        return prefix + "/all";
+        return prefix + "/list";
     }
 
     /**
@@ -58,7 +58,6 @@ public class ResourceController extends BaseController {
      */
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") String id, ModelMap mmap) {
-
         Demo demo = demoService.getById(id);
 
         demo.setId(pk_encrypt(demo.getId()));
@@ -68,4 +67,5 @@ public class ResourceController extends BaseController {
         mmap.put("demo", demo);
         return prefix + "/add";
     }
+
 }

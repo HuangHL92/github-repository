@@ -19,19 +19,38 @@
                         </li>
                         <li>
                             <div class="radio i-checks" style="margin-top: 5px;">
-                                <input type="radio" id="distype1" name="disptype" checked="" value="1">按分类显示
-                                <input type="radio" id="distype2" name="disptype" value="2">按单位显示
-                                <input type="radio" id="distype3" name="disptype" value="3">按系统显示
+                                <input type="radio" id="disptype1" name="disptype" data-toggle="icheck" value="1" checked/>按分类显示
+                                <input type="radio" id="disptype2" name="disptype" data-toggle="icheck" value="2" />按单位显示
+                                <input type="radio" id="disptype3" name="disptype" data-toggle="icheck" value="3" />按系统显示
                             </div>
                         </li>
-                        <li id="cls1">
 
+                        <li id="cls">
+                            <span class="cls1">
                             数据分类：<select name="catalog1" id="catalog1" lay-filter="">
-                            <option value="">--请选择--</option>
+                                <option value="">--请选择--</option>
+                                <option value="">测试数据分类1</option>
+                                <option value="">测试数据分类2</option>
                         </select>
+                            </span>
+                            <span class="cls2">
+                            所属单位：<select name="officeId" id="officeId" lay-filter="">
+                                <option value="">--请选择--</option>
+                                <option value="">测试所属单位1</option>
+                                <option value="">测试所属单位2</option>
+                        </select>
+                        </span>
+                            <span class="cls3">
+                            所属系统：<select name="systemId" id="systemId" lay-filter="">
+                                <option value="">--请选择--</option>
+                                <option value="">测试所属系统1</option>
+                                <option value="">测试所属系统2</option>
+                                </select>
+                        </span>
                             <div class="layui-form-mid layui-word-aux" style="margin-top: -3px">
                                 数据量每30分钟计算一次，可能存在滞后的情况。
                             </div>
+                        </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -95,7 +114,12 @@
                     field: 'name',
                     title: '名称',
                     width: 200,
-                    /*跳转detail*/
+                    /*跳转到修改页*/
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<div class="layui-text"><a href="#" onclick="$.operate.detail(\'' + row.id + '\')">' + row.name + '</a></div>');
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'createTime',
@@ -148,7 +172,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-info btn-xs ' + addFlag + '" href="#" onclick="$.operate.add(\'' + row.menuId + '\')"><i class="fa fa-plus"></i>新增</a> ');
+                        actions.push('<a class="btn btn-info btn-xs ' + addFlag + '" href="#" onclick="$.operate.addFull(\'' + row.menuId + '\')"><i class="fa fa-plus"></i>新增</a> ');
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
 
@@ -158,9 +182,8 @@
         $.table.init(options);
 
         var menuData = [
-
             {
-                content: '导出', callback: function () {
+                content: '导出选中', callback: function () {
                     $.table.exportExcel();
                 }
             }
@@ -172,18 +195,32 @@
                 data: menuData
             });
         });
+
+        $("input:radio[name='disptype']").on('ifChecked', function (event) {
+            shiftDispType(this.value);
+        });
+        shiftDispType(1);
+
+        function shiftDispType(opt) {
+            $(".cls1").hide();
+            $(".cls2").hide();
+            $(".cls3").hide();
+            if(opt==1){
+                $(".cls1").show();
+                $(".officeId").val("");
+                $(".systemId").val("");
+            } else if(opt==2){
+                $(".cls2").show();
+                $("#catalog1").val("");
+                $("#systemId").val("");
+            } else {
+                $(".cls3").show();
+                $("#catalog1").val("");
+                $("#officeId").val("");
+            }
+        }
+
     });
-
-    function batchData() {
-        var url = ctx + "demo/resource/batchData";
-        $.operate.post(url, $("#form-demo-redis").serialize());
-    }
-
-    function clearAll() {
-        var url = ctx + "demo/resource/clearAll";
-        $.operate.post(url, $("#form-demo-redis").serialize());
-    }
-
 </script>
 </body>
 </html>

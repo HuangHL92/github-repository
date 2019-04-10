@@ -16,29 +16,23 @@
 
         <input id="create_by" name="create_by" type="hidden" value=""/>
         <!--非明细数据-->
+        <div class="alert alert-warning"> 注意：请按任务调度中心配置进行填写</div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>基本信息</h5>
-                        <div class="ibox-tools">
-                            <a class="collapse-link">
-                                <i class="fa fa-chevron-up"></i>
-                            </a>
-
-                        </div>
-                    </div>
                     <div class="ibox-content">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">接口名称：</label>
-
+                            <label class="col-sm-2 control-label">编号：</label>
                             <div class="col-sm-4">
                                 <input type="text" name="name" id="name" class="form-control required"
                                        th:field="*{name}">
                             </div>
+                            <div col-sm-4>
+                                <div class="layui-form-mid layui-word-aux"> 必须保证唯一，且和任务调度中心配置一致。</div>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">接口类型：</label>
+                            <label class="col-sm-2 control-label">任务类型：</label>
                             <div class="col-sm-4">
                                 <select data-toggle="select" data-type="user" data-radio="true" id="reporter"
                                         data-skin="warm">
@@ -46,33 +40,31 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">接口状态：</label>
+                            <label class="col-sm-2 control-label">任务名称：</label>
                             <div class="col-sm-4">
-                                <select data-toggle="select" data-type="user" data-radio="true" id="reporter1"
-                                        data-skin="warm">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">API地址：</label>
-                            <div class="col-sm-4">
-                                <input type="text" name="name" id="system" class="form-control required"
+                                <input type="text" name="name" id="rwmc" class="form-control required"
                                        th:field="*{name}">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">接口描述：</label>
+                            <label class="col-sm-2 control-label">功能描述：</label>
                             <div class="col-sm-10">
                                     <textarea id="remark" name="remark" class="form-control" rows="3"
                                               th:field="*{remark}"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">返回JSON模板：</label>
-                            <div class="col-sm-10">
-                                    <textarea id="JSON" name="remark" class="form-control" rows="40"
-                                              th:field="*{remark}">
-                                    </textarea>
+                            <label class="col-sm-2 control-label">执行周期：</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="name" id="rwmc" class="form-control"
+                                       th:field="*{name}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">最后执行时间：</label>
+                            <div class="col-sm-4">
+                                <input type="text" name="name" id="rwmc" class="form-control"
+                                       th:field="*{name}">
                             </div>
                         </div>
                     </div>
@@ -85,14 +77,6 @@
 
 <!--底部引用-->
 <div th:include="include::footer"></div>
-
-<!--页面JS-->
-<script type="text/javascript">
-    layui.use('layedit', function(){
-        var layedit = layui.layedit;
-        layedit.build('JSON'); //建立编辑器
-    });
-</script>
 
 </body>
 </html>
