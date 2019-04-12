@@ -100,6 +100,39 @@ public class DataXController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(SysDataX sysDataX, HttpServletRequest request, Model model) {
         if (StringUtils.isNotBlank(sysDataX.getId())) {
+            SysDataX sysDataXOne = sysDataXService.getById(sysDataX);
+            if (sysDataXOne.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
+                //1 有任务
+                //1.1 查找任务
+                try{
+                    SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataXOne.getScheduleId()));
+
+                    if (job != null && sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_NO)) {
+                        //1.2取消任务
+                        //删除任务
+                        delSysJob(sysDataXOne.getScheduleId(), sysDataXOne.getFileName());
+                        //更新datax的值
+                        sysDataX.setScheduleCron("");
+                        sysDataX.setScheduleName("");
+                    } else if (null == job && sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
+                        //1.3添加新任务
+                        addSysJob(sysDataX);
+                    } else if (job != null && sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
+                        //1.4切换至其他任务
+                        //1.4.1删除旧任务
+                        delSysJob(sysDataXOne.getScheduleId(), sysDataXOne.getFileName());
+                        //1.4.2新增新任务
+                        addSysJob(sysDataX);
+                    }
+                } catch (NumberFormatException e){
+                    DataXJsonCommon.dataxJsonMod(sysDataX);
+                    sysDataX.setLog("");
+                }
+            } else {
+                //2 无任务
+                //2.1添加到新任务
+                addSysJob(sysDataX);
+            }
             //生成json文件
             DataXJsonCommon.dataxJsonMod(sysDataX);
             sysDataX.setLog("");
@@ -107,36 +140,12 @@ public class DataXController extends BaseController {
         } else {
             //是否要加入定时任务
             if (sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
-                //生成json文件
-                DataXJsonCommon.dataxJsonMod(sysDataX);
                 sysDataX.setId(UUID.randomUUID().toString());
                 //如果为新增定时任务
-                if (StrUtil.isBlank(sysDataX.getScheduleId())) {
-                    //增加一个定时任务 任务名\任务组\任务方法\任务参数(文件名、sysDataXId)\执行表达式
-                    SysJob sysJob = new SysJob();
-                    sysJob.setJobName(SYS_JOB_NAME);
-                    sysJob.setJobGroup(sysDataX.getFileName()+SYS_JOB_AFTER_NAME);
-                    sysJob.setMethodName(SYS_JOB_MTHOD_NAME);
-                    sysJob.setMethodParams(sysDataX.getFileName());
-                    sysJob.setCronExpression(sysDataX.getScheduleCron());
-                    sysJobService.insertJobCron(sysJob);
-                    sysDataX.setScheduleName(sysJob.getJobName());
-                } else {
-                    //如果为加入旧的定时任务
-                    //根据任务id查找任务
-                    SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
-                    if (job != null) {
-                        //增加参数（文件名） 修改任务
-                        String fileNames = job.getMethodParams() + "," + sysDataX.getFileName();
-                        job.setMethodParams(fileNames);
-                        sysJobService.updateJobCron(job);
-                        sysDataX.setScheduleName(job.getJobName());
-                    }
-
-                }
-
+                addSysJob(sysDataX);
             }
-
+            //生成json文件
+            DataXJsonCommon.dataxJsonMod(sysDataX);
             return toAjax(sysDataXService.save(sysDataX));
 
         }
@@ -189,28 +198,15 @@ public class DataXController extends BaseController {
         //删除对应的文件
         for (String id : Arrays.asList(ids.split(","))
         ) {
-            String newMethodParams;
             SysDataX sysDataX = sysDataXService.getById(id);
             //删除定时任务 捕获转换异常
             try {
-                SysJob sysJob = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
-                if (sysJob != null) {
-                    List<String> methodParamsList = new ArrayList<String>();
-                    Collections.addAll(methodParamsList, sysJob.getMethodParams().split(","));
-                    if (methodParamsList.contains(sysDataX.getFileName())) {
-                        methodParamsList.remove(sysDataX.getFileName());
-                        newMethodParams = String.join(",", methodParamsList);
-                        sysJob.setMethodParams(newMethodParams);
-                        sysJobService.updateJobCron(sysJob);
-                    }
-                }
+               delSysJob(sysDataX.getScheduleId(),sysDataX.getFileName());
                 DataXJsonCommon.delJsonAndLog(sysDataX.getFileName());
             } catch (NumberFormatException e) {
                 //删除文件
                 DataXJsonCommon.delJsonAndLog(sysDataX.getFileName());
             }
-
-
         }
         return toAjax(sysDataXService.removeByIds(Arrays.asList(Convert.toStrArray(ids))));
 
@@ -258,4 +254,60 @@ public class DataXController extends BaseController {
         return prefix + "/detail";
     }
 
+    /**
+     * 删除任务
+     * @param jobId
+     * @param methodParam
+     */
+    public void delSysJob(String jobId,String methodParam){
+        SysJob sysJob = sysJobService.selectJobById(Long.parseLong(jobId));
+        if (sysJob != null) {
+            List<String> methodParamsList = new ArrayList<String>();
+            Collections.addAll(methodParamsList, sysJob.getMethodParams().split(","));
+            if (methodParamsList.contains(methodParam)) {
+                methodParamsList.remove(methodParam);
+                sysJob.setMethodParams(String.join(",", methodParamsList));
+                sysJobService.updateJobCron(sysJob);
+            }
+        }
+    }
+
+    /**
+     * 增加一个新任务
+     * @param sysDataX
+     */
+    public void addSysJob(SysDataX sysDataX){
+        if (StrUtil.isBlank(sysDataX.getScheduleId())) {
+            //增加一个定时任务 任务名\任务组\任务方法\任务参数(文件名、sysDataXId)\执行表达式
+            SysJob sysJob = new SysJob();
+            sysJob.setJobName(SYS_JOB_NAME);
+            sysJob.setJobGroup(sysDataX.getFileName()+SYS_JOB_AFTER_NAME);
+            sysJob.setMethodName(SYS_JOB_MTHOD_NAME);
+            sysJob.setMethodParams(sysDataX.getFileName());
+            sysJob.setCronExpression(sysDataX.getScheduleCron());
+            sysJobService.insertJobCron(sysJob);
+            //变更datax值
+            sysDataX.setScheduleName(sysJob.getJobGroup());
+            sysDataX.setScheduleId(String.valueOf(sysJob.getJobId()));
+        } else {
+            //如果为加入旧的定时任务
+            //根据任务id查找任务
+            SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
+            if (job != null) {
+                List<String> methodParamsList = new ArrayList<String>();
+                if(StrUtil.isNotBlank(job.getMethodParams())){
+                    Collections.addAll(methodParamsList, job.getMethodParams().split(","));
+                }
+                methodParamsList.add(sysDataX.getFileName());
+                //增加参数（文件名） 修改任务
+                job.setMethodParams(String.join(",", methodParamsList));
+                sysJobService.updateJobCron(job);
+                //变更datax值
+                sysDataX.setScheduleName(job.getJobGroup());
+                sysDataX.setScheduleCron(job.getCronExpression());
+                sysDataX.setScheduleId(String.valueOf(job.getJobId()));
+            }
+
+        }
+    }
 }
