@@ -1,10 +1,9 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.framework.util.CacheUtils;
-import com.ruoyi.framework.web.domain.server.Sys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -57,4 +56,33 @@ public class SysIndexController extends BaseController
         mmap.put("version", Global.getVersion());
         return "main";
     }
+
+    /***
+     *
+     * @param mmap
+     * @param id
+     * @return
+     */
+    @GetMapping("/system/menu_left")
+    public String menu_left(ModelMap mmap,String id)
+    {
+        // 取身份信息
+        SysUser user = getSysUser();
+
+        // 根据用户id取出菜单
+        List<SysMenu> menus = cacheUtils.getUserMenuCache().get(user.getLoginName());
+        if(menus==null) {
+            menus = menuService.selectMenusByUser(user);
+            cacheUtils.getUserMenuCache().put(user.getLoginName(),menus);
+        }
+        //根据一级菜单ID进行过滤
+        List<SysMenu> pm;
+        pm = menus.stream().filter(u->u.getMenuId()==Long.parseLong(id)).collect(Collectors.toList());
+        mmap.put("menus", pm.get(0));
+        mmap.put("user", user);
+        mmap.put("copyrightYear", Global.getCopyrightYear());
+        return "menu_left";
+    }
+
+
 }

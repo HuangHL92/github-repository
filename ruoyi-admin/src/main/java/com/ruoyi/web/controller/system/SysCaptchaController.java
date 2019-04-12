@@ -9,11 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import io.swagger.annotations.Api;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
@@ -25,7 +24,7 @@ import com.ruoyi.framework.web.base.BaseController;
  * @author ruoyi
  */
 
-@Api("图片验证码")
+
 @Controller
 @RequestMapping("/captcha")
 public class SysCaptchaController extends BaseController

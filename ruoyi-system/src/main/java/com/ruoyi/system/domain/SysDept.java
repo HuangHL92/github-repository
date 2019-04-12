@@ -66,6 +66,16 @@ public class SysDept extends BaseEntity
     @TableField(exist = false)
     private int levels;
 
+    /** 编号 */
+    private String no;
+
+    public String getNo() {
+        return no;
+    }
+
+    public void setNo(String no) {
+        this.no = no;
+    }
 
 
     public int getLevels() {
