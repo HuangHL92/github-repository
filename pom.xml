@@ -60,6 +60,7 @@
         <module>ruoyi-web</module>
         <module>ruoyi-wx</module>
         <module>ruoyi-api</module>
+        <module>ruoyi-web-service</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -216,6 +217,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+
 
 
     </dependencies>

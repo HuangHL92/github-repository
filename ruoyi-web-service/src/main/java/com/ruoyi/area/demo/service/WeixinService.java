@@ -1,4 +1,4 @@
-//package com.ruoyi.area.demo.service;
+package com.ruoyi.area.demo.service;//package com.ruoyi.area.demo.service;
 //
 //import com.ruoyi.config.WxMpConfig;
 //import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;

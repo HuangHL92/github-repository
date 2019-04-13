@@ -1,11 +1,8 @@
 package com.ruoyi.area.demo.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.area.demo.domain.Demo;
-import javafx.scene.control.Pagination;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
@@ -22,6 +19,6 @@ public interface IDemoService extends IService<Demo>
 
     Page<Demo> selectList4Page1(Page<Demo> page);
 
-    Page<Demo> selectList4Page2(Page<Demo> page,Demo sysDemo);
+    Page<Demo> selectList4Page2(Page<Demo> page, Demo sysDemo);
 
 }

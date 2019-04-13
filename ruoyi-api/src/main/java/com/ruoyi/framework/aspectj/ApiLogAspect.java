@@ -2,11 +2,12 @@ package com.ruoyi.framework.aspectj;
 
 import cn.hutool.core.date.DateTime;
 import com.google.gson.Gson;
-import com.ruoyi.common.utils.ServletUtils;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.http.HttpUtils;
+//import com.ruoyi.common.utils.ServletUtils;
+//import com.ruoyi.common.utils.StringUtils;
+//import com.ruoyi.common.utils.http.HttpUtils;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -57,7 +58,7 @@ public class ApiLogAspect
         Object[] args = joinPoint.getArgs();
         MethodSignature signature  = (MethodSignature)joinPoint.getSignature();
         Method method = signature.getMethod();
-        log.info("{}.{}: 请求参数：{}",method.getDeclaringClass().getName(),method.getName(),StringUtils.join(args,";"));
+        log.info("{}.{}: 请求参数：{}",method.getDeclaringClass().getName(),method.getName(), StringUtils.join(args,";"));
 
     }
 
@@ -99,28 +100,28 @@ public class ApiLogAspect
         {
             StringBuffer sb = new StringBuffer();
 
-            HttpServletRequest request = ServletUtils.getRequest();
-            String agentString = request.getHeader("User-Agent");
-            UserAgent userAgent = UserAgent.parseUserAgentString(agentString);
-            OperatingSystem operatingSystem = userAgent.getOperatingSystem(); // 操作系统信息
-            eu.bitwalker.useragentutils.DeviceType deviceType = operatingSystem.getDeviceType(); // 设备类型
-            String url = request.getRequestURL().toString();
-            // 请求的地址
-            String ip = HttpUtils.getClientIP(request);
-            sb.append("\r\n").append("*******************************请求信息-S***************************").append("\r\n");
-            sb.append("URL：" + url).append("\r\n");
-            sb.append("IP：" + ip).append("\r\n");
-            sb.append("请求时间：" + DateTime.now().toString("\"yyyy年MM月dd日 hh时mm分ss秒\"")).append("\r\n");
-            sb.append("操作系统：" + operatingSystem.getName()).append("\r\n");
-            sb.append("设备类型：" + deviceType).append("\r\n");
-            sb.append("头部信息：").append("\r\n");
-            Enumeration<String> header =request.getHeaderNames();
-            while (header.hasMoreElements()){
-                String s = header.nextElement();
-                sb.append(s+":"+request.getHeader(s)).append("\r\n");
-            }
-            sb.append("*******************************请求信息-E***************************");
-            log.info(sb.toString());
+//            HttpServletRequest request = ServletUtils.getRequest();
+//            String agentString = request.getHeader("User-Agent");
+//            UserAgent userAgent = UserAgent.parseUserAgentString(agentString);
+//            OperatingSystem operatingSystem = userAgent.getOperatingSystem(); // 操作系统信息
+//            eu.bitwalker.useragentutils.DeviceType deviceType = operatingSystem.getDeviceType(); // 设备类型
+//            String url = request.getRequestURL().toString();
+//            // 请求的地址
+//            String ip = HttpUtils.getClientIP(request);
+//            sb.append("\r\n").append("*******************************请求信息-S***************************").append("\r\n");
+//            sb.append("URL：" + url).append("\r\n");
+//            sb.append("IP：" + ip).append("\r\n");
+//            sb.append("请求时间：" + DateTime.now().toString("\"yyyy年MM月dd日 hh时mm分ss秒\"")).append("\r\n");
+//            sb.append("操作系统：" + operatingSystem.getName()).append("\r\n");
+//            sb.append("设备类型：" + deviceType).append("\r\n");
+//            sb.append("头部信息：").append("\r\n");
+//            Enumeration<String> header =request.getHeaderNames();
+//            while (header.hasMoreElements()){
+//                String s = header.nextElement();
+//                sb.append(s+":"+request.getHeader(s)).append("\r\n");
+//            }
+//            sb.append("*******************************请求信息-E***************************");
+//            log.info(sb.toString());
         }
         catch (Exception exp)
         {

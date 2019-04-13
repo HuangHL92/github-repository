@@ -11,11 +11,8 @@ import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.DataSourceType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.datasource.DynamicDataSourceContextHolder;
-import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,8 +35,6 @@ public class TestController extends ApiBaseController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
-
 
 
     @ApiOperation("get测试")
@@ -100,7 +95,6 @@ public class TestController extends ApiBaseController {
 
         return ApiResult.success();
     }
-
 
 
     @ApiOperation("mybatisPlus 翻页获得数据Demo1")
@@ -171,7 +165,6 @@ public class TestController extends ApiBaseController {
         demo.setName(name + "_" + i++);
         demoService.save(demo);
 
-
         //TODO 模式错误
         if(hasError==1) {
             i = 1/0;
@@ -186,12 +179,9 @@ public class TestController extends ApiBaseController {
     }
 
 
-
     @ApiOperation("批量插入测试(JdbcTemplate)")
     @GetMapping("/batchJdbc/{size}")
     public ApiResult batchJdbc(@PathVariable(name="size") Integer size) {
-
-
 
         String sql = "INSERT INTO sys_demo " +
                 "(id, name) VALUES (?, ?)";
@@ -216,7 +206,6 @@ public class TestController extends ApiBaseController {
             }
         });
 
-
         return ApiResult.success("成功插入" + size + "条记录！" );
     }
 
@@ -234,9 +223,7 @@ public class TestController extends ApiBaseController {
             list.add(demo);
         }
 
-
         demoService.saveBatch(list);
-
 
         return ApiResult.success("成功插入" + size + "条记录！");
     }

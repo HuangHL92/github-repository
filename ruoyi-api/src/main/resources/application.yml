@@ -1,7 +1,7 @@
 # 项目相关配置
 ruoyi:
   # 名称（TODO 显示在首页等位置，根据项目情况自行更换）
-  name: 吉运Java开发平台3.0
+  name: 吉运通用接口平台
   # 版本
   version: 3.2.0
   # 版权年份
@@ -33,20 +33,9 @@ logging:
     org.springframework: WARN
     org.spring.springboot.dao: debug
 
-# 用户配置
-user:
-  password:
-    # 密码错误{maxRetryCount}次锁定10分钟
-    maxRetryCount: 5
 
 # Spring配置
 spring:
-  # 模板引擎
-  thymeleaf:
-    mode: HTML
-    encoding: utf-8
-    # 禁用缓存
-    cache: false
   # 资源信息
   messages:
     # 国际化资源文件路径
@@ -60,9 +49,9 @@ spring:
     active: druid
   # 文件上传
   servlet:
-     multipart:
-       max-file-size:  30MB
-       max-request-size:  30MB
+    multipart:
+      max-file-size:  30MB
+      max-request-size:  30MB
   # 服务模块
   devtools:
     restart:
@@ -85,7 +74,7 @@ spring:
     prefix: jy_basic  #前缀（TODO 重要：用于区分不同项目的空间，根据项目情况自行更换）
 
   main:
-      allow-bean-definition-overriding: true #遇到相同名字，是否进行覆盖
+    allow-bean-definition-overriding: true #遇到相同名字，是否进行覆盖
 
 # MyBatis-Plus
 mybatis-plus:
@@ -124,37 +113,6 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
-# Shiro
-shiro:
-  user:
-    # 登录地址
-    loginUrl: /login
-    # 权限认证失败地址
-    unauthorizedUrl: /unauth
-    # 首页地址
-    indexUrl: /index
-    # 验证码开关
-    captchaEnabled: false
-    # 验证码类型 math 数组计算 char 字符
-    captchaType: math
-  cookie:
-    # 设置Cookie的域名 默认空，即当前访问的域名
-    domain:
-    # 设置cookie的有效访问路径
-    path: /
-    # 设置HttpOnly属性
-    httpOnly: true
-    # 设置Cookie的过期时间，天为单位
-    maxAge: 30
-  session:
-    # Session超时时间（默认30分钟）
-    expireTime: 30
-    # 同步session到数据库的周期（默认1分钟）
-    dbSyncPeriod: 1
-    # 相隔多久检查一次session的有效性，默认就是10分钟
-    validationInterval: 10
-    # 是否将用户在线信息写入数据库
-    dbSyncflag: false
 
 # 防止XSS攻击
 xss:
@@ -165,38 +123,18 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
-# 代码生成
-gen:
-  # 作者
-  author: jiyunsoft
-  # 默认生成包路径 system 需改成自己的模块名称 如 system monitor tool
-  packageName: com.ruoyi.system
-  # 自动去除表前缀，默认是true
-  autoRemovePre: true
-  # 表前缀(类名不会包含表前缀)
-  tablePrefix: biz_
 
-#
-jiyun:
-  notice:
-    mailto: fei.yu@51e.com.cn   #（TODO 用于接收异常通知等信息的邮件地址，根据项目情况自行更换）
-    isopen: true #是否开启邮件通知
-  websocket:
-    url: ws://localhost:81/socketServer #（TODO websocket服务地址，根据项目情况自行更换）
-  #shorturl地址
-  shortapi:
-    url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
 # 微信公众号配置
 wx:
   mp:
     configs:
-      - appId: wx2b911f070115b89a #（一个公众号的appid  微驱动）
-        secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret 微驱动）
-        token: 111 #（接口配置里的Token值）
-        aesKey: 111 #（接口配置里的EncodingAESKey值）
-        webPath: http://hahayu.natapp1.cc
-        thirdurl: http://wx.51e.com.cn/get-weixin-code.html
-        ##      - appId: 2222 （另一个公众号的appid，以下同上）
+    - appId: wx2b911f070115b89a #（一个公众号的appid  微驱动）
+      secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret 微驱动）
+      token: 111 #（接口配置里的Token值）
+      aesKey: 111 #（接口配置里的EncodingAESKey值）
+      webPath: http://hahayu.natapp1.cc
+      thirdurl: http://wx.51e.com.cn/get-weixin-code.html
+      ##      - appId: 2222 （另一个公众号的appid，以下同上）
 #        secret: 1111
 #        token: 111
 #        aesKey: 111
@@ -210,21 +148,6 @@ api:
   token:
     expires: 10 #jwt token过期时间（单位：分钟）
 
-#Actuator相关配置
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  server:
-    port: 10111
-    servlet:
-      context-path: /
-    ssl:
-      enabled: false
-  endpoint:
-    health:
-      show-details: always
 
 # 第三方认证配置
 auth:
@@ -233,12 +156,9 @@ auth:
     client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
     redirect-uri: http://localhost:81/oauth/gitee/login
 
-# 正则表达式(未启用)
-#regex:
-#  password: ^[a-zA-Z0-9]{6,20}$
-#  mobile: ^[1](([3|5|8][\d])|([4][5,6,7,8,9])|([6][5,6])|([7][3,4,5,6,7,8])|([9][8,9]))[\d]{8}$
-#  email: ^([a-z0-9A-Z]+[-|\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\.)+[a-zA-Z]{2,}$
-#  url: http(s)?://([\w-]+\.)+[\w-]+(/[\w- ./?%&=]*)?
-#  idcard: (^\d{18}$)|(^\d{15}$)
-#  ipaddress: (25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)
-#  username: ^[a-zA-Z]\w{5,20}$
+
+#
+jiyun:
+  #shorturl地址
+  shortapi:
+    url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=

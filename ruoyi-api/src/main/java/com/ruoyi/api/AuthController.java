@@ -3,12 +3,12 @@ package com.ruoyi.api;
 import com.ruoyi.base.ApiBaseController;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
-import com.ruoyi.common.utils.JedisUtils;
-import com.ruoyi.common.utils.StringUtils;
+//import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.framework.jwt.domain.Account;
 import com.ruoyi.framework.jwt.service.TokenService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 /**
@@ -36,6 +37,7 @@ public class AuthController extends ApiBaseController {
     private int  expires;
 
     private String TOKEN_KEY= "tokenCache:%s";
+
 
     @ApiOperation("用户验证（成功：返回token）")
     @PostMapping("getToken")
@@ -86,7 +88,8 @@ public class AuthController extends ApiBaseController {
         }
 
         //3.生成令牌写入redis
-        String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
+//        String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
+        String token = "";
         //多少分钟后过期
         int etime = expires*60*1000;
         //过期时间
@@ -116,7 +119,7 @@ public class AuthController extends ApiBaseController {
         ac.setUsername(account);
         ac.setPassword(password);
         String token = tokenService.getToken(ac);
-        JedisUtils.set(String.format(TOKEN_KEY,account), token,exptime);
+       // JedisUtils.set(String.format(TOKEN_KEY,account), token,exptime);
         return token;
     }
 

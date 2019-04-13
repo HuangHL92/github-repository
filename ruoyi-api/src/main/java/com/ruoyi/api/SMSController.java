@@ -2,9 +2,9 @@ package com.ruoyi.api;
 
 import com.ruoyi.base.ApiBaseController;
 import com.ruoyi.common.base.ApiResult;
-import com.ruoyi.common.utils.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -29,6 +29,14 @@
             <artifactId>ruoyi-common</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
+
+        <!--DB交换模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-web-service</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
+
         <!--微信模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
