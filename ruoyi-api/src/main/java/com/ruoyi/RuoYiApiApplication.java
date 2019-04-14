@@ -2,10 +2,15 @@ package com.ruoyi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
@@ -16,8 +21,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 
 @SpringBootApplication( exclude = {DataSourceAutoConfiguration.class})
+@ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
+@EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableSwagger2
-public class RuoYiApiApplication
+public class RuoYiApiApplication implements WebMvcConfigurer
 {
     public static void main(String[] args)
     {
@@ -43,5 +50,10 @@ public class RuoYiApiApplication
     }
 
 
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
 
 }

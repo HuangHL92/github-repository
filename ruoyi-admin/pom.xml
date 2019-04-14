@@ -40,11 +40,11 @@
         </dependency>
 
         <!-- 接口模块(独立部署的情况下，可以注释掉)-->
-        <dependency>
-            <groupId>com.ruoyi</groupId>
-            <artifactId>ruoyi-api</artifactId>
-            <version>${ruoyi.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.ruoyi</groupId>-->
+            <!--<artifactId>ruoyi-api</artifactId>-->
+            <!--<version>${ruoyi.version}</version>-->
+        <!--</dependency>-->
 
         <!-- 定时任务-->
         <dependency>

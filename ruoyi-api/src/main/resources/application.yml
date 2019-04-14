@@ -26,6 +26,12 @@ server:
     # Tomcat启动初始化的线程数，默认值25
     min-spare-threads: 30
 
+swagger:
+  basic:
+    enable: false
+    username: zhangsan
+    password: 123456
+
 # 日志配置
 logging:
   level:
