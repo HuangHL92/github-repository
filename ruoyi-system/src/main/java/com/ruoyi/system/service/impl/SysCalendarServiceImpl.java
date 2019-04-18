@@ -113,6 +113,23 @@ public class SysCalendarServiceImpl extends ServiceImpl<SysCalendarMapper, SysCa
     }
 
     /**
+     * 添加日历
+     * @param sysCalendar
+     * @return
+     */
+    @Override
+    public int saveSyscanlendar(SysCalendar sysCalendar) {
+
+        SysCalendar calendar = calendarMapper.selectCalendarByDays(sysCalendar.getDays());
+        //如果id不为空,则更新
+        if (StringUtils.isNotEmpty(calendar.getId())){
+            sysCalendar.setId(calendar.getId());
+            return calendarMapper.updateCalendar(sysCalendar);
+        }
+        return calendarMapper.insertCalendar(sysCalendar);
+    }
+
+    /**
      * 更新日历数据
      *
      * @param calendar
