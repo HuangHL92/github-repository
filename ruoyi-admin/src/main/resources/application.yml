@@ -11,7 +11,7 @@ ruoyi:
   # 获取ip地址开关
   addressEnabled: true
   # dataX插件路径 (项目部署所在盘符的根本目录)
-  dataX: /dataX/bin/
+  dataX: C:/java/dataX/bin/
 
 # 开发环境配置
 server:

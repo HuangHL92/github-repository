@@ -103,6 +103,18 @@
 				var pageNumber = table.pageNumber;
 				return pageSize * (pageNumber - 1) + index + 1;
 			},
+            // 下拉按钮切换
+            dropdownToggle: function (value) {
+                var actions = [];
+                actions.push('<div class="btn-group">');
+                actions.push('<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">');
+                actions.push('<i class="fa fa-cog"></i>&nbsp;<span class="fa fa-chevron-down"></span></button>');
+                actions.push('<ul class="dropdown-menu">');
+                actions.push(value.replace(/<a/g,"<li><a").replace(/<\/a>/g,"</a></li>"));
+                actions.push('</ul>');
+                actions.push('</div>');
+                return actions.join('');
+            },
             // 搜索-默认第一个form
             search: function(formId) {
             	var currentId = $.common.isEmpty(formId) ? $('form').attr('id') : formId;
@@ -514,11 +526,15 @@
             },
             // 禁用按钮
             disable: function() {
-	        	$("a[class*=layui-layer-btn]", window.parent.document).addClass("layer-disabled");
+                var doc = window.top == window.parent ? window.document : window.parent.document;
+	        	$("a[class*=layui-layer-btn]", doc).addClass("layer-disabled");
+                $("a[class*=layui-layer-btn]").addClass("layer-disabled");
             },
             // 启用按钮
             enable: function() {
-            	$("a[class*=layui-layer-btn]", window.parent.document).removeClass("layer-disabled");
+                var doc = window.top == window.parent ? window.document : window.parent.document;
+            	$("a[class*=layui-layer-btn]", doc).removeClass("layer-disabled");
+                $("a[class*=layui-layer-btn]").removeClass("layer-disabled");
             },
             // 打开遮罩层
             loading: function (message) {

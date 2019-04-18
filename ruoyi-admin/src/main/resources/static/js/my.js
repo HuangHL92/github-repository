@@ -8,6 +8,10 @@ function submitAction(formobj) {
         url : ctx + formobj.attr("action"),
         data : formobj.serialize(),
         async : false,
+        beforeSend: function () {
+            $.modal.loading("正在处理中，请稍后...");
+            $.modal.disable();
+        },
         error : function(request) {
             $.modal.alertError("系统错误");
         },
@@ -47,14 +51,17 @@ function submitHandler(f) {
     if ($.validate.form()) {
 
         if(formid!="") {
+            $.modal.disable();
             submitAction($("#"+formid));
             console.log("表单>" + formid +"<提交成功！");
         } else {
             $.modal.alertError("提交失败！（原因：没有获得表单对象）");
+            $.modal.enable();
         }
 
     } else {
         $.modal.alertWarning("您还有未填数据项！");
+        $.modal.enable();
     }
 }
 

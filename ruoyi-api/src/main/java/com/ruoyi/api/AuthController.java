@@ -3,19 +3,22 @@ package com.ruoyi.api;
 import com.ruoyi.base.ApiBaseController;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
+import com.ruoyi.common.exception.user.CaptchaException;
 import com.ruoyi.common.utils.JedisUtils;
-import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.jwt.domain.Account;
 import com.ruoyi.framework.jwt.service.TokenService;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.HashMap;
 
 /**
@@ -32,10 +35,14 @@ public class AuthController extends ApiBaseController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private ISysUserService userService;
+
     @Value("${api.token.expires}")
     private int  expires;
 
     private String TOKEN_KEY= "tokenCache:%s";
+
 
     @ApiOperation("用户验证（成功：返回token）")
     @PostMapping("getToken")
@@ -127,21 +134,32 @@ public class AuthController extends ApiBaseController {
      * @return
      */
     private boolean checkAccount(String account, String password) {
-//        SysUser user = null;
-//        try
-//        {
-//            user = loginService.login(account, password);
-//        }
-//        catch (CaptchaException e)
-//        {
-//            throw new AuthenticationException(e.getMessage(), e);
-//        }
-//        if(user==null) {
-//            return false;
-//        }
+        SysUser user = null;
+        try
+        {
+            user = userService.selectUserByLoginName(account);
+
+            if(user ==null || !user.getPassword().equals(encryptPassword(account,password,user.getSalt()))) {
+                return false;
+            }
+        }
+        catch (CaptchaException e)
+        {
+            throw e;
+        }
+        if(user==null) {
+            return false;
+        }
 
         return true;
     }
+
+
+    private String encryptPassword(String username, String password, String salt)
+    {
+        return new Md5Hash(username + password + salt).toHex().toString();
+    }
+
 
 
 }
