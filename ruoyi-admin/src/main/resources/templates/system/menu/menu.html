@@ -85,7 +85,12 @@
 		            field: 'orderNum',
 		            title: '排序',
 		            width: '10%',
-		            align: "left"
+		            align: "left",
+					formatter: function (value, row, index) {
+						var actions = [];
+						actions.push('<input type="text" onblur="updateOrderAjax(\'' + row.menuId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
+						return actions.join('');
+					}
 		        },
 		        {
 		            field: 'url',
@@ -140,7 +145,8 @@
 		    };
 		    $.treeTable.init(options);
 		});
-		
+
+		// 删除
 		function remove(id) {
 			$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
 				$.ajax({
@@ -157,6 +163,27 @@
 				});
 			});
 		}
+
+
+		//更新显示顺序
+		function updateOrderAjax(id, input) {
+
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {id: id, orderNum: input.value},
+				url: prefix + "/updateOrder",
+				success: function (result) {
+					if (result.code == web_status.SUCCESS) {
+						// do nothing
+					} else {
+						$.modal.msgError(result.msg);
+					}
+				}
+			})
+
+		}
+
 	</script>
 </body>
 </html>

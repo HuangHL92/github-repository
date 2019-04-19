@@ -3,7 +3,10 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 import java.util.Map;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.CacheUtils;
+import com.ruoyi.framework.web.domain.server.Sys;
+import com.ruoyi.system.domain.SysDept;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -181,6 +184,27 @@ public class SysMenuController extends BaseController
     {
         mmap.put("menu", menuService.selectMenuById(menuId));
         return prefix + "/tree";
+    }
+
+    /**
+     * 更新显示顺序（Ajax）
+     */
+    @GetMapping("/updateOrder")
+    @ResponseBody
+    public  AjaxResult updateOrder( Long id, String orderNum)
+    {
+        try {
+            SysMenu obj = menuService.selectMenuById(id);
+            if (obj!=null)
+            {
+                obj.setOrderNum(orderNum);
+                menuService.updateMenu(obj);
+            }
+        } catch (Exception ex) {
+            return AjaxResult.error("更新失败！");
+        }
+
+        return AjaxResult.success();
     }
 
 

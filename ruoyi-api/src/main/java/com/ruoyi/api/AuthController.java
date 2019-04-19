@@ -62,7 +62,7 @@ public class AuthController extends ApiBaseController {
 
         //3. 生成令牌写入redis
         //多少分钟后过期
-        int etime = expires*60*1000;
+        int etime = expires*3*1000;
         //过期时间
         long etime1=(System.currentTimeMillis()+etime)/1000L;
         String token = createToken(account,password,etime);
@@ -95,7 +95,7 @@ public class AuthController extends ApiBaseController {
         //3.生成令牌写入redis
         String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
         //多少分钟后过期
-        int etime = expires*60*1000;
+        int etime = expires*3*1000;
         //过期时间
         long etime1=(System.currentTimeMillis()+etime)/1000L;
         if(token==null) {
