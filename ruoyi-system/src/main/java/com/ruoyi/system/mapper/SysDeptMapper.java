@@ -1,8 +1,9 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.domain.SysDept;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 部门管理 数据层
@@ -25,7 +26,7 @@ public interface SysDeptMapper
      * @param deptId 部门ID
      * @return 结果
      */
-    public int checkDeptExistUser(Long deptId);
+    public int checkDeptExistUser(String deptId);
 
     /**
      * 查询部门管理数据
@@ -41,7 +42,7 @@ public interface SysDeptMapper
      * @param deptId 部门ID
      * @return 结果
      */
-    public int deleteDeptById(Long deptId);
+    public int deleteDeptById(String deptId);
 
     /**
      * 新增部门信息
@@ -73,7 +74,7 @@ public interface SysDeptMapper
      * @param deptId 部门ID
      * @return 部门信息
      */
-    public SysDept selectDeptById(Long deptId);
+    public SysDept selectDeptById(String deptId);
 
     /**
      * 校验部门名称是否唯一
@@ -82,7 +83,7 @@ public interface SysDeptMapper
      * @param parentId 父部门ID
      * @return 结果
      */
-    public SysDept checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") Long parentId);
+    public SysDept checkDeptNameUnique(@Param("deptName") String deptName, @Param("parentId") String parentId);
 
     /**
      * 根据角色ID查询部门

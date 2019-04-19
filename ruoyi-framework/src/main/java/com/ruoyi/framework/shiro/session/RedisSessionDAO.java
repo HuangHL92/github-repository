@@ -1,6 +1,7 @@
 package com.ruoyi.framework.shiro.session;
 
 import com.ruoyi.common.enums.OnlineStatus;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.manager.AsyncManager;
 import com.ruoyi.framework.manager.factory.AsyncFactory;
 import com.ruoyi.system.service.impl.SysUserOnlineServiceImpl;
@@ -137,7 +138,7 @@ public class RedisSessionDAO extends EnterpriseCacheSessionDAO
                 // 时间差不足 无需同步
                 needSync = false;
             }
-            boolean isGuest = onlineSession.getUserId() == null || onlineSession.getUserId() == 0L;
+            boolean isGuest = StringUtils.isEmpty(onlineSession.getUserId()) || "0".equals(onlineSession.getUserId());
 
             // session 数据变更了 同步
             if (isGuest == false && onlineSession.isAttributeChanged())

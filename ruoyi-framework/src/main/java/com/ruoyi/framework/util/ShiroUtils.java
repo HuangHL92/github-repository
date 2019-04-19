@@ -1,17 +1,15 @@
 package com.ruoyi.framework.util;
 
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.spring.SpringUtils;
+import com.ruoyi.framework.shiro.realm.UserRealm;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.shiro.realm.UserRealm;
-import com.ruoyi.system.domain.SysUser;
 
 /**
  * shiro 工具类
@@ -80,9 +78,9 @@ public class ShiroUtils
         cacheUtils.getUserMenuCache().clear();
     }
 
-    public static Long getUserId()
+    public static String getUserId()
     {
-        return getSysUser((String)SecurityUtils.getSubject().getPrincipal()).getUserId().longValue();
+        return getSysUser((String)SecurityUtils.getSubject().getPrincipal()).getUserId();
     }
 
     public static String getLoginName()

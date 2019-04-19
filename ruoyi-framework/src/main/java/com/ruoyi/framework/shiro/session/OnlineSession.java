@@ -1,7 +1,7 @@
 package com.ruoyi.framework.shiro.session;
 
-import org.apache.shiro.session.mgt.SimpleSession;
 import com.ruoyi.common.enums.OnlineStatus;
+import org.apache.shiro.session.mgt.SimpleSession;
 
 /**
  * 在线用户会话属性
@@ -13,7 +13,7 @@ public class OnlineSession extends SimpleSession
     private static final long serialVersionUID = 1L;
 
     /** 用户ID */
-    private Long userId;
+    private String userId;
 
     /** 用户名称 */
     private String loginName;
@@ -68,12 +68,12 @@ public class OnlineSession extends SimpleSession
         this.os = os;
     }
 
-    public Long getUserId()
+    public String getUserId()
     {
         return userId;
     }
 
-    public void setUserId(Long userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }

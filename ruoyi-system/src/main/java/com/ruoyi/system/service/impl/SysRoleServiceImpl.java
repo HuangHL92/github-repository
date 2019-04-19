@@ -1,12 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.exception.BusinessException;
@@ -20,6 +13,10 @@ import com.ruoyi.system.mapper.SysRoleMapper;
 import com.ruoyi.system.mapper.SysRoleMenuMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.service.ISysRoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * 角色 业务层处理
@@ -61,7 +58,7 @@ public class SysRoleServiceImpl implements ISysRoleService
      * @return 权限列表
      */
     @Override
-    public Set<String> selectRoleKeys(Long userId)
+    public Set<String> selectRoleKeys(String userId)
     {
         List<SysRole> perms = roleMapper.selectRolesByUserId(userId);
         Set<String> permsSet = new HashSet<>();
@@ -82,7 +79,7 @@ public class SysRoleServiceImpl implements ISysRoleService
      * @return 角色列表
      */
     @Override
-    public List<SysRole> selectRolesByUserId(Long userId)
+    public List<SysRole> selectRolesByUserId(String userId)
     {
         List<SysRole> userRoles = roleMapper.selectRolesByUserId(userId);
         List<SysRole> roles = selectRoleAll();

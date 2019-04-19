@@ -1,7 +1,8 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
 import com.ruoyi.system.domain.SysUser;
+
+import java.util.List;
 
 /**
  * 用户表 数据层
@@ -48,7 +49,7 @@ public interface SysUserMapper
      * @param userId 用户ID
      * @return 用户对象信息
      */
-    public SysUser selectUserById(Long userId);
+    public SysUser selectUserById(String userId);
 
     /**
      * 通过gitee查询用户
@@ -63,7 +64,7 @@ public interface SysUserMapper
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteUserById(Long userId);
+    public int deleteUserById(String userId);
 
     /**
      * 批量删除用户信息
@@ -71,7 +72,7 @@ public interface SysUserMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteUserByIds(Long[] ids);
+    public int deleteUserByIds(String[] ids);
 
     /**
      * 修改用户信息

@@ -1,8 +1,8 @@
 package com.ruoyi.system.service;
 
-import java.util.List;
-
 import com.ruoyi.system.domain.SysUser;
+
+import java.util.List;
 
 /**
  * 用户 业务层
@@ -49,7 +49,7 @@ public interface ISysUserService
      * @param userId 用户ID
      * @return 用户对象信息
      */
-    public SysUser selectUserById(Long userId);
+    public SysUser selectUserById(String userId);
 
     /**
      * 通过gitee查询用户
@@ -64,7 +64,7 @@ public interface ISysUserService
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteUserById(Long userId);
+    public int deleteUserById(String userId);
 
     /**
      * 批量删除用户信息
@@ -137,7 +137,7 @@ public interface ISysUserService
      * @param userId 用户ID
      * @return 结果
      */
-    public String selectUserRoleGroup(Long userId);
+    public String selectUserRoleGroup(String userId);
 
     /**
      * 根据用户ID查询用户所属岗位组
@@ -145,7 +145,7 @@ public interface ISysUserService
      * @param userId 用户ID
      * @return 结果
      */
-    public String selectUserPostGroup(Long userId);
+    public String selectUserPostGroup(String userId);
 
     /**
      * 导入用户数据

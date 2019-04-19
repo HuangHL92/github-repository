@@ -1,12 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.exception.BusinessException;
@@ -15,6 +8,10 @@ import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.service.ISysDeptService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
 
 /**
  * 部门管理 服务实现
@@ -129,7 +126,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 结果
      */
     @Override
-    public int selectDeptCount(Long parentId)
+    public int selectDeptCount(String parentId)
     {
         SysDept dept = new SysDept();
         dept.setParentId(parentId);
@@ -143,7 +140,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 结果 true 存在 false 不存在
      */
     @Override
-    public boolean checkDeptExistUser(Long deptId)
+    public boolean checkDeptExistUser(String deptId)
     {
         int result = deptMapper.checkDeptExistUser(deptId);
         return result > 0 ? true : false;
@@ -156,7 +153,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 结果
      */
     @Override
-    public int deleteDeptById(Long deptId)
+    public int deleteDeptById(String deptId)
     {
         return deptMapper.deleteDeptById(deptId);
     }
@@ -170,6 +167,8 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public int insertDept(SysDept dept)
     {
+        // 设置id
+        dept.setDeptId(UUID.randomUUID().toString().replaceAll("-", ""));
         // 查找父节点
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为"正常"状态,则不允许新增子节点
@@ -180,7 +179,7 @@ public class SysDeptServiceImpl implements ISysDeptService
         // 设置祖先列表
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
         // 设置组织架构（忽略顶级部门）
-        dept.setOrgStructure(100L == dept.getParentId() ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName());
+        dept.setOrgStructure("100".equals(dept.getParentId()) ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName());
         return deptMapper.insertDept(dept);
     }
 
@@ -202,7 +201,7 @@ public class SysDeptServiceImpl implements ISysDeptService
             String ancestors = info.getAncestors() + "," + info.getDeptId();
             dept.setAncestors(ancestors);
             // 设置组织架构（忽略顶级部门）
-            String orgStructure = 100L == dept.getParentId() ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName();
+            String orgStructure = "100".equals(dept.getParentId()) ? dept.getDeptName() : info.getOrgStructure() + "/" + dept.getDeptName();
             dept.setOrgStructure(orgStructure);
             // 更新该节点的所有子节点
             updateDeptChildren(dept.getDeptId(), ancestors, orgStructure);
@@ -236,7 +235,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @param ancestors 元素列表
      * @param orgStructure 组织架构
      */
-    public void updateDeptChildren(Long deptId, String ancestors, String orgStructure)
+    public void updateDeptChildren(String deptId, String ancestors, String orgStructure)
     {
         SysDept dept = new SysDept();
         dept.setParentId(deptId);
@@ -261,7 +260,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 部门信息
      */
     @Override
-    public SysDept selectDeptById(Long deptId)
+    public SysDept selectDeptById(String deptId)
     {
         return deptMapper.selectDeptById(deptId);
     }
@@ -275,9 +274,9 @@ public class SysDeptServiceImpl implements ISysDeptService
     @Override
     public String checkDeptNameUnique(SysDept dept)
     {
-        Long deptId = StringUtils.isNull(dept.getDeptId()) ? -1L : dept.getDeptId();
+        String deptId = StringUtils.isNull(dept.getDeptId()) ? "-1" : dept.getDeptId();
         SysDept info = deptMapper.checkDeptNameUnique(dept.getDeptName(), dept.getParentId());
-        if (StringUtils.isNotNull(info) && info.getDeptId().longValue() != deptId.longValue())
+        if (StringUtils.isNotNull(info) && !info.getDeptId().equals(deptId))
         {
             return UserConstants.DEPT_NAME_NOT_UNIQUE;
         }

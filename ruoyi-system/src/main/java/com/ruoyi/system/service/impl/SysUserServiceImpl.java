@@ -1,29 +1,23 @@
 package com.ruoyi.system.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.Md5Utils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.SysPost;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.domain.SysUserPost;
-import com.ruoyi.system.domain.SysUserRole;
-import com.ruoyi.system.mapper.SysPostMapper;
-import com.ruoyi.system.mapper.SysRoleMapper;
-import com.ruoyi.system.mapper.SysUserMapper;
-import com.ruoyi.system.mapper.SysUserPostMapper;
-import com.ruoyi.system.mapper.SysUserRoleMapper;
+import com.ruoyi.system.domain.*;
+import com.ruoyi.system.mapper.*;
 import com.ruoyi.system.service.ISysConfigService;
 import com.ruoyi.system.service.ISysUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户 业务层处理
@@ -110,7 +104,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 用户对象信息
      */
     @Override
-    public SysUser selectUserById(Long userId)
+    public SysUser selectUserById(String userId)
     {
         return userMapper.selectUserById(userId);
     }
@@ -132,7 +126,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    public int deleteUserById(Long userId)
+    public int deleteUserById(String userId)
     {
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
@@ -150,8 +144,8 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int deleteUserByIds(String ids) throws BusinessException
     {
-        Long[] userIds = Convert.toLongArray(ids);
-        for (Long userId : userIds)
+        String[] userIds = Convert.toStrArray(ids);
+        for (String userId : userIds)
         {
             if (SysUser.isAdmin(userId))
             {
@@ -170,6 +164,8 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int insertUser(SysUser user)
     {
+        // 设置用户id
+        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联
@@ -188,7 +184,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public int updateUser(SysUser user)
     {
-        Long userId = user.getUserId();
+        String userId = user.getUserId();
         // 删除用户与角色关联
         userRoleMapper.deleteUserRoleByUserId(userId);
         // 新增用户与角色管理
@@ -302,9 +298,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public String checkPhoneUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        String userId = StringUtils.isNull(user.getUserId()) ? null : user.getUserId();
         SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && !info.getUserId().equals(userId))
         {
             return UserConstants.USER_PHONE_NOT_UNIQUE;
         }
@@ -320,9 +316,9 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public String checkEmailUnique(SysUser user)
     {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
+        String userId = StringUtils.isNull(user.getUserId()) ? null : user.getUserId();
         SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
+        if (StringUtils.isNotNull(info) && !info.getUserId().equals(userId))
         {
             return UserConstants.USER_EMAIL_NOT_UNIQUE;
         }
@@ -336,7 +332,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    public String selectUserRoleGroup(Long userId)
+    public String selectUserRoleGroup(String userId)
     {
         List<SysRole> list = roleMapper.selectRolesByUserId(userId);
         StringBuffer idsStr = new StringBuffer();
@@ -358,7 +354,7 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
-    public String selectUserPostGroup(Long userId)
+    public String selectUserPostGroup(String userId)
     {
         List<SysPost> list = postMapper.selectPostsByUserId(userId);
         StringBuffer idsStr = new StringBuffer();

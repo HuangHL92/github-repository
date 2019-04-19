@@ -1,9 +1,7 @@
 package com.ruoyi.framework.web.service;
 
 import com.ruoyi.system.domain.SysDept;
-import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysDeptService;
-import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +20,7 @@ public class deptService
 
 
 
-    public String getName(Long id)
+    public String getName(String id)
     {
         SysDept dept= deptService.selectDeptById(id);
         return dept==null?"":dept.getDeptName();

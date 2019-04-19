@@ -1,8 +1,9 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.system.domain.SysRole;
+
 import java.util.List;
 import java.util.Set;
-import com.ruoyi.system.domain.SysRole;
 
 /**
  * 角色业务层
@@ -25,7 +26,7 @@ public interface ISysRoleService
      * @param userId 用户ID
      * @return 权限列表
      */
-    public Set<String> selectRoleKeys(Long userId);
+    public Set<String> selectRoleKeys(String userId);
 
     /**
      * 根据用户ID查询角色
@@ -33,7 +34,7 @@ public interface ISysRoleService
      * @param userId 用户ID
      * @return 角色列表
      */
-    public List<SysRole> selectRolesByUserId(Long userId);
+    public List<SysRole> selectRolesByUserId(String userId);
 
     /**
      * 查询所有角色

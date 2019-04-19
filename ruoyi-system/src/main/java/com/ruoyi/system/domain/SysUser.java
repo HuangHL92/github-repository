@@ -1,12 +1,14 @@
 package com.ruoyi.system.domain;
 
-import java.util.Date;
-import java.util.List;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import cn.hutool.core.util.StrUtil;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.base.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户对象 sys_user
@@ -19,14 +21,14 @@ public class SysUser extends BaseEntity
 
     /** 用户ID */
     @Excel(name = "用户序号")
-    private Long userId;
+    private String userId;
 
     /** 部门ID */
     @Excel(name = "部门编号", type = Type.IMPORT)
-    private Long deptId;
+    private String deptId;
 
     /** 部门父ID */
-    private Long parentId;
+    private String parentId;
 
     /** 登录名称 */
     @Excel(name = "登录名称")
@@ -94,12 +96,12 @@ public class SysUser extends BaseEntity
     /** 第三方登录：gitee **/
     private String authGitee;
 
-    public Long getUserId()
+    public String getUserId()
     {
         return userId;
     }
 
-    public void setUserId(Long userId)
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }
@@ -109,27 +111,27 @@ public class SysUser extends BaseEntity
         return isAdmin(this.userId);
     }
 
-    public static boolean isAdmin(Long userId)
+    public static boolean isAdmin(String userId)
     {
-        return userId != null && 1L == userId;
+        return StrUtil.isNotBlank(userId) && "1".equals(userId);
     }
 
-    public Long getDeptId()
+    public String getDeptId()
     {
         return deptId;
     }
 
-    public void setDeptId(Long deptId)
+    public void setDeptId(String deptId)
     {
         this.deptId = deptId;
     }
 
-    public Long getParentId()
+    public String getParentId()
     {
         return parentId;
     }
 
-    public void setParentId(Long parentId)
+    public void setParentId(String parentId)
     {
         this.parentId = parentId;
     }

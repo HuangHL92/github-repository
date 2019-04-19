@@ -1,15 +1,17 @@
 package com.ruoyi.framework.shiro.session;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.ruoyi.common.enums.OnlineStatus;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.manager.AsyncManager;
+import com.ruoyi.framework.manager.factory.AsyncFactory;
+import com.ruoyi.framework.shiro.service.SysShiroService;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import com.ruoyi.common.enums.OnlineStatus;
-import com.ruoyi.framework.manager.AsyncManager;
-import com.ruoyi.framework.manager.factory.AsyncFactory;
-import com.ruoyi.framework.shiro.service.SysShiroService;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 针对自定义的ShiroSession的db操作
@@ -69,7 +71,7 @@ public class OnlineSessionDAO extends EnterpriseCacheSessionDAO
                 // 时间差不足 无需同步
                 needSync = false;
             }
-            boolean isGuest = onlineSession.getUserId() == null || onlineSession.getUserId() == 0L;
+            boolean isGuest = StringUtils.isEmpty(onlineSession.getUserId()) || "0".equals(onlineSession.getUserId());
 
             // session 数据变更了 同步
             if (isGuest == false && onlineSession.isAttributeChanged())

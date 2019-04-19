@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectPostVo"/>
 	</select>
 	
-	<select id="selectPostsByUserId" parameterType="Long" resultMap="SysPostResult">
+	<select id="selectPostsByUserId" parameterType="String" resultMap="SysPostResult">
 		SELECT p.post_id, p.post_name, p.post_code
 		FROM sys_user u
 			 LEFT JOIN sys_user_post up ON u.user_id = up.user_id

@@ -1,8 +1,9 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.ruoyi.system.domain.SysMenu;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 菜单表 数据层
@@ -31,7 +32,7 @@ public interface SysMenuMapper
      * @param userId 用户ID
      * @return 菜单列表
      */
-    public List<SysMenu> selectMenusByUserId(Long userId);
+    public List<SysMenu> selectMenusByUserId(String userId);
 
     /**
      * 根据用户ID查询权限
@@ -39,7 +40,7 @@ public interface SysMenuMapper
      * @param userId 用户ID
      * @return 权限列表
      */
-    public List<String> selectPermsByUserId(Long userId);
+    public List<String> selectPermsByUserId(String userId);
 
     /**
      * 根据角色ID查询菜单

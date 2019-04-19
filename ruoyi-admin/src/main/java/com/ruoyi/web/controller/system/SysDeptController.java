@@ -1,32 +1,27 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.List;
-import java.util.Map;
-
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.base.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.framework.util.JsonFileUtils;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.framework.web.base.BaseController;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.annotation.Log;
-import com.ruoyi.common.base.AjaxResult;
-import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysDept;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.service.ISysDeptService;
-import com.ruoyi.framework.web.base.BaseController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 部门信息
@@ -62,7 +57,7 @@ public class SysDeptController extends BaseController
      * 新增部门
      */
     @GetMapping("/add/{parentId}")
-    public String add(@PathVariable("parentId") Long parentId, ModelMap mmap)
+    public String add(@PathVariable("parentId") String parentId, ModelMap mmap)
     {
         mmap.put("dept", deptService.selectDeptById(parentId));
         return prefix + "/add";
@@ -87,10 +82,10 @@ public class SysDeptController extends BaseController
      * 修改
      */
     @GetMapping("/edit/{deptId}")
-    public String edit(@PathVariable("deptId") Long deptId, ModelMap mmap)
+    public String edit(@PathVariable("deptId") String deptId, ModelMap mmap)
     {
         SysDept dept = deptService.selectDeptById(deptId);
-        if (StringUtils.isNotNull(dept) && 100L == deptId)
+        if (StringUtils.isNotNull(dept) && "100".equals(deptId))
         {
             dept.setParentName("无");
         }
@@ -120,7 +115,7 @@ public class SysDeptController extends BaseController
     @RequiresPermissions("system:dept:remove")
     @PostMapping("/remove/{deptId}")
     @ResponseBody
-    public AjaxResult remove(@PathVariable("deptId") Long deptId)
+    public AjaxResult remove(@PathVariable("deptId") String deptId)
     {
         if (deptService.selectDeptCount(deptId) > 0)
         {
@@ -149,7 +144,7 @@ public class SysDeptController extends BaseController
      * 选择部门树
      */
     @GetMapping("/selectDeptTree/{deptId}")
-    public String selectDeptTree(@PathVariable("deptId") Long deptId, ModelMap mmap)
+    public String selectDeptTree(@PathVariable("deptId") String deptId, ModelMap mmap)
     {
         mmap.put("dept", deptService.selectDeptById(deptId));
         return prefix + "/tree";
@@ -187,7 +182,7 @@ public class SysDeptController extends BaseController
     {
         SysUser user = new SysUser();
         if(!StringUtils.isEmpty(deptid)) {
-            user.setDeptId(Long.parseLong(deptid));
+            user.setDeptId(deptid);
         }
 
         JSONObject robj = new JSONObject();
@@ -238,7 +233,7 @@ public class SysDeptController extends BaseController
         return rList;
     }
 
-    private void createTree(SysDept d,JSONObject o, String pid) {
+    private void createTree(SysDept d, JSONObject o, String pid) {
 
         SysDept dept = new SysDept();
         dept.setParentId(d.getDeptId());
@@ -274,7 +269,7 @@ public class SysDeptController extends BaseController
      */
     @GetMapping("/updateOrder")
     @ResponseBody
-    public  AjaxResult updateOrder(Long id, String orderNum)
+    public AjaxResult updateOrder(String id, String orderNum)
     {
         try {
             SysDept obj = deptService.selectDeptById(id);
@@ -289,6 +284,7 @@ public class SysDeptController extends BaseController
 
         return AjaxResult.success();
     }
+
 
 
 }

@@ -1,39 +1,34 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.List;
-
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
-import com.ruoyi.common.exception.BusinessException;
-import com.ruoyi.common.support.Convert;
-import com.ruoyi.framework.util.CacheUtils;
-import com.ruoyi.framework.util.JsonFileUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.page.TableDataInfo;
+import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
+import com.ruoyi.framework.util.CacheUtils;
+import com.ruoyi.framework.util.JsonFileUtils;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 用户信息
@@ -148,7 +143,7 @@ public class SysUserController extends BaseController
      * 修改用户
      */
     @GetMapping("/edit/{userId}")
-    public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
+    public String edit(@PathVariable("userId") String userId, ModelMap mmap)
     {
         mmap.put("user", userService.selectUserById(userId));
         mmap.put("roles", roleService.selectRolesByUserId(userId));
@@ -192,7 +187,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
-    public String resetPwd(@PathVariable("userId") Long userId, ModelMap mmap)
+    public String resetPwd(@PathVariable("userId") String userId, ModelMap mmap)
     {
         mmap.put("user", userService.selectUserById(userId));
         return prefix + "/resetPwd";
@@ -220,8 +215,8 @@ public class SysUserController extends BaseController
         try
         {
             // 循环获取用户清空缓存（暂未实现更好的方法）
-            Long[] userIds = Convert.toLongArray(ids);
-            for (Long userId : userIds)
+            String[] userIds = Convert.toStrArray(ids);
+            for (String userId : userIds)
             {
                 if (SysUser.isAdmin(userId))
                 {
@@ -302,7 +297,7 @@ public class SysUserController extends BaseController
         String keyword  =request.getParameter("keyword");
         SysUser user = new SysUser();
         if(!StringUtils.isEmpty(deptid)) {
-            user.setDeptId(Long.parseLong(deptid));
+            user.setDeptId(deptid);
         }
         if(!StringUtils.isEmpty(keyword)) {
             user.setUserName(keyword);
@@ -340,13 +335,12 @@ public class SysUserController extends BaseController
         return JsonFileUtils.getOrgTreeJson();
     }
 
-
     /**
      * 更新显示顺序（Ajax）
      */
     @GetMapping("/updateOrder")
     @ResponseBody
-    public  AjaxResult updateOrder(Long id, String orderNum)
+    public AjaxResult updateOrder(String id, String orderNum)
     {
         try {
             SysUser obj = userService.selectUserById(id);

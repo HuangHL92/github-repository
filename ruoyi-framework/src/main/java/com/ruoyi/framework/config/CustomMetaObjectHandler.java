@@ -39,13 +39,13 @@ public class CustomMetaObjectHandler implements MetaObjectHandler
         Object fieldValue = getFieldValByName(COMMON_FIELD_CREATE_BY, metaObject);
         if (fieldValue == null && currentUser != null)
         {
-            setFieldValByName(COMMON_FIELD_CREATE_BY, currentUser.getUserId().toString(), metaObject);
+            setFieldValByName(COMMON_FIELD_CREATE_BY, currentUser.getUserId(), metaObject);
         }
         // 更新者
         fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_BY, metaObject);
         if (fieldValue == null && currentUser != null)
         {
-            setFieldValByName(COMMON_FIELD_UPDATE_BY, currentUser.getUserId().toString(), metaObject);
+            setFieldValByName(COMMON_FIELD_UPDATE_BY, currentUser.getUserId(), metaObject);
         }
         // 创建时间
         fieldValue = getFieldValByName(COMMON_FIELD_CREATE_TIME, metaObject);
@@ -81,7 +81,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler
         Object fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_BY, metaObject);
         if (fieldValue == null && currentUser != null)
         {
-            setFieldValByName(COMMON_FIELD_UPDATE_BY, currentUser.getUserId().toString(), metaObject);
+            setFieldValByName(COMMON_FIELD_UPDATE_BY, currentUser.getUserId(), metaObject);
         }
         // 更新时间：必须要更新
 //        fieldValue = getFieldValByName(COMMON_FIELD_UPDATE_TIME, metaObject);

@@ -1,7 +1,8 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
 import com.ruoyi.system.domain.SysUserRole;
+
+import java.util.List;
 
 /**
  * 用户表 数据层
@@ -16,7 +17,7 @@ public interface SysUserRoleMapper
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteUserRoleByUserId(Long userId);
+    public int deleteUserRoleByUserId(String userId);
 
     /**
      * 批量删除用户和角色关联

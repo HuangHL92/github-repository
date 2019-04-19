@@ -1,7 +1,8 @@
 package com.ruoyi.system.mapper;
 
-import java.util.List;
 import com.ruoyi.system.domain.SysUserPost;
+
+import java.util.List;
 
 /**
  * 用户与岗位 表 数据层
@@ -16,7 +17,7 @@ public interface SysUserPostMapper
      * @param userId 用户ID
      * @return 结果
      */
-    public int deleteUserPostByUserId(Long userId);
+    public int deleteUserPostByUserId(String userId);
     
     /**
      * 通过岗位ID查询岗位使用数量
@@ -32,7 +33,7 @@ public interface SysUserPostMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-    public int deleteUserPost(Long[] ids);
+    public int deleteUserPost(String[] ids);
 
     /**
      * 批量新增用户岗位信息

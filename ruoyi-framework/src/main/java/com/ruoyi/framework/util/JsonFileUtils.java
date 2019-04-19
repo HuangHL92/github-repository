@@ -48,7 +48,7 @@ public class JsonFileUtils
         else {
             JSONObject result = new JSONObject();
             JSONArray array = new JSONArray();
-            bindChildByParent(0L, array);
+            bindChildByParent("0", array);
             result.put("data", array);
             orgJson = result.toJSONString(4);
             FileUtil.writeString(orgJson, ORG_JSON_FILE_PATH, "UTF-8");
@@ -71,10 +71,10 @@ public class JsonFileUtils
      * @param array
      * @return
      */
-    private static JSONArray bindChildByParent(Long pId, JSONArray array) {
+    private static JSONArray bindChildByParent(String pId, JSONArray array) {
         SysDept parent = new SysDept();
         List<SysDept> deptList;
-        if (pId == 0) {
+        if ("0".equals(pId)) {
             deptList = deptService.selectTopList(parent);
         } else{
             parent.setParentId(pId);
@@ -103,7 +103,7 @@ public class JsonFileUtils
      * @param deptId
      * @return
      */
-    private static JSONArray getUserJsonDeptId(Long deptId) {
+    private static JSONArray getUserJsonDeptId(String deptId) {
         JSONArray array = new JSONArray();
         SysUser sysUser = new SysUser();
         sysUser.setDeptId(deptId);
