@@ -8,7 +8,6 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.framework.util.CacheUtils;
 import com.ruoyi.framework.util.JsonFileUtils;
-import com.ruoyi.system.service.ISysDeptService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -340,4 +339,29 @@ public class SysUserController extends BaseController
     public String orgTree() {
         return JsonFileUtils.getOrgTreeJson();
     }
+
+
+    /**
+     * 更新显示顺序（Ajax）
+     */
+    @GetMapping("/updateOrder")
+    @ResponseBody
+    public  AjaxResult updateOrder(Long id, String orderNum)
+    {
+        try {
+            SysUser obj = userService.selectUserById(id);
+            if (obj!=null)
+            {
+                obj.setOrderNum(Long.valueOf(orderNum));
+                userService.updateUserInfo(obj);
+            }
+        } catch (Exception ex) {
+            return AjaxResult.error("更新失败！");
+        }
+
+        return AjaxResult.success();
+    }
+
+
+
 }

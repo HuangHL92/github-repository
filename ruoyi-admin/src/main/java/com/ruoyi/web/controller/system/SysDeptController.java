@@ -268,4 +268,27 @@ public class SysDeptController extends BaseController
             o.put("children",cobj);
         }
     }
+
+    /**
+     * 更新显示顺序（Ajax）
+     */
+    @GetMapping("/updateOrder")
+    @ResponseBody
+    public  AjaxResult updateOrder(Long id, String orderNum)
+    {
+        try {
+            SysDept obj = deptService.selectDeptById(id);
+            if (obj!=null)
+            {
+                obj.setOrderNum(orderNum);
+                deptService.updateDept(obj);
+            }
+        } catch (Exception ex) {
+            return AjaxResult.error("更新失败！");
+        }
+
+        return AjaxResult.success();
+    }
+
+
 }

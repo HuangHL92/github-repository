@@ -3,73 +3,54 @@
       xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
-<style>
-    #bootstrap-tree-table .orderNum_cls.ellipsis {
-        position: relative;
-    }
-
-    #bootstrap-tree-table .orderNum_cls.ellipsis input.form-control {
-        border-left: 1px solid #e7eaec !important;
-    }
-
-    #bootstrap-tree-table .orderNum_cls.ellipsis input.form-control.error {
-        border-left: 1px dotted #cc5965 !important;
-    }
-
-    #bootstrap-tree-table .orderNum_cls.ellipsis input.form-control:focus {
-        border-color: #1ab394 !important;
-    }
-
-    #bootstrap-tree-table .orderNum_cls.ellipsis label.error {
-        top: 18px;
-    }
-</style>
 <body class="gray-bg">
-<div class="container-div">
-    <div class="row">
-        <form id="dept-form">
-            <div class="col-sm-12 search-collapse">
-                <div class="select-list">
-                    <ul>
-                        <li>
-                            部门名称：<input type="text" name="deptName"/>
-                        </li>
-                        <li>
-                            部门状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
-                            <option value="">所有</option>
-                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-                                    th:value="${dict.dictValue}"></option>
-                        </select>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
 
-            <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:dept:add">
-                    <i class="fa fa-plus"></i> 新增
-                </a>
-                <a class="btn btn-primary" onclick="$.operate.editTree()" shiro:hasPermission="system:dept:edit">
-                    <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-info" id="expandAllBtn">
-                    <i class="fa fa-exchange"></i> 展开/折叠
-                </a>
-            </div>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-tree-table" data-mobile-responsive="true"></table>
-            </div>
-        </form>
+    <div class="container-div">
+        <div class="row">
+            <form id="dept-form">
+                <div class="col-sm-12 search-collapse">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                部门名称：<input type="text" name="deptName"/>
+                            </li>
+                            <li>
+                                部门状态：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
+                                <option value="">所有</option>
+                                <option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+                                        th:value="${dict.dictValue}"></option>
+                            </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.treeTable.search()"><i
+                                        class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                        class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+                    <a class="btn btn-success" onclick="$.operate.add(100)" shiro:hasPermission="system:dept:add">
+                        <i class="fa fa-plus"></i> 新增
+                    </a>
+                    <a class="btn btn-primary" onclick="$.operate.editTree()" shiro:hasPermission="system:dept:edit">
+                        <i class="fa fa-edit"></i> 修改
+                    </a>
+                    <a class="btn btn-info" id="expandAllBtn">
+                        <i class="fa fa-exchange"></i> 展开/折叠
+                    </a>
+                </div>
+                <div class="col-sm-12 select-table table-striped">
+                    <table id="bootstrap-tree-table" data-mobile-responsive="true"></table>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-<div th:include="include :: footer"></div>
-<script th:inline="javascript">
+
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
     var addFlag = [[${@permission.hasPermi('system:dept:add')}]];
     var editFlag = [[${@permission.hasPermi('system:dept:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:dept:remove')}]];
@@ -107,7 +88,7 @@
                     width: '80px',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
+                        actions.push('<input type="text" onblur="updateOrderAjax(\'' + row.deptId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
                         return actions.join('');
                     }
                 },
@@ -152,45 +133,6 @@
         $.treeTable.init(options);
     });
 
-    // 重建name，避免因为name导致的validate验证显示问题
-    function reCreateOrderNumName() {
-        $('#dept-form').find('tr').each(function (index, tr) {
-            var $input = $(tr).find('td input');
-            $input.each(function () {
-                var name = 'orderNum_' + parseInt(index - 1);
-                $(this).attr('name', name);
-            })
-        })
-    }
-
-    var oldValue = '';
-
-    // 记录旧值
-    function recordOldValue(value) {
-        oldValue = value;
-    }
-
-    function updateOrderAjax(deptId, input) {
-        reCreateOrderNumName();
-        $('#dept-form').validate();
-        // valid单个校验
-        if ($(input).valid() && oldValue != input.value) {
-            $.ajax({
-                type: 'post',
-                dataType: 'json',
-                data: {deptId: deptId, orderNum: input.value},
-                url: prefix + "/edit",
-                success: function (result) {
-                    if (result.code == web_status.SUCCESS) {
-                        // do nothing
-                    } else {
-                        $.modal.msgError(result.msg);
-                    }
-                }
-            })
-        }
-    }
-
     function remove(id) {
         $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function () {
             $.ajax({
@@ -207,6 +149,26 @@
             });
         });
     }
+
+    //更新显示顺序
+    function updateOrderAjax(deptId, input) {
+
+        $.ajax({
+            type: 'get',
+            dataType: 'json',
+            data: {id: deptId, orderNum: input.value},
+            url: prefix + "/updateOrder",
+            success: function (result) {
+                if (result.code == web_status.SUCCESS) {
+                    // do nothing
+                } else {
+                    $.modal.msgError(result.msg);
+                }
+            }
+        })
+
+    }
+
 </script>
 </body>
 </html>

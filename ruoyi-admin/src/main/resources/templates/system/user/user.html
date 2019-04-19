@@ -5,15 +5,6 @@
 <head th:include="include :: header"></head>
 <link th:href="@{/ajax/libs/jquery-layout/jquery.layout-latest.css}" rel="stylesheet"/>
 <link th:href="@{/ajax/libs/jquery-ztree/3.5/css/metro/zTreeStyle.css}" rel="stylesheet"/>
-<style>
-	#bootstrap-table td{
-		position: relative;
-	}
-
-	#bootstrap-table td label.error {
-		top: 25px;
-	}
-</style>
 <body class="gray-bg">
 	<div class="ui-layout-west">
 		<div class="main-content">
@@ -103,7 +94,6 @@
 		var editFlag = [[${@permission.hasPermi('system:user:edit')}]];
 		var removeFlag = [[${@permission.hasPermi('system:user:remove')}]];
 		var resetPwdFlag = [[${@permission.hasPermi('system:user:resetPwd')}]];
-		var datas = [[${@dict.getType('sys_normal_disable')}]];
 		var prefix = ctx + "system/user";
 
 
@@ -198,7 +188,7 @@
 					width: 80,
 					formatter: function (value, row, index) {
 						var actions = [];
-						actions.push('<input type="text" onfocus="recordOldValue(this.value)" onblur="updateOrderAjax(\'' + row.userId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
+						actions.push('<input type="text" onblur="updateOrderAjax(\'' + row.userId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
 						return actions.join('');
 					}
 				},
@@ -223,42 +213,23 @@
 		    $.table.init(options);
 		}
 
-        // 重建name，避免因为name导致的validate验证显示问题
-        function reCreateOrderNumName() {
-            $('#user-form').find('tr').each(function (index, tr) {
-                var $input = $(tr).find('td input');
-                $input.each(function () {
-                    var name = 'orderNum_' + parseInt(index - 1);
-                    $(this).attr('name', name);
-                })
-            })
-        }
-
-        var oldValue = '';
-        // 记录旧值
-        function recordOldValue(value) {
-            oldValue = value;
-        }
-
+        //更新显示顺序
         function updateOrderAjax(userId, input) {
-            reCreateOrderNumName();
-            $('#user-form').validate();
-            // valid单个校验
-            if ($(input).valid() && oldValue != input.value) {
-                $.ajax({
-                    type: 'post',
-                    dataType: 'json',
-                    data: {userId: userId, orderNum: input.value},
-                    url: prefix + "/edit/userInfo",
-                    success: function (result) {
-                        if (result.code == web_status.SUCCESS) {
-                            // do nothing
-                        } else {
-                            $.modal.msgError(result.msg);
-                        }
+
+            $.ajax({
+                type: 'get',
+                dataType: 'json',
+                data: {id: userId, orderNum: input.value},
+                url: prefix + "/updateOrder",
+                success: function (result) {
+                    if (result.code == web_status.SUCCESS) {
+                        // do nothing
+                    } else {
+                        $.modal.msgError(result.msg);
                     }
-                })
-            }
+                }
+            })
+
         }
 
         function viewImage(img) {
