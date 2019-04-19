@@ -28,4 +28,11 @@ public interface ISysCalendarService extends IService<SysCalendar>
      * @return
      */
     String importCalendar(List<SysCalendar> calendarList, String operName);
+
+    /**
+     * 添加日历
+     * @param sysCalendar
+     * @return
+     */
+    int saveSyscanlendar(SysCalendar sysCalendar);
 }

@@ -1,17 +1,11 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.poi.excel.ExcelFileUtil;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.utils.workday.WorkdayUtils;
-import com.ruoyi.system.domain.SysUser;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -135,7 +129,7 @@ public class SysCalendarController extends BaseController
 		sysCalendar.setDays(WorkdayUtils.Date2Int(sysCalendar.getDateStr()));
 		sysCalendar.setYears(DateUtil.year(sysCalendar.getDateStr()));
 
-		return toAjax(sysCalendarService.save(sysCalendar));
+		return toAjax(sysCalendarService.saveSyscanlendar(sysCalendar));
 	}
 	/**
 	 * 修改日历
