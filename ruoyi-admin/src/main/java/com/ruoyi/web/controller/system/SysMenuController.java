@@ -64,14 +64,14 @@ public class SysMenuController extends BaseController
     @ResponseBody
     public AjaxResult remove(@PathVariable("menuId") Long menuId)
     {
-        if (menuService.selectCountMenuByParentId(menuId) > 0)
-        {
-            return error(1, "存在子菜单,不允许删除");
-        }
-        if (menuService.selectCountRoleMenuByMenuId(menuId) > 0)
-        {
-            return error(1, "菜单已分配,不允许删除");
-        }
+//        if (menuService.selectCountMenuByParentId(menuId) > 0)
+//        {
+//            return error(1, "存在子菜单,不允许删除");
+//        }
+//        if (menuService.selectCountRoleMenuByMenuId(menuId) > 0)
+//        {
+//            return error(1, "菜单已分配,不允许删除");
+//        }
         ShiroUtils.clearCachedAuthorizationInfo();
         return toAjax(menuService.deleteMenuById(menuId));
     }

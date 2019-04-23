@@ -154,9 +154,9 @@ shiro:
     # 同步session到数据库的周期（默认1分钟）
     dbSyncPeriod: 1
     # 相隔多久检查一次session的有效性，默认就是10分钟
-    validationInterval: 10
+    validationInterval: 5
     # 是否将用户在线信息写入数据库
-    dbSyncflag: true
+    dbSyncflag: false
     #session保存方式
     store-type: Redis
 
