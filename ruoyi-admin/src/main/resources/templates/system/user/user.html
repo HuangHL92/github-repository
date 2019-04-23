@@ -27,10 +27,10 @@
 		</div>
 	</div>
 	
-	<div class="container-div ui-layout-center">
-		<div class="row">
-			<form id="user-form">
-				<div class="col-sm-12 search-collapse">
+	<div class="container-div ui-layout-center" >
+		<div class="row" >
+			<form id="user-form" >
+				<div class="col-md-12 search-collapse">
 					<input type="hidden" id="deptId" name="deptId">
 	                <input type="hidden" id="parentId" name="parentId">
 					<div class="select-list">
@@ -80,7 +80,7 @@
 					</a>
 				</div>
 
-				<div class="col-sm-12 select-table table-striped">
+				<div class="col-md-12 select-table table-striped">
 					<table id="bootstrap-table" data-mobile-responsive="true"></table>
 				</div>
 			</form>
@@ -102,7 +102,12 @@
 		    if ($(this).width() < 769) {
 		        panehHidden = true;
 		    }
-		    $('body').layout({ initClosed: panehHidden, west__size: 280 });
+
+			$('body').layout({
+				initClosed: panehHidden,
+				west__size: 250
+				//applyDefaultStyles: true //应用默认样式
+			});
 		    queryUserList();
 		    queryDeptTree();
 		});

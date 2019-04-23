@@ -152,7 +152,8 @@ api:
   basepackage: com.ruoyi.api #restful接口扫描路径
   appsecret: 1q2w3e4r # （TODO token验证用密钥，根据项目情况自行更换）
   token:
-    expires: 10 #jwt token过期时间（单位：分钟）
+    expires: 1 #jwt token过期时间（单位：分钟）
+    secretKey: 1q2w3e4r
 
 
 # 第三方认证配置

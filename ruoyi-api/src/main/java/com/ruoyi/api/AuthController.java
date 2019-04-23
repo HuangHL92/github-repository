@@ -1,6 +1,7 @@
 package com.ruoyi.api;
 
 import com.ruoyi.base.ApiBaseController;
+import com.ruoyi.common.base.ApiConst;
 import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.exception.user.CaptchaException;
@@ -41,7 +42,9 @@ public class AuthController extends ApiBaseController {
     @Value("${api.token.expires}")
     private int  expires;
 
-    private String TOKEN_KEY= "tokenCache:%s";
+    @Value("${api.appsecret}")
+    private String appsecret;
+
 
 
     @ApiOperation("用户验证（成功：返回token）")
@@ -62,7 +65,7 @@ public class AuthController extends ApiBaseController {
 
         //3. 生成令牌写入redis
         //多少分钟后过期
-        int etime = expires*3*1000;
+        int etime = expires*60;
         //过期时间
         long etime1=(System.currentTimeMillis()+etime)/1000L;
         String token = createToken(account,password,etime);
@@ -93,11 +96,11 @@ public class AuthController extends ApiBaseController {
         }
 
         //3.生成令牌写入redis
-        String token  =JedisUtils.get(String.format(TOKEN_KEY,account));
-        //多少分钟后过期
-        int etime = expires*3*1000;
+        String token  =JedisUtils.get(String.format(ApiConst.TOKEN_KEY,account));
+        //多少分钟后过期(秒)
+        int etime = expires*60;
         //过期时间
-        long etime1=(System.currentTimeMillis()+etime)/1000L;
+        long etime1=(System.currentTimeMillis()+etime)*1000/1000L;
         if(token==null) {
             token = createToken(account,password,etime);
         }
@@ -122,8 +125,8 @@ public class AuthController extends ApiBaseController {
         ac.setId(account);
         ac.setUsername(account);
         ac.setPassword(password);
-        String token = tokenService.getToken(ac);
-        JedisUtils.set(String.format(TOKEN_KEY,account), token,exptime);
+        String token = tokenService.getToken(ac,appsecret,exptime);
+        JedisUtils.set(String.format(ApiConst.TOKEN_KEY,account), token,exptime);
         return token;
     }
 

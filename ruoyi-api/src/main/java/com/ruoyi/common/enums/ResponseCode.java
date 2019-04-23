@@ -16,7 +16,8 @@ public enum ResponseCode {
     ILLEGAL_REQUEST(4005, "非法请求"),
     ILLEGAL_ACCOUNT(4006, "账号信息不存在"),
     ERROR_LOGIN(4007, "账号或密码错误"),
-    ILLEGAL_TOKEN(4008, "非法请求（token验证失败）");
+    ILLEGAL_TOKEN(4008, "非法请求（token验证失败）"),
+    EXPIRE_TOKEN(4009, "非法请求（token失效）");
 
     private long code;
     private String msg;

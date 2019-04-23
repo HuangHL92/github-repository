@@ -7,6 +7,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.ruoyi.common.annotation.ValidateRequest;
+import com.ruoyi.common.base.ApiConst;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.exception.ApiRuntimeException;
 import com.ruoyi.common.utils.IpUtils;
@@ -103,6 +104,7 @@ public class AuthenticationAspect {
                 throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
             }
 
+
             // 重复请求过滤（token+ip+url）
             String ip = IpUtils.getIpAddr(request);
             String url = request.getRequestURL().toString();
@@ -112,13 +114,20 @@ public class AuthenticationAspect {
             }
 
             // 获取 token 中的 user id
-            String userId;
+            String cahce_key;
             try {
-                userId = JWT.decode(token).getAudience().get(0);
+                cahce_key = JWT.decode(token).getAudience().get(0);
+
+                //取得缓存中的token并验证
+                String token_cahce  =JedisUtils.get(String.format(ApiConst.TOKEN_KEY,cahce_key));
+                if(token_cahce==null || !token.equals(token_cahce)) {
+                    throw new ApiRuntimeException(ResponseCode.EXPIRE_TOKEN);
+                }
+
             } catch (JWTDecodeException j) {
                 throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
             }
-//            User user = userService.findUserById(userId);
+//            User user = userService.findUserById(cahce_key);
 //            if (user == null) {
 //                throw new ApiRuntimeException(ResponseCode.ILLEGAL_ACCOUNT);
 //            }

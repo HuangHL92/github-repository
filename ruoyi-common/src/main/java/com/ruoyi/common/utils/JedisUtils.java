@@ -55,11 +55,16 @@ public class JedisUtils {
         String value = null;
         key = prefix+ key;
         Jedis jedis = getJedis();
-        if (jedis.exists(key)) {
-            value = jedis.get(key);
-            value = StringUtils.isNotBlank(value) && !"nil".equalsIgnoreCase(value) ? value : null;
-            logger.debug("get {} = {}", key, value);
+        try{
+            if (jedis.exists(key)) {
+                value = jedis.get(key);
+                value = StringUtils.isNotBlank(value) && !"nil".equalsIgnoreCase(value) ? value : null;
+                logger.debug("get {} = {}", key, value);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
 
         return value;
     }
@@ -73,11 +78,18 @@ public class JedisUtils {
     public static Object getObject(String key) {
         Object value = null;
         Jedis jedis = getJedis();
-        key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            value = toObject(jedis.get(getBytesKey(key)));
-            logger.debug("getObject {} = {}", key, value);
+
+        try{
+            key = prefix+ key;
+            if (jedis.exists(getBytesKey(key))) {
+                value = toObject(jedis.get(getBytesKey(key)));
+                logger.debug("getObject {} = {}", key, value);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
+
 
         return value;
     }
@@ -93,12 +105,16 @@ public class JedisUtils {
     public static String set(String key, String value, int cacheSeconds) {
         String result = null;
         Jedis jedis = getJedis();
-        key = prefix+ key;
-        result = jedis.set(key, value);
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
+        try {
+            key = prefix+ key;
+            result = jedis.set(key, value);
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("set {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        logger.debug("set {} = {}", key, value);
 
         return result;
     }
@@ -114,12 +130,16 @@ public class JedisUtils {
     public static String setObject(String key, Object value, int cacheSeconds) {
         String result = null;
         Jedis jedis = getJedis();
-        key = prefix+ key;
-        result = jedis.set(getBytesKey(key), toBytes(value));
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
+        try{
+            key = prefix+ key;
+            result = jedis.set(getBytesKey(key), toBytes(value));
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setObject {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        logger.debug("setObject {} = {}", key, value);
 
         return result;
     }
@@ -133,11 +153,18 @@ public class JedisUtils {
     public static List<String> getList(String key) {
         List<String> value = null;
         Jedis jedis = getJedis();
-        key = prefix+ key;
-        if (jedis.exists(key)) {
-            value = jedis.lrange(key, 0, -1);
-            logger.debug("getList {} = {}", key, value);
+
+        try{
+            key = prefix+ key;
+            if (jedis.exists(key)) {
+                value = jedis.lrange(key, 0, -1);
+                logger.debug("getList {} = {}", key, value);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
+
 
         return value;
     }
@@ -152,13 +179,18 @@ public class JedisUtils {
         List<Object> value = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            List<byte[]> list = jedis.lrange(getBytesKey(key), 0, -1);
-            value = Lists.newArrayList();
-            for (byte[] bs : list) {
-                value.add(toObject(bs));
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                List<byte[]> list = jedis.lrange(getBytesKey(key), 0, -1);
+                value = Lists.newArrayList();
+                for (byte[] bs : list) {
+                    value.add(toObject(bs));
+                }
+                logger.debug("getObjectList {} = {}", key, value);
             }
-            logger.debug("getObjectList {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
 
         return value;
@@ -177,14 +209,21 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            jedis.del(key);
+
+        try{
+            if (jedis.exists(key)) {
+                jedis.del(key);
+            }
+            result = jedis.rpush(key, (String[]) value.toArray());
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setList {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.rpush(key, (String[]) value.toArray());
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setList {} = {}", key, value);
+
+
 
         return result;
     }
@@ -201,18 +240,25 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            jedis.del(key);
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                jedis.del(key);
+            }
+            List<byte[]> list = Lists.newArrayList();
+            for (Object o : value) {
+                list.add(toBytes(o));
+            }
+            result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setObjectList {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        List<byte[]> list = Lists.newArrayList();
-        for (Object o : value) {
-            list.add(toBytes(o));
-        }
-        result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setObjectList {} = {}", key, value);
+
+
 
         return result;
     }
@@ -228,8 +274,12 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.rpush(key, value);
-        logger.debug("listAdd {} = {}", key, value);
+        try{
+            result = jedis.rpush(key, value);
+            logger.debug("listAdd {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
 
         return result;
     }
@@ -245,12 +295,18 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        List<byte[]> list = Lists.newArrayList();
-        for (Object o : value) {
-            list.add(toBytes(o));
+        try{
+            List<byte[]> list = Lists.newArrayList();
+            for (Object o : value) {
+                list.add(toBytes(o));
+            }
+            result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
+            logger.debug("listObjectAdd {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.rpush(getBytesKey(key), (byte[][]) list.toArray());
-        logger.debug("listObjectAdd {} = {}", key, value);
+
+
 
         return result;
     }
@@ -265,9 +321,14 @@ public class JedisUtils {
         Set<String> value = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            value = jedis.smembers(key);
-            logger.debug("getSet {} = {}", key, value);
+
+        try{
+            if (jedis.exists(key)) {
+                value = jedis.smembers(key);
+                logger.debug("getSet {} = {}", key, value);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
 
         return value;
@@ -283,14 +344,21 @@ public class JedisUtils {
         Set<Object> value = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            value = Sets.newHashSet();
-            Set<byte[]> set = jedis.smembers(getBytesKey(key));
-            for (byte[] bs : set) {
-                value.add(toObject(bs));
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                value = Sets.newHashSet();
+                Set<byte[]> set = jedis.smembers(getBytesKey(key));
+                for (byte[] bs : set) {
+                    value.add(toObject(bs));
+                }
+                logger.debug("getObjectSet {} = {}", key, value);
             }
-            logger.debug("getObjectSet {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
+
 
         return value;
     }
@@ -307,14 +375,22 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            jedis.del(key);
+
+
+        try{
+            if (jedis.exists(key)) {
+                jedis.del(key);
+            }
+            result = jedis.sadd(key, (String[]) value.toArray());
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setSet {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.sadd(key, (String[]) value.toArray());
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setSet {} = {}", key, value);
+
+
 
         return result;
     }
@@ -331,18 +407,23 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            jedis.del(key);
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                jedis.del(key);
+            }
+            Set<byte[]> set = Sets.newHashSet();
+            for (Object o : value) {
+                set.add(toBytes(o));
+            }
+            result = jedis.sadd(getBytesKey(key), (byte[][]) set.toArray());
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setObjectSet {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        Set<byte[]> set = Sets.newHashSet();
-        for (Object o : value) {
-            set.add(toBytes(o));
-        }
-        result = jedis.sadd(getBytesKey(key), (byte[][]) set.toArray());
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setObjectSet {} = {}", key, value);
 
         return result;
     }
@@ -358,8 +439,13 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.sadd(key, value);
-        logger.debug("setSetAdd {} = {}", key, value);
+
+        try{
+            result = jedis.sadd(key, value);
+            logger.debug("setSetAdd {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
 
         return result;
     }
@@ -375,12 +461,19 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        Set<byte[]> set = Sets.newHashSet();
-        for (Object o : value) {
-            set.add(toBytes(o));
+
+        try{
+            Set<byte[]> set = Sets.newHashSet();
+            for (Object o : value) {
+                set.add(toBytes(o));
+            }
+            result = jedis.rpush(getBytesKey(key), (byte[][]) set.toArray());
+            logger.debug("setSetObjectAdd {} = {}", key, value);
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.rpush(getBytesKey(key), (byte[][]) set.toArray());
-        logger.debug("setSetObjectAdd {} = {}", key, value);
+
+
 
         return result;
     }
@@ -395,9 +488,14 @@ public class JedisUtils {
         Map<String, String> value = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            value = jedis.hgetAll(key);
-            logger.debug("getMap {} = {}", key, value);
+
+        try{
+            if (jedis.exists(key)) {
+                value = jedis.hgetAll(key);
+                logger.debug("getMap {} = {}", key, value);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
 
         return value;
@@ -413,13 +511,19 @@ public class JedisUtils {
         Map<String, Object> value = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            value = Maps.newHashMap();
-            Map<byte[], byte[]> map = jedis.hgetAll(getBytesKey(key));
-            for (Map.Entry<byte[], byte[]> e : map.entrySet()) {
-                value.put(StringUtils.toString(e.getKey()), toObject(e.getValue()));
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                value = Maps.newHashMap();
+                Map<byte[], byte[]> map = jedis.hgetAll(getBytesKey(key));
+                for (Map.Entry<byte[], byte[]> e : map.entrySet()) {
+                    value.put(StringUtils.toString(e.getKey()), toObject(e.getValue()));
+                }
+                logger.debug("getObjectMap {} = {}", key, value);
             }
-            logger.debug("getObjectMap {} = {}", key, value);
+
+        } finally {
+            jedisPool.returnResource(jedis);
         }
 
         return value;
@@ -437,14 +541,20 @@ public class JedisUtils {
         String result = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            jedis.del(key);
+
+        try{
+            if (jedis.exists(key)) {
+                jedis.del(key);
+            }
+            result = jedis.hmset(key, value);
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setMap {} = {}", key, value);
+
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.hmset(key, value);
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setMap {} = {}", key, value);
 
         return result;
     }
@@ -461,18 +571,27 @@ public class JedisUtils {
         String result = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            jedis.del(key);
+
+
+        try{
+
+            if (jedis.exists(getBytesKey(key))) {
+                jedis.del(key);
+            }
+            Map<byte[], byte[]> map = Maps.newHashMap();
+            for (Map.Entry<String, Object> e : value.entrySet()) {
+                map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
+            }
+            result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>) map);
+            if (cacheSeconds != 0) {
+                jedis.expire(key, cacheSeconds);
+            }
+            logger.debug("setObjectMap {} = {}", key, value);
+
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        Map<byte[], byte[]> map = Maps.newHashMap();
-        for (Map.Entry<String, Object> e : value.entrySet()) {
-            map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
-        }
-        result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>) map);
-        if (cacheSeconds != 0) {
-            jedis.expire(key, cacheSeconds);
-        }
-        logger.debug("setObjectMap {} = {}", key, value);
+
 
         return result;
     }
@@ -488,8 +607,17 @@ public class JedisUtils {
         String result = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.hmset(key, value);
-        logger.debug("mapPut {} = {}", key, value);
+
+        try{
+
+            result = jedis.hmset(key, value);
+            logger.debug("mapPut {} = {}", key, value);
+
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+
+
 
         return result;
     }
@@ -505,12 +633,19 @@ public class JedisUtils {
         String result = null;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        Map<byte[], byte[]> map = Maps.newHashMap();
-        for (Map.Entry<String, Object> e : value.entrySet()) {
-            map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
+
+        try{
+
+            Map<byte[], byte[]> map = Maps.newHashMap();
+            for (Map.Entry<String, Object> e : value.entrySet()) {
+                map.put(getBytesKey(e.getKey()), toBytes(e.getValue()));
+            }
+            result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>) map);
+            logger.debug("mapObjectPut {} = {}", key, value);
+
+        } finally {
+            jedisPool.returnResource(jedis);
         }
-        result = jedis.hmset(getBytesKey(key), (Map<byte[], byte[]>) map);
-        logger.debug("mapObjectPut {} = {}", key, value);
 
         return result;
     }
@@ -526,8 +661,15 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.hdel(key, mapKey);
-        logger.debug("mapRemove {}  {}", key, mapKey);
+
+        try{
+
+            result = jedis.hdel(key, mapKey);
+            logger.debug("mapRemove {}  {}", key, mapKey);
+
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
 
         return result;
     }
@@ -542,9 +684,16 @@ public class JedisUtils {
     public static long mapObjectRemove(String key, String mapKey) {
         long result = 0;
         Jedis jedis = getJedis();
-        key = prefix+ key;
-        result = jedis.hdel(getBytesKey(key), getBytesKey(mapKey));
-        logger.debug("mapObjectRemove {}  {}", key, mapKey);
+
+
+        try{
+            key = prefix+ key;
+            result = jedis.hdel(getBytesKey(key), getBytesKey(mapKey));
+            logger.debug("mapObjectRemove {}  {}", key, mapKey);
+
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
 
         return result;
     }
@@ -560,8 +709,14 @@ public class JedisUtils {
         boolean result = false;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.hexists(key, mapKey);
-        logger.debug("mapExists {}  {}", key, mapKey);
+
+        try{
+            result = jedis.hexists(key, mapKey);
+            logger.debug("mapExists {}  {}", key, mapKey);
+
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
 
         return result;
     }
@@ -577,8 +732,15 @@ public class JedisUtils {
         boolean result = false;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.hexists(getBytesKey(key), getBytesKey(mapKey));
-        logger.debug("mapObjectExists {}  {}", key, mapKey);
+
+        try{
+            result = jedis.hexists(getBytesKey(key), getBytesKey(mapKey));
+            logger.debug("mapObjectExists {}  {}", key, mapKey);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+
+
 
         return result;
     }
@@ -593,12 +755,19 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(key)) {
-            result = jedis.del(key);
-            logger.debug("del {}", key);
-        } else {
-            logger.debug("del {} not exists", key);
+
+        try{
+            if (jedis.exists(key)) {
+                result = jedis.del(key);
+                logger.debug("del {}", key);
+            } else {
+                logger.debug("del {} not exists", key);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
+
 
         return result;
     }
@@ -613,12 +782,18 @@ public class JedisUtils {
         long result = 0;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        if (jedis.exists(getBytesKey(key))) {
-            result = jedis.del(getBytesKey(key));
-            logger.debug("delObject {}", key);
-        } else {
-            logger.debug("delObject {} not exists", key);
+
+        try{
+            if (jedis.exists(getBytesKey(key))) {
+                result = jedis.del(getBytesKey(key));
+                logger.debug("delObject {}", key);
+            } else {
+                logger.debug("delObject {} not exists", key);
+            }
+        } finally {
+            jedisPool.returnResource(jedis);
         }
+
 
         return result;
     }
@@ -633,8 +808,15 @@ public class JedisUtils {
         boolean result = false;
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.exists(key);
-        logger.debug("exists {}", key);
+
+        try{
+            result = jedis.exists(key);
+            logger.debug("exists {}", key);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+
+
 
         return result;
     }
@@ -650,8 +832,16 @@ public class JedisUtils {
 
         Jedis jedis = getJedis();
         key = prefix+ key;
-        result = jedis.exists(getBytesKey(key));
-        logger.debug("existsObject {}", key);
+
+
+        try{
+            result = jedis.exists(getBytesKey(key));
+            logger.debug("existsObject {}", key);
+        } finally {
+            jedisPool.returnResource(jedis);
+        }
+
+
 
         return result;
     }
