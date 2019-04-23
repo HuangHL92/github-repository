@@ -53,7 +53,7 @@
             	</li>
             	<li>
             		<div class="user-panel">
-            			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}"> 
+            			<a class="menuItem" title="个人中心" th:href="@{/system/user/profile}">
             				<div class="hide" th:text="个人中心"></div>
 					        <div class="pull-left image">
 		                    	<img th:src="${user.avatar == ''} ? ( ${user.sex == '0'} ? @{/img/male.png} : (${user.sex == '1'} ? @{/img/female.png} : @{/img/profile.jpg}) ): ${@comm.getImgUrl(user.avatar)}" class="img-circle" alt="User Image">
@@ -88,7 +88,7 @@
         </div>
     </nav>
     <!--左侧导航结束-->
-    
+
     <!--右侧部分开始-->
     <div id="page-wrapper" class="gray-bg dashbard-1">
         <div class="row border-bottom">
@@ -169,9 +169,9 @@
             </div>
             <a href="#" class="roll-nav roll-right tabReload"><i class="fa fa-refresh"></i> 刷新</a>
         </div>
-        
+
         <a id="ax_close_max" class="ax_close_max" href="#" title="关闭全屏"> <i class="fa fa-times-circle-o"></i> </a>
-                    
+
         <div class="row mainContent" id="content-main">
             <iframe class="RuoYi_iframe" name="iframe0" width="100%" height="100%" data-id="/system/main"
                     th:src="@{/system/main}" frameborder="0" seamless></iframe>
@@ -198,6 +198,9 @@
 <script th:src="@{/js/websocket.js}"></script>
 <!--使用常链接的websocket.js 连接断开后会一直尝试连接-->
 <script th:src="@{/js/plugins/reconnecting-websocket/reconnecting-websocket.min.js}"></script>
+
+
+
 <script th:inline="javascript">
 
     var ctx = [[@{/}]];
@@ -239,15 +242,12 @@
     }
 
     $(".menu-top-left-nav li").on("click",function () {
+
         $(this).addClass("cn");
         $(this).siblings().removeClass("cn");
-        $("#side-menu").load('/system/menu_left?id='+ $(this).attr("mid"),initMenu());
+        $("#side-menu").load('/system/menu_left?id='+ $(this).attr("mid"),function (){initMenu()});
     });
 
-    function initMenu() {
-        // MetsiMenu
-        $('#side-menu').metisMenu();
-    }
 </script>
 </body>
 </html>
