@@ -506,12 +506,17 @@
             		// 弹层外区域关闭
             		shadeClose: true,
                     btn1: function(index, layero) {
-                        var iframeWin = layero.find('iframe')[0];
-                        if(iframeWin.contentWindow.submitHandler) {
-                            iframeWin.contentWindow.submitHandler(iframeWin);
-                        } else {
+            		    if(isDetail) {
                             layer.close(index);
+                        } else {
+                            var iframeWin = layero.find('iframe')[0];
+                            if(iframeWin.contentWindow.submitHandler) {
+                                iframeWin.contentWindow.submitHandler(iframeWin);
+                            } else {
+                                layer.close(index);
+                            }
                         }
+
 
                     },
             	    cancel: function(index) {
