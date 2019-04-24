@@ -234,7 +234,7 @@ public class SysRoleServiceImpl implements ISysRoleService
         int rows = 1;
         // 新增角色与部门（数据权限）管理
         List<SysRoleDept> list = new ArrayList<SysRoleDept>();
-        for (Long deptId : role.getDeptIds())
+        for (String deptId : role.getDeptIds())
         {
             SysRoleDept rd = new SysRoleDept();
             rd.setRoleId(role.getRoleId());

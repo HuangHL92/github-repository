@@ -250,7 +250,7 @@ public class SysDeptController extends BaseController
 
                 if(StringUtils.isNotEmpty(pid) ) {
                     //只显示指定部门下的子部门
-                    if( pid.equals(s.getParentId().toString()) || pid.equals(s.getDeptId().toString())) {
+                    if( pid.equals(s.getParentId()) || pid.equals(s.getDeptId())) {
                         cobj.add(sb);
                         //sb.put("disabled","true");
                     }
