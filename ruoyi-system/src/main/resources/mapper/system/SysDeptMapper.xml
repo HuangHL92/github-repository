@@ -40,7 +40,7 @@
 	<select id="selectDeptList" parameterType="SysDept" resultMap="SysDeptResult">
         <include refid="selectDeptVo"/>
         where d.del_flag = '0'
-        <if test="parentId != null and parentId != 0">
+        <if test="parentId != null and parentId != ''and parentId != &quot;0&quot;">
 			AND parent_id = #{parentId}
 		</if>
 		<if test="deptName != null and deptName != ''">
