@@ -1,8 +1,8 @@
 <html  lang="zh" xmlns:th="http://www.thymeleaf.org">
 
-<li class="logo">
-    <span class="logo-lg" th:text="${@config.SystemName()}">JiYun</span>
-</li>
+<!--<li class="logo">-->
+    <!--<span class="logo-lg" th:text="${@config.SystemName()}">JiYun</span>-->
+<!--</li>-->
 <li>
     <div class="user-panel">
         <a class="menuItem" title="个人中心" th:href="@{/system/user/profile}">
@@ -18,7 +18,6 @@
         </div>
     </div>
 </li>
-
 
 <li th:each="menu : ${menus}">
 
