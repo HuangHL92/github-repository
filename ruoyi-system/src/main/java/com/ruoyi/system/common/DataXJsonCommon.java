@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.json.JSONUtil;
 
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.enums.DataXSqlType;
 import com.ruoyi.system.domain.SysDataX;
 import com.ruoyi.system.domain.SysDataXType.SysDataXInfo;
 
@@ -166,10 +167,15 @@ public class DataXJsonCommon {
         return fileName;
     }
 
-    public static Connection getConnection(String url, String name, String pwd) {
-        String driver = "com.mysql.cj.jdbc.Driver";
+    public static Connection getConnection(String sqlType,String url, String name, String pwd) {
         try {
-            Class.forName(driver);
+            if(String.valueOf(DataXSqlType.MYSQL.getType()).equals(sqlType)){
+                Class.forName(DataXSqlType.MYSQL.getDriver());
+            }else if(String.valueOf(DataXSqlType.ORACLE.getType()).equals(sqlType)){
+                Class.forName(DataXSqlType.ORACLE.getDriver());
+            }else if(String.valueOf(DataXSqlType.SQL_SERVER.getType()).equals(sqlType)){
+                Class.forName(DataXSqlType.SQL_SERVER.getDriver());
+            }
             //获取连接对象 链接 用户名 密码
             Connection conn = DriverManager.getConnection(url, name, pwd);
             conn.close();
@@ -194,8 +200,19 @@ public class DataXJsonCommon {
     public static Boolean dataxJsonMod(SysDataX sysDataX) {
         //准备数据 开始
         String fileNames = sysDataX.getFileName() + ".json";
-        String readerPort = "jdbc:mysql://" + sysDataX.getReaderPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
-        String writerPort = "jdbc:mysql://" + sysDataX.getWriterPort() + "?characterEncoding=utf8&serverTimezone=GMT%2B8";
+        String readerPort = null;
+        String writerPort = null;
+        if (String.valueOf(DataXSqlType.MYSQL.getType()).equals(sysDataX.getSqlType())) {
+            readerPort = DataXSqlType.MYSQL.getPrefix() + sysDataX.getReaderPort() + DataXSqlType.MYSQL.getSuffix();
+            writerPort = DataXSqlType.MYSQL.getPrefix() + sysDataX.getWriterPort() + DataXSqlType.MYSQL.getSuffix();
+        } else if (String.valueOf(DataXSqlType.ORACLE.getType()).equals(sysDataX.getSqlType())) {
+            readerPort = DataXSqlType.ORACLE.getPrefix() + sysDataX.getReaderPort() + DataXSqlType.ORACLE.getSuffix();
+            writerPort = DataXSqlType.ORACLE.getPrefix() + sysDataX.getWriterPort() + DataXSqlType.ORACLE.getSuffix();
+        } else if (String.valueOf(DataXSqlType.SQL_SERVER.getType()).equals(sysDataX.getSqlType())) {
+            readerPort = DataXSqlType.SQL_SERVER.getPrefix() + sysDataX.getReaderPort() + DataXSqlType.SQL_SERVER.getSuffix();
+            writerPort = DataXSqlType.SQL_SERVER.getPrefix() + sysDataX.getWriterPort() + DataXSqlType.SQL_SERVER.getSuffix();
+        }
+
         String cols = sysDataX.getReaderColumn().replace('，', ',');
         String[] columns = cols.split(",");
         List<String> column = Arrays.asList(columns);

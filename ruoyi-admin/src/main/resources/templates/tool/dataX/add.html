@@ -44,12 +44,29 @@
                     </div>
                     <div class="ibox-content">
                         <div class="form-group">
+                            <label class="col-sm-3 control-label">数据库类型：</label>
+                            <div class="col-sm-8">
+                                <select id="sqlType" name="sqlType" class="form-control required" th:field="*{sqlType}" th:with="type=${@dict.getType('datax_sql_type')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">源数据库连接：</label>
                             <div class="col-sm-8">
-                                <input id="readerPort" name="readerPort" th:field="*{readerPort}"
+                                <input style="display: inline;width: 85%" id="readerPort" name="readerPort"
+                                       th:field="*{readerPort}"
                                        class="form-control required"
-                                       type="text" placeholder="输入源数据数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
+                                       type="text" placeholder="输入源数据数据库链接">
+                                <a onclick="testConnection('A')" class="btn btn-success btn-xs" href="javaScript:;">
+                                    <i class="fa fa-check"></i>测试数据库连接
+                                </a>
+                                <div style="margin-top: 10px;" class="alert alert-info alert-dismissable">
+                                    <strong>数据库链接示例：</strong>前后不要有空格<br>
+                                    <strong class="sqlTypeAlert"></strong>
+                                </div>
                             </div>
+
                         </div>
 
                         <div class="form-group">
@@ -124,10 +141,18 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">目标库链接：</label>
                             <div class="col-sm-8">
-                                <input id="writerPort" name="writerPort" th:field="*{writerPort}"
+                                <input id="writerPort" style="display:inline;width: 85%" name="writerPort"
+                                       th:field="*{writerPort}"
                                        class="form-control required"
-                                       type="text" placeholder="输入写入数据库链接：数据库ip/数据库名，例：127.0.0.1:3306/test">
+                                       type="text" placeholder="输入写入数据库链接">
+                                <a onclick="testConnection('B')" class="btn btn-success btn-xs" href="javaScript:;"><i
+                                        class="fa fa-check"></i>测试数据库连接</a>
+                                <div style="margin-top: 10px;" class="alert alert-info alert-dismissable">
+                                    <strong>数据库链接示例：</strong>前后不要有空格<br>
+                                    <strong class="sqlTypeAlert"></strong>
+                                </div>
                             </div>
+
                         </div>
 
                         <div class="form-group">
@@ -207,11 +232,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group" >
+                        <div class="form-group">
                             <label class="col-sm-3 control-label">定时任务：</label>
                             <div class="col-sm-8">
-                                <label class="radio-box">  <input id = "scheduleTypeNew" type="radio" name="scheduleType" th:checked="*{scheduleId == null}? true : false" value="1"/>新建定时任务</label>
-                                <label class="radio-box">  <input type="radio" name="scheduleType" th:checked="*{scheduleId == null}? false : true" value="2"/>添加到现有定时任务</label>
+                                <label class="radio-box"> <input id="scheduleTypeNew" type="radio" name="scheduleType"
+                                                                 th:checked="*{scheduleId == null}? true : false"
+                                                                 value="1"/>新建定时任务</label>
+                                <label class="radio-box"> <input type="radio" name="scheduleType"
+                                                                 th:checked="*{scheduleId == null}? false : true"
+                                                                 value="2"/>添加到现有定时任务</label>
                                 <div id="scheduleTypeTip" class="col-sm-12 alert alert-warning">新建定时任务会自动创建定时任务组</div>
                             </div>
                         </div>
@@ -226,8 +255,10 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">dataX定时任务组列表：</label>
                             <div class="col-sm-8">
-                                <select class="form-control required" id="scheduleId" name="scheduleId" th:field="*{scheduleId}">
-                                    <option  th:each="sysJob:${sysJobs}" th:value="${sysJob.jobId}" th:text="${sysJob.jobGroup}"></option>
+                                <select class="form-control required" id="scheduleId" name="scheduleId"
+                                        th:field="*{scheduleId}">
+                                    <option th:each="sysJob:${sysJobs}" th:value="${sysJob.jobId}"
+                                            th:text="${sysJob.jobGroup}"></option>
                                 </select>
                             </div>
                         </div>
@@ -259,19 +290,40 @@
     var cronPrefix = ctx + "monitor/job"
 
     $(function () {
+        var html=''
+        if ($('#sqlType').val() == 1) {
+            html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+        } else if ($('#sqlType').val() == 2) {
+            html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+        } else if ($('#sqlType').val() == 3) {
+            html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+        }
+        $(".sqlTypeAlert").html(html);
+
+        $("#sqlType").change(function () {
+            var html=''
+            if ($(this).val() == 1) {
+                html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+            } else if ($(this).val() == 2) {
+                html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+            } else if ($(this).val() == 3) {
+                html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+            }
+            $(".sqlTypeAlert").html(html);
+        })
         //页面加载时
         if ([[${sysDataX.isSchedule==0}]] || [[${sysDataX.isSchedule==null}]]) {
             $("#scheduleCron").parents(".form-group").hide();
-            $("#scheduleCron").attr("disabled","disabled");
+            $("#scheduleCron").attr("disabled", "disabled");
             $("#scheduleName").parents(".form-group").hide();
             $("#scheduleId").parents(".form-group").hide();
             $("#scheduleTypeNew").parents(".form-group").hide();
-        }else {
+        } else {
             if ([[${sysDataX.scheduleId==null}]]) {
                 $("#scheduleCron").parents(".form-group").show();
                 var boolCheck = $('input[name="scheduleType"]:checked').val();
                 menuVisible(boolCheck)
-            }else{
+            } else {
                 $("#scheduleId").parents(".form-group").show();
                 var boolCheck = $('input[name="scheduleType"]:checked').val();
                 menuVisible(boolCheck)
@@ -279,10 +331,10 @@
         }
 
         //点击开启定时任务按钮时
-        $("#form-sysDataX-add").click(function(event) {
+        $("#form-sysDataX-add").click(function (event) {
             if ($("#isSchedule_N").is(":checked") == false) {
                 $("#scheduleCron").parents(".form-group").hide();
-                $("#scheduleCron").attr("disabled","disabled");
+                $("#scheduleCron").attr("disabled", "disabled");
                 $("#scheduleName").parents(".form-group").hide();
                 $("#scheduleId").parents(".form-group").hide();
                 $("#scheduleTypeNew").parents(".form-group").hide();
@@ -295,29 +347,28 @@
             }
         })
         //选择新增或者添加已有时
-        $('input[name=scheduleType]').on('ifChecked', function(event) {
+        $('input[name=scheduleType]').on('ifChecked', function (event) {
             var boolCheck = $(event.target).val();
             menuVisible(boolCheck);
         })
     })
 
 
-    function menuVisible(boolCheck){
-        if(boolCheck==1){
+    function menuVisible(boolCheck) {
+        if (boolCheck == 1) {
             $("#scheduleId").parents(".form-group").hide();
-            $("#scheduleId").attr("disabled","disabled");
+            $("#scheduleId").attr("disabled", "disabled");
             $('#scheduleTypeTip').show();
             $("#scheduleCron").parents(".form-group").show();
             $("#scheduleCron").removeAttr("disabled");
-        }else if(boolCheck==2){
+        } else if (boolCheck == 2) {
             $('#scheduleTypeTip').hide();
             $("#scheduleId").parents(".form-group").show();
             $("#scheduleId").removeAttr("disabled");
             $("#scheduleCron").parents(".form-group").hide();
-            $("#scheduleCron").attr("disabled","disabled");
+            $("#scheduleCron").attr("disabled", "disabled");
         }
     }
-
 
 
     $("#form-sysDataX-add").validate({
@@ -371,8 +422,59 @@
         if ($.validate.form()) {
             $("#isSchedule").val($("#isSchedule_N").is(':checked') == true ? 1 : 0);
             $("#scheduleCron").val($("#isSchedule_N").is(':checked') == true ? $("#scheduleCron").val() : '');
+            console.log($('#form-sysDataX-add').serialize())
             $.operate.save(prefix + "/add", $('#form-sysDataX-add').serialize());
         }
+    }
+
+    function testConnection(type) {
+        var sqlType = $("#sqlType").val();
+        var readerUserName = $("#readerUserName").val();
+        var readerPassword = $("#readerPassword").val();
+        var writerUserName = $("#writerUserName").val();
+        var writerPassword = $("#writerPassword").val();
+        var readerPort = $("#readerPort").val();
+        var writerPort = $("#writerPort").val();
+        if (type == 'A') {
+            if(readerUserName=='' || readerUserName==null
+                || readerPassword=='' || readerPassword==null
+                || readerPort=='' || readerPort==null
+            ){
+                $.modal.msgWarning("数据源连接用户名和密码不能为空！")
+                return;
+            }
+        } else if (type == 'B') {
+            if(writerUserName=='' || writerUserName==null
+                || writerPassword=='' || writerPassword==null
+                || writerPort=='' || writerPort==null
+            ){
+                $.modal.msgWarning("目标库连接用户名和密码不能为空！")
+                return;
+            }
+        }
+        var name = type=='A' ? readerUserName:writerUserName;
+        var pwd = type=='A'?readerPassword:writerPassword;
+        var port =  type=='A' ? readerPort:writerPort;
+        $.modal.loading("正在测试连接。。。");
+        $.ajax({
+            url:prefix + "/checkConnection",
+            data:{
+                sqlType:sqlType,
+                name:name,
+                pwd:pwd,
+                port:port
+            },
+            success:function (rs) {
+                if(rs.code!=0){
+                    $.modal.closeLoading();
+                    $.modal.msgError("抱歉，数据库测试连接失败！请检查数据库连接信息是否正确");
+                    return;
+                }
+
+                $.modal.closeLoading();
+                $.modal.msgSuccess("恭喜！数据库测试连接成功！");
+            }
+        })
     }
 </script>
 </body>
