@@ -144,9 +144,15 @@ public class DataXController extends BaseController {
                 //如果为新增定时任务
                 addSysJob(sysDataX);
             }
+            //保存数据
+            sysDataXService.save(sysDataX);
+
             //生成json文件
-            DataXJsonCommon.dataxJsonMod(sysDataX);
-            return toAjax(sysDataXService.save(sysDataX));
+            boolean res = DataXJsonCommon.dataxJsonMod(sysDataX);
+            if(!res) {
+                return error("配置文件生成失败！请检查配置。");
+            }
+            return toAjax(res);
 
         }
 

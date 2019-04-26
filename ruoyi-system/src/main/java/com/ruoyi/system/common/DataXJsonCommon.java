@@ -271,26 +271,24 @@ public class DataXJsonCommon {
         contentList.add(content);
         //准备数据 结束
         //判断数据库链接正确
-        if (getConnection(readerPort, readerParameter.getUsername(), readerParameter.getPassword()) != null && getConnection(writerPort, writerParameter.getUsername(), writerParameter.getPassword()) != null) {
+//        if (getConnection(readerPort, readerParameter.getUsername(), readerParameter.getPassword()) != null
+//                && getConnection(writerPort, writerParameter.getUsername(), writerParameter.getPassword()) != null) {
             //job
             SysDataXInfo.Job job = new SysDataXInfo.Job();
             job.setSetting(setting);
             job.setContent(contentList);
-
             SysDataXInfo sysDataXInfo = new SysDataXInfo();
             sysDataXInfo.setJob(job);
 
-
             createJson(sysDataXInfo, fileNames);
-//            ExportJson.readJson(fileNames);
             //连接正常
-            return true;
-        } else {
-            //链接错误
-            return false;
-        }
+//            return true;
+//        } else {
+//            //链接错误
+//            return false;
+//        }
 
-
+        return true;
     }
 
     /**
