@@ -53,7 +53,7 @@
     var editFlag = [[${@permission.hasPermi('tool:dataX:editFull')}]];
     var removeFlag = [[${@permission.hasPermi('tool:dataX:remove')}]];
     var prefix = ctx + "tool/dataX";
-
+    var datas = [[${@dict.getType('datax_sql_type')}]];
     $(function () {
 
 
@@ -77,6 +77,13 @@
                 {
                     field: 'fileName',
                     title: '作业名称'
+                },
+                {
+                    field: 'sqlType',
+                    title: '数据库类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
                 },
                 {
                     field: 'readerPort',

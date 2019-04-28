@@ -14,7 +14,8 @@
 								部门名称：<input type="text" name="name"/>
 							</li>
 							<li>
-								部门级别：<select name="grade" th:with="type=${@dict.getType('biz_department_grade')}">
+								部门级别：
+								<select name="grade" th:with="type=${@dict.getType('biz_department_grade')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 								</select>

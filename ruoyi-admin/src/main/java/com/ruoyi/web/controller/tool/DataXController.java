@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.enums.DataXSqlType;
 import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.common.support.Convert;
 import com.ruoyi.common.utils.StringUtils;
@@ -37,8 +38,8 @@ import java.util.*;
 @RequestMapping("/tool/dataX")
 public class DataXController extends BaseController {
     private String prefix = "tool/dataX";
-    private static final String SYS_JOB_NAME="sysDataxTask";
-    private static final String SYS_JOB_MTHOD_NAME="sysDataxParams";
+    private static final String SYS_JOB_NAME = "sysDataxTask";
+    private static final String SYS_JOB_METHOD_NAME = "sysDataxParams";
     private static final String SYS_JOB_AFTER_NAME = "_Datax";
     @Autowired
     private ISysDataXService sysDataXService;
@@ -104,7 +105,7 @@ public class DataXController extends BaseController {
             if (sysDataXOne.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
                 //1 有任务
                 //1.1 查找任务
-                try{
+                try {
                     SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataXOne.getScheduleId()));
 
                     if (job != null && sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_NO)) {
@@ -124,7 +125,7 @@ public class DataXController extends BaseController {
                         //1.4.2新增新任务
                         addSysJob(sysDataX);
                     }
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     DataXJsonCommon.dataxJsonMod(sysDataX);
                     sysDataX.setLog("");
                 }
@@ -149,7 +150,7 @@ public class DataXController extends BaseController {
 
             //生成json文件
             boolean res = DataXJsonCommon.dataxJsonMod(sysDataX);
-            if(!res) {
+            if (!res) {
                 return error("配置文件生成失败！请检查配置。");
             }
             return toAjax(res);
@@ -207,7 +208,7 @@ public class DataXController extends BaseController {
             SysDataX sysDataX = sysDataXService.getById(id);
             //删除定时任务 捕获转换异常
             try {
-               delSysJob(sysDataX.getScheduleId(),sysDataX.getFileName());
+                delSysJob(sysDataX.getScheduleId(), sysDataX.getFileName());
                 DataXJsonCommon.delJsonAndLog(sysDataX.getFileName());
             } catch (NumberFormatException e) {
                 //删除文件
@@ -262,10 +263,11 @@ public class DataXController extends BaseController {
 
     /**
      * 删除任务
+     *
      * @param jobId
      * @param methodParam
      */
-    public void delSysJob(String jobId,String methodParam){
+    public void delSysJob(String jobId, String methodParam) {
         SysJob sysJob = sysJobService.selectJobById(Long.parseLong(jobId));
         if (sysJob != null) {
             List<String> methodParamsList = new ArrayList<String>();
@@ -280,15 +282,16 @@ public class DataXController extends BaseController {
 
     /**
      * 增加一个新任务
+     *
      * @param sysDataX
      */
-    public void addSysJob(SysDataX sysDataX){
+    public void addSysJob(SysDataX sysDataX) {
         if (StrUtil.isBlank(sysDataX.getScheduleId())) {
             //增加一个定时任务 任务名\任务组\任务方法\任务参数(文件名、sysDataXId)\执行表达式
             SysJob sysJob = new SysJob();
             sysJob.setJobName(SYS_JOB_NAME);
-            sysJob.setJobGroup(sysDataX.getFileName()+SYS_JOB_AFTER_NAME);
-            sysJob.setMethodName(SYS_JOB_MTHOD_NAME);
+            sysJob.setJobGroup(sysDataX.getFileName() + SYS_JOB_AFTER_NAME);
+            sysJob.setMethodName(SYS_JOB_METHOD_NAME);
             sysJob.setMethodParams(sysDataX.getFileName());
             sysJob.setCronExpression(sysDataX.getScheduleCron());
             sysJobService.insertJobCron(sysJob);
@@ -301,7 +304,7 @@ public class DataXController extends BaseController {
             SysJob job = sysJobService.selectJobById(Long.parseLong(sysDataX.getScheduleId()));
             if (job != null) {
                 List<String> methodParamsList = new ArrayList<String>();
-                if(StrUtil.isNotBlank(job.getMethodParams())){
+                if (StrUtil.isNotBlank(job.getMethodParams())) {
                     Collections.addAll(methodParamsList, job.getMethodParams().split(","));
                 }
                 methodParamsList.add(sysDataX.getFileName());
@@ -315,5 +318,25 @@ public class DataXController extends BaseController {
             }
 
         }
+    }
+
+    /**
+     * 测试连接
+     */
+    @GetMapping("/checkConnection")
+    @ResponseBody
+    public AjaxResult checkConnection(String sqlType, String port,String name, String pwd){
+        String url = null;
+        if(String.valueOf(DataXSqlType.MYSQL.getType()).equals(sqlType)){
+            url=DataXSqlType.MYSQL.getPrefix()+port+DataXSqlType.MYSQL.getSuffix();
+        }else if(String.valueOf(DataXSqlType.ORACLE.getType()).equals(sqlType)){
+            url=DataXSqlType.ORACLE.getPrefix()+port+DataXSqlType.ORACLE.getSuffix();
+        }else if(String.valueOf(DataXSqlType.SQL_SERVER.getType()).equals(sqlType)){
+            url=DataXSqlType.SQL_SERVER.getPrefix()+port+DataXSqlType.SQL_SERVER.getSuffix();
+        }
+        if(DataXJsonCommon.getConnection(sqlType,url,name,pwd)!=null){
+            return toAjax(true);
+        }
+        return toAjax(false);
     }
 }
