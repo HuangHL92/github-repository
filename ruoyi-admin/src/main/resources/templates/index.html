@@ -309,8 +309,34 @@
 
         $(this).addClass("cn");
         $(this).siblings().removeClass("cn");
-        $("#side-menu").load('/system/menu_left?id='+ $(this).attr("mid"),function (){initMenu()});
+        $("#side-menu").load('/system/menu_left?id='+ $(this).attr("mid"),function (response,status,xhr){
+            //console.log(response);
+            if(isJSON(response)){
+                var jobj = JSON.parse(response);
+                $.modal.alertWarning(jobj.msg);
+                return;
+            } else {
+                initMenu();
+            }
+
+
+        });
     });
+
+
+    function  isJSON(str) {
+        try {
+            var obj = JSON.parse(str);
+            if (typeof obj == 'object' && obj) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
+    }
+
 
 </script>
 </body>

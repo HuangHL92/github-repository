@@ -57,14 +57,11 @@
                                 <input style="display: inline;width: 85%" id="readerPort" name="readerPort"
                                        th:field="*{readerPort}"
                                        class="form-control required"
-                                       type="text" placeholder="输入源数据数据库链接">
-                                <a onclick="testConnection('A')" class="btn btn-success btn-xs" href="javaScript:;">
-                                    <i class="fa fa-check"></i>测试数据库连接
+                                       type="text" placeholder="输入源数据数据库链接"/>
+                                <a onclick="testConnection('A')" class="btn btn-primary btn-sm" href="javaScript:;">
+                                    <i class="fa fa-check"></i>测试连接
                                 </a>
-                                <div style="margin-top: 10px;" class="alert alert-info alert-dismissable">
-                                    <strong>数据库链接示例：</strong>前后不要有空格<br>
-                                    <strong class="sqlTypeAlert"></strong>
-                                </div>
+                                <div class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
                             </div>
 
                         </div>
@@ -114,6 +111,7 @@
                                 SELECT column1, column2, column3 FROM table WHERE 1=1<br>
                                 填写该行同步更新时会忽略数据源列名及表名
                             </div>
+
                         </div>
                         <div class="form-group">
                             <label class="col-sm-3 control-label">源数据数据库主键：</label>
@@ -149,16 +147,16 @@
                         <div class="form-group">
                             <label class="col-sm-3 control-label">目标库链接：</label>
                             <div class="col-sm-8">
+
                                 <input id="writerPort" style="display:inline;width: 85%" name="writerPort"
                                        th:field="*{writerPort}"
                                        class="form-control required"
-                                       type="text" placeholder="输入写入数据库链接">
-                                <a onclick="testConnection('B')" class="btn btn-success btn-xs" href="javaScript:;"><i
-                                        class="fa fa-check"></i>测试数据库连接</a>
-                                <div style="margin-top: 10px;" class="alert alert-info alert-dismissable">
-                                    <strong>数据库链接示例：</strong>前后不要有空格<br>
-                                    <strong id="sqlTypeWriterAlert"></strong>
-                                </div>
+                                       type="text" placeholder="输入写入数据库链接"/>
+
+                                <a onclick="testConnection('B')" class="btn btn-primary btn-sm" href="javaScript:;">
+                                    <i class="fa fa-check"></i>测试连接</a>
+                                <div class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
+
                             </div>
 
                         </div>
