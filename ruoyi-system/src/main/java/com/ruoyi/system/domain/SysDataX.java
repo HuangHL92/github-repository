@@ -131,6 +131,10 @@ public class SysDataX extends BaseEntity {
      * 数据库类型 (枚举类 ：DataXSqlType) 1 mysql  2 oracle 3 sqlserver
      */
     private String sqlType;
+    /**
+     * 数据库类型 (枚举类 ：DataXSqlType) 1 mysql  2 oracle 3 sqlserver
+     */
+    private String sqlTypeWriter;
     @TableField(exist = false)
     private String speedByteName = "byte";
     @TableField(exist = false)

@@ -78,16 +78,17 @@
                     field: 'fileName',
                     title: '作业名称'
                 },
-                {
-                    field: 'sqlType',
-                    title: '数据库类型',
-                    formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
-                    }
-                },
+
                 {
                     field: 'readerPort',
                     title: '源数据库'
+                },
+                {
+                    field: 'sqlType',
+                    title: '源数据库类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
                 },
                 {
                     field: 'readerTableName',
@@ -97,6 +98,13 @@
                 {
                     field: 'writerPort',
                     title: '目标数据库'
+                },
+                {
+                    field: 'sqlTypeWriter',
+                    title: '目标数据库类型',
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
                 },
                 {
                     field: 'writerTableName',
