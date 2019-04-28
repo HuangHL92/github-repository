@@ -61,7 +61,7 @@
                                 <a onclick="testConnection('A')" class="btn btn-primary btn-sm" href="javaScript:;">
                                     <i class="fa fa-check"></i>测试连接
                                 </a>
-                                <div class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
+                                <div id="sqlTypeReaderTips" class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
                             </div>
 
                         </div>
@@ -155,7 +155,7 @@
 
                                 <a onclick="testConnection('B')" class="btn btn-primary btn-sm" href="javaScript:;">
                                     <i class="fa fa-check"></i>测试连接</a>
-                                <div class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
+                                <div id = "sqlTypeWriterTips"class="layui-form-mid layui-word-aux">数据库链接示例：ip:port/database </div>
 
                             </div>
 
@@ -298,42 +298,42 @@
     $(function () {
         var html=''
         if ($('#sqlType').val() == 1) {
-            html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+            html = ' MySql数据库链接示例：ip:port/database';
         } else if ($('#sqlType').val() == 2) {
-            html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+            html = ' Oracle数据库链接示例示例：&nbsp;@ip:port:database&nbsp;';
         } else if ($('#sqlType').val() == 3) {
-            html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+            html = ' SQLServer数据库链接示例示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
         }
-        $(".sqlTypeAlert").html(html);
+        $("#sqlTypeReaderTIPS").html(html);
         if ($('#sqlTypeWriter').val() == 1) {
-            html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+            html = ' MySql数据库链接示例：ip:port/database';
         } else if ($('#sqlTypeWriter').val() == 2) {
-            html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+            html = ' Oracle数据库链接示例示例：&nbsp;@ip:port:database&nbsp;';
         } else if ($('#sqlTypeWriter').val() == 3) {
-            html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+            html = ' SQLServer数据库链接示例示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
         }
-        $("#sqlTypeWriterAlert").html(html);
+        $("#sqlTypeWriterTips").html(html);
         $("#sqlType").change(function () {
             var html=''
             if ($(this).val() == 1) {
-                html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+                html = ' MySql数据库链接示例：ip:port/database';
             } else if ($(this).val() == 2) {
-                html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+                html = ' Oracle数据库链接示例示例：&nbsp;@ip:port:database&nbsp;';
             } else if ($(this).val() == 3) {
-                html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+                html = ' SQLServer数据库链接示例示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
             }
-            $(".sqlTypeAlert").html(html);
+            $("#sqlTypeReaderTips").html(html);
         })
         $("#sqlTypeWriter").change(function () {
             var html=''
             if ($(this).val() == 1) {
-                html = ' mysql示例：&nbsp;ip:port/database&nbsp;';
+                html = ' MySql数据库链接示例：ip:port/database';
             } else if ($(this).val() == 2) {
-                html = ' Oracle示例：&nbsp;@ip:port:database&nbsp;';
+                html = ' Oracle数据库链接示例示例：&nbsp;@ip:port:database&nbsp;';
             } else if ($(this).val() == 3) {
-                html = ' SQLServer示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
+                html = ' SQLServer数据库链接示例示例：&nbsp;ip:port;DatabaseName=database&nbsp;';
             }
-            $("#sqlTypeWriterAlert").html(html);
+            $("#sqlTypeWriterTips").html(html);
         })
         //页面加载时
         if ([[${sysDataX.isSchedule==0}]] || [[${sysDataX.isSchedule==null}]]) {
