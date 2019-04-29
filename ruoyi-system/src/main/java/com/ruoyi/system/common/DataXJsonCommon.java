@@ -228,6 +228,7 @@ public class DataXJsonCommon {
         readerConnection.setTable(readerTable);
         readerConnection.setJdbcUrl(readerJdbcUrl);
 
+
         SysDataXInfo.Job.Content.Reader.Parameter readerParameter = new SysDataXInfo.Job.Content.Reader.Parameter();
         //pojo
         readerParameter.setUsername(sysDataX.getReaderUserName());
@@ -266,8 +267,22 @@ public class DataXJsonCommon {
 
         SysDataXInfo.Job.Content.Reader reader = new SysDataXInfo.Job.Content.Reader();
         reader.setParameter(readerParameter);
+        if(String.valueOf(DataXSqlType.MYSQL.getType()).equals(sysDataX.getSqlType())){
+            reader.setName(DataXSqlType.MYSQL.getSqlReaderDriver());
+        }else if(String.valueOf(DataXSqlType.ORACLE.getType()).equals(sysDataX.getSqlType())){
+            reader.setName(DataXSqlType.ORACLE.getSqlReaderDriver());
+        }else if(String.valueOf(DataXSqlType.SQL_SERVER.getType()).equals(sysDataX.getSqlType())){
+            reader.setName(DataXSqlType.SQL_SERVER.getSqlReaderDriver());
+        }
 
         SysDataXInfo.Job.Content.Writer writer = new SysDataXInfo.Job.Content.Writer();
+        if(String.valueOf(DataXSqlType.MYSQL.getType()).equals(sysDataX.getSqlTypeWriter())){
+            writer.setName(DataXSqlType.MYSQL.getSqlWriterDriver());
+        }else if(String.valueOf(DataXSqlType.ORACLE.getType()).equals(sysDataX.getSqlTypeWriter())){
+            writer.setName(DataXSqlType.ORACLE.getSqlWriterDriver());
+        }else if(String.valueOf(DataXSqlType.SQL_SERVER.getType()).equals(sysDataX.getSqlTypeWriter())){
+            writer.setName(DataXSqlType.SQL_SERVER.getSqlWriterDriver());
+        }
         writer.setParameter(writerParameter);
 
         SysDataXInfo.Job.Content content = new SysDataXInfo.Job.Content();
