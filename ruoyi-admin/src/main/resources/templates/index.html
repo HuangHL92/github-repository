@@ -313,8 +313,12 @@
             //console.log(response);
             if(isJSON(response)){
                 var jobj = JSON.parse(response);
-                $.modal.alertWarning(jobj.msg);
-                return;
+                layer.confirm(jobj.msg, {
+                    btn : [ '确定', '取消' ]//按钮
+                }, function(index) {
+                    layer.close(index);
+                    window.location.href='login';
+                });
             } else {
                 initMenu();
             }

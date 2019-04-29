@@ -81,15 +81,12 @@
 
                 {
                     field: 'readerPort',
-                    title: '源数据库'
-                },
-                {
-                    field: 'sqlType',
-                    title: '源数据库类型',
+                    title: '源数据库',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
+                        return ($.table.selectDictLabel(datas, row.sqlType) + value);
                     }
                 },
+
                 {
                     field: 'readerTableName',
                     title: '源数据表'
@@ -97,15 +94,12 @@
 
                 {
                     field: 'writerPort',
-                    title: '目标数据库'
-                },
-                {
-                    field: 'sqlTypeWriter',
-                    title: '目标数据库类型',
+                    title: '目标数据库',
                     formatter: function(value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
+                        return ($.table.selectDictLabel(datas, row.sqlTypeWriter) + value);
                     }
                 },
+
                 {
                     field: 'writerTableName',
                     title: '目标表'
