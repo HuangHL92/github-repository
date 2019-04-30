@@ -40,7 +40,7 @@
                     queryParams: $.table.queryParams,
                 };
                 var options = $.extend(defaults, options);
-                var h = $(window).height() - $(".search-collapse").height()- $("#toolbar").height()-$(".pagination-detail").height()+25;//动态获取窗口高度
+                    var h = $(window).height() - $(".search-collapse").innerHeight()- $(".bs-bars").innerHeight()-$(".pagination-detail").innerHeight()-$(".fixed-table-header").innerHeight()-48;//动态获取窗口高度
                 $.table._option = options;
                 $.table.initEvent();
                 $('#' + options.id).bootstrapTable({
