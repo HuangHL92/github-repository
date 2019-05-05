@@ -22,7 +22,7 @@
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 							    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" id="menuBtn" >下拉菜单</a>
+                                <!--<a class="btn btn-warning btn-rounded btn-sm" id="menuBtn" >下拉菜单</a>-->
 							</li>
 						</ul>
 					</div>
@@ -54,17 +54,17 @@
 
 	        </div>
 
-	        <div class="col-sm-12 select-table table-striped">
+	        <div class="col-sm-12 select-table text-nowrap">
 			    <table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
 		</div>
 	</div>
 
 
-    <ul id="context-menu">
-        <li data-item = "edit" onclick="$.operate.addFull()" shiro:hasPermission="system:demo:add">新增</li>
-        <li data-item = "delete">修改</li>
-    </ul>
+    <!--<ul id="context-menu">-->
+        <!--<li data-item = "edit" onclick="$.operate.addFull()" shiro:hasPermission="system:demo:add">新增</li>-->
+        <!--<li data-item = "delete">修改</li>-->
+    <!--</ul>-->
 
 	<div th:include="include :: footer"></div>
 
@@ -90,10 +90,19 @@
 		        columns: [{
 		            checkbox: true
 		        },
+				{
+					title: '序号',
+					align: 'center',
+					valign: 'bottom',
+					widht:30,
+					formatter: function (value, row, index) {
+						return index + 1;
+					}
+				},
 		        {
 		            field: 'id',
 		            title: '编号',
-                    align : "center",
+                    align : "left",
                     valign : "middle",
                     width:400,
                     formatter:function (value, row, index) {
@@ -112,6 +121,48 @@
                     width: 200,
                     sortable: true
                 },
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
+					{
+						field: 'createTime',
+						title: '创建时间',
+						width: 200,
+						sortable: true
+					},
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -137,25 +188,25 @@
              * callback [function] : 需要执行的回调函数
              * disabled [boolean]  : 是否禁用菜单项目
              */
-            var menuData = [
-                //{content:'News Site',header: true},//定义子标题栏
-                //{content:'修改',url : 'http://www.163.com'},//链接跳转型菜单项目
-                {content:'新增',callback : function(){
-                        $.operate.addFull();
-                    }},
-                {content:'sm_divider'},//分隔栏
-                //点击后执行回调的菜单项目
-                {content:'修改',callback : function(){
-                        alert('you can do anything in callback!');
-                    }}
-            ];
-            $('#menuBtn').click(function(){
-                $(this).selectMenu({
-                    //设置常规菜单模式
-                    regular : true,
-                    data : menuData
-                });
-            });
+            // var menuData = [
+            //     //{content:'News Site',header: true},//定义子标题栏
+            //     //{content:'修改',url : 'http://www.163.com'},//链接跳转型菜单项目
+            //     {content:'新增',callback : function(){
+            //             $.operate.addFull();
+            //         }},
+            //     {content:'sm_divider'},//分隔栏
+            //     //点击后执行回调的菜单项目
+            //     {content:'修改',callback : function(){
+            //             alert('you can do anything in callback!');
+            //         }}
+            // ];
+            // $('#menuBtn').click(function(){
+            //     $(this).selectMenu({
+            //         //设置常规菜单模式
+            //         regular : true,
+            //         data : menuData
+            //     });
+            // });
 
             // $('#bootstrap-table').bootstrapTable({
             //     contextMenu: '#context-menu',

@@ -2,6 +2,11 @@
 //表单提交事件
 function submitAction(formobj) {
 
+    //回调页面上的方法
+    if(typeof doBeforeSubmit == "function"){
+        doBeforeSubmit();
+    }
+
     $.ajax({
         cache : true,
         type : "POST",
