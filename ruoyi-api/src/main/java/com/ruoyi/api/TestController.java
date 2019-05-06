@@ -1,7 +1,6 @@
 package com.ruoyi.api;
 
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
@@ -136,7 +135,7 @@ public class TestController extends ApiBaseController {
         String ds = datasource==1?DataSourceType.MASTER.name():DataSourceType.SLAVE.name();
 
         //切换数据源
-        DynamicDataSourceContextHolder.setDateSoureType(ds);
+        DynamicDataSourceContextHolder.setDataSourceType(ds);
         Page<Demo> questionStudent = demoService.selectList4Page1(new Page<>(1, 100000));
         if (questionStudent.getRecords().size() == 0) {
             map.put("code", 400);
@@ -145,7 +144,7 @@ public class TestController extends ApiBaseController {
             map.put("data", questionStudent);
         }
         //清空数据源
-        DynamicDataSourceContextHolder.clearDateSoureType();
+        DynamicDataSourceContextHolder.clearDataSourceType();
 
         return map;
     }
