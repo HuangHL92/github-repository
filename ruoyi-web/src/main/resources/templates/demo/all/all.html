@@ -84,9 +84,11 @@
                 //sortOrder:"desc",
 		        //sortName: "id",
 		        modalName: "测试数据",
-		        search: false,
-		        showExport: false,
+		        search: true,
+		        showExport: true,
                 context_Menu: '#context-menu',
+                // fixedColumns: true,
+                // fixedNumber: 2,
 		        columns: [{
 		            checkbox: true
 		        },
@@ -175,6 +177,7 @@
 
 		            }
 		        }]
+
 		    };
 		    $.table.init(options);
 
