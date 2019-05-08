@@ -6,6 +6,5 @@
 .idea
 *.iml
 out
-gen
 **/rebel.xml
 /ruoyi/
