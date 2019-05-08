@@ -508,7 +508,7 @@
                 });
             },
             // 弹出层指定宽度
-            open: function (title, url, width, height) {
+            open: function (title, url, width, height,callback) {
                 //如果是移动端，就使用自适应大小弹窗
                 if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
                     width = 'auto';
@@ -540,7 +540,7 @@
                     shadeClose: true,
                     btn1: function(index, layero) {
                         var iframeWin = layero.find('iframe')[0];
-                        iframeWin.contentWindow.submitHandler(iframeWin);
+                        iframeWin.contentWindow.submitHandler(iframeWin,callback);
                     },
                     cancel: function(index) {
                         return true;
@@ -833,6 +833,24 @@
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
+            },
+            // ajax请求传输
+            ajax: function(url,data) {
+                var config = {
+                    url: url,
+                    type: "get",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function(result) {
+                        $.modal.closeLoading();
+                        window.parent.$.modal.msgSuccess(result.msg);
+                    }
+                };
+                $.ajax(config)
             }
         },
         // 校验封装处理

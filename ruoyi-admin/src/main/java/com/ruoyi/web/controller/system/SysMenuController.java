@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.framework.util.CacheUtils;
 import com.ruoyi.framework.web.domain.server.Sys;
 import com.ruoyi.system.domain.SysDept;
@@ -35,6 +36,8 @@ import com.ruoyi.framework.web.base.BaseController;
 public class SysMenuController extends BaseController
 {
     private String prefix = "system/menu";
+
+    private static CacheUtils cacheUtils = SpringUtils.getBean(CacheUtils.class);
 
     @Autowired
     private ISysMenuService menuService;
@@ -204,6 +207,21 @@ public class SysMenuController extends BaseController
             return AjaxResult.error("更新失败！");
         }
 
+        return AjaxResult.success();
+    }
+
+    /**
+     * 刷新菜单缓存（Ajax）
+     */
+    @GetMapping("/refreshCache")
+    @ResponseBody
+    public  AjaxResult refreshCache()
+    {
+        try {
+            cacheUtils.getUserMenuCache().clear();
+        } catch (Exception ex) {
+            return AjaxResult.error("刷新失败！");
+        }
         return AjaxResult.success();
     }
 

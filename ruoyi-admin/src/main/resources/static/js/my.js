@@ -1,6 +1,6 @@
 
 //表单提交事件
-function submitAction(formobj) {
+function submitAction(formobj,callback) {
 
     //回调页面上的方法
     if(typeof doBeforeSubmit == "function"){
@@ -21,13 +21,20 @@ function submitAction(formobj) {
             $.modal.alertError("系统错误");
         },
         success : function(data) {
-            $.operate.successCallback(data);
+            // 回调页面上的方法
+            if(typeof callback == "function"){
+                $.modal.closeLoading();
+                $.modal.close();
+                callback();
+            } else {
+                $.operate.successCallback(data);
+            }
         }
     });
 }
 
 //表单提交事件Handler(由ry-ui.js进行回调)
-function submitHandler(f) {
+function submitHandler(f,callback) {
     //第一个form的ID（提交第一个form,注意一个画面如果有多个form的情况下可能有问题）
     var formlength =f.contentWindow.document.forms.length;
     var formid="";
@@ -57,7 +64,7 @@ function submitHandler(f) {
 
         if(formid!="") {
             $.modal.disable();
-            submitAction($("#"+formid));
+            submitAction($("#"+formid),callback);
             console.log("表单>" + formid +"<提交成功！");
         } else {
             $.modal.alertError("提交失败！（原因：没有获得表单对象）");
