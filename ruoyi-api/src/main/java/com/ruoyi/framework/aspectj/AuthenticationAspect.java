@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+
 import com.ruoyi.common.annotation.ValidateRequest;
 import com.ruoyi.common.base.ApiConst;
 import com.ruoyi.common.enums.ResponseCode;
@@ -13,6 +14,7 @@ import com.ruoyi.common.exception.ApiRuntimeException;
 import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.ServletUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -45,7 +47,8 @@ public class AuthenticationAspect {
 
 
     // 配置织入点
-    @Pointcut("@annotation(com.ruoyi.common.annotation.ValidateRequest)")
+//    @Pointcut("@annotation(com.ruoyi.common.annotation.ValidateRequest)")
+    @Pointcut("within(com.ruoyi.api..*)")
     public void apiPointCut()
     {
 
@@ -88,6 +91,14 @@ public class AuthenticationAspect {
         {
             HttpServletRequest request = ServletUtils.getRequest();
 
+            // 重复请求过滤（ip+url）
+            String ip = IpUtils.getIpAddr(request);
+            String url = request.getRequestURL().toString();
+            String tempkey = ( ip + "#" + url).replaceAll(":","");
+            if(!validateRequest(tempkey)) {
+                throw new ApiRuntimeException(ResponseCode.RE_REQUEST);
+            }
+
             // 获得注解
             ValidateRequest annotation = getAnnotationLog(joinPoint);
             // 判断是否需要验证
@@ -95,22 +106,12 @@ public class AuthenticationAspect {
             {
                 return;
             }
-
             //从 http 请求头中取出 token
             String token = request.getHeader("x-access-token");
 
             // 执行认证
-            if (token == null) {
+            if (StringUtils.isEmpty(token)) {
                 throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
-            }
-
-
-            // 重复请求过滤（token+ip+url）
-            String ip = IpUtils.getIpAddr(request);
-            String url = request.getRequestURL().toString();
-            String tempkey = (token + "#" + ip + "#" + url).replaceAll(":","");
-            if(!validateRequest(tempkey)) {
-                throw new ApiRuntimeException(ResponseCode.RE_REQUEST);
             }
 
             // 获取 token 中的 user id

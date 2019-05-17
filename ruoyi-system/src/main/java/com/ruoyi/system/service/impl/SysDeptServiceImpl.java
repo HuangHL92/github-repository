@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.exception.BusinessException;
@@ -168,7 +169,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     public int insertDept(SysDept dept)
     {
         // 设置id
-        dept.setDeptId(UUID.randomUUID().toString().replaceAll("-", ""));
+        dept.setDeptId(IdUtil.simpleUUID());
         // 查找父节点
         SysDept info = deptMapper.selectDeptById(dept.getParentId());
         // 如果父节点不为"正常"状态,则不允许新增子节点
