@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import cn.hutool.core.util.IdUtil;
 import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.UserConstants;
 import com.ruoyi.common.exception.BusinessException;
@@ -165,7 +166,7 @@ public class SysUserServiceImpl implements ISysUserService
     public int insertUser(SysUser user)
     {
         // 设置用户id
-        user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
+        user.setUserId(IdUtil.simpleUUID());
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联

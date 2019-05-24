@@ -1,7 +1,7 @@
 package com.ruoyi.api;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.service.IDemoService;
@@ -136,7 +136,7 @@ public class TestController extends ApiBaseController {
         String ds = datasource==1?DataSourceType.MASTER.name():DataSourceType.SLAVE.name();
 
         //切换数据源
-        DynamicDataSourceContextHolder.setDateSoureType(ds);
+        DynamicDataSourceContextHolder.setDataSourceType(ds);
         Page<Demo> questionStudent = demoService.selectList4Page1(new Page<>(1, 100000));
         if (questionStudent.getRecords().size() == 0) {
             map.put("code", 400);
@@ -145,7 +145,7 @@ public class TestController extends ApiBaseController {
             map.put("data", questionStudent);
         }
         //清空数据源
-        DynamicDataSourceContextHolder.clearDateSoureType();
+        DynamicDataSourceContextHolder.clearDataSourceType();
 
         return map;
     }
@@ -161,7 +161,7 @@ public class TestController extends ApiBaseController {
 
         //第1次插入
         Demo demo =new Demo();
-        demo.setId(UUID.randomUUID().toString());
+        demo.setId(IdUtil.simpleUUID());
         demo.setName(name + "_" + i++);
         demoService.save(demo);
 
@@ -171,7 +171,7 @@ public class TestController extends ApiBaseController {
         }
 
         //第2次插入
-        demo.setId(UUID.randomUUID().toString());
+        demo.setId(IdUtil.simpleUUID());
         demo.setName(name + "_" + i++);
         demoService.save(demo);
 
@@ -190,7 +190,7 @@ public class TestController extends ApiBaseController {
         String name = "test_" + RandomUtil.randomNumbers(6);
         for(int i=0;i<size;i++) {
             Demo demo =new Demo();
-            demo.setId(UUID.randomUUID().toString());
+            demo.setId(IdUtil.simpleUUID());
             demo.setName(name + "_" + i++);
             list.add(demo);
         }
@@ -218,7 +218,7 @@ public class TestController extends ApiBaseController {
         String name = "test_" + RandomUtil.randomNumbers(6);
         for(int i=0;i<size;i++) {
             Demo demo =new Demo();
-            demo.setId(UUID.randomUUID().toString());
+            demo.setId(IdUtil.simpleUUID());
             demo.setName(name + "_" + i++);
             list.add(demo);
         }

@@ -10,18 +10,26 @@
 				<form id="gen-form">
 					<div class="select-list">
 						<ul>
+                            <li>
+                                数据库：
+                                <select name="dbName" id="dbName" th:with="type=${@dict.getType('sys_db_list')}">
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}">
+                                    </option>
+                                </select>
+                            </li>
 							<li>
 								表名称：<input type="text" name="tableName"/>
 							</li>
 							<li>
 								表描述：<input type="text" name="tableComment"/>
 							</li>
-							<li class="select-time">
-								<label>表时间： </label>
-								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-								<span>-</span>
-								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
-							</li>
+
+							<!--<li class="select-time">-->
+								<!--<label>表时间： </label>-->
+								<!--<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>-->
+								<!--<span>-</span>-->
+								<!--<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>-->
+							<!--</li>-->
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -100,21 +108,24 @@
 	
 		// 生成代码
 		function genCode(tableName) {
+
+            var dbName= $("#dbName").val();
 		    $.modal.confirm("确定要生成" + tableName + "表代码吗？", function() {
-		        location.href = prefix + "/genCode/" + tableName;
+		        location.href = prefix + "/genCode/" + tableName+ "/" +dbName;
 		        layer.msg('执行成功,正在生成代码请稍后…', { icon: 1 });
 		    })
 		}
 	
 		//批量生成代码
 		function batchGenCode() {
+            var dbName= $("#dbName").val();
 		    var rows = $.table.selectColumns("tableName");
 		    if (rows.length == 0) {
 		        $.modal.alertWarning("请选择要生成的数据");
 		        return;
 		    }
 		    $.modal.confirm("确认要生成选中的" + rows.length + "条数据吗?", function() {
-		        location.href = prefix + "/batchGenCode?tables=" + rows;
+		        location.href = prefix + "/batchGenCode?tables=" + rows+ "&dbName=" + dbName;
 		        layer.msg('执行成功,正在生成代码请稍后…', { icon: 1 });
 		    });
 		}

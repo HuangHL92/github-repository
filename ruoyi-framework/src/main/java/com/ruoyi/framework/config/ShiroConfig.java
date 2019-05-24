@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.Filter;
 
@@ -90,6 +91,9 @@ public class ShiroConfig
     // redis缓存开关
     @Value("${spring.redis.enabled}")
     private boolean redisEnabled = false;
+
+    @Value("${shiro.user.filterChainDefinitions}")
+    private List<String> filterList;
 
     @Autowired
     private CacheUtils cacheUtils;
@@ -318,31 +322,43 @@ public class ShiroConfig
         shiroFilterFactoryBean.setUnauthorizedUrl(unauthorizedUrl);
         // Shiro连接约束配置，即过滤链的定义
         LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 对静态资源设置匿名访问
-        filterChainDefinitionMap.put("/favicon.ico**", "anon");
-        filterChainDefinitionMap.put("/ruoyi.png**", "anon");
-        filterChainDefinitionMap.put("/css/**", "anon");
-        filterChainDefinitionMap.put("/docs/**", "anon");
-        filterChainDefinitionMap.put("/fonts/**", "anon");
-        filterChainDefinitionMap.put("/img/**", "anon");
-        filterChainDefinitionMap.put("/ajax/**", "anon");
-        filterChainDefinitionMap.put("/js/**", "anon");
-        filterChainDefinitionMap.put("/ruoyi/**", "anon");
-        filterChainDefinitionMap.put("/druid/**", "anon");
-        filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
-        // 退出 logout地址，shiro去清除session
-        filterChainDefinitionMap.put("/logout", "logout");
-        // 不需要拦截的访问
-        filterChainDefinitionMap.put("/login", "anon,captchaValidate");
-        // TODO 业务接口不需要拦截
-        filterChainDefinitionMap.put("/api/**", "anon");
-        filterChainDefinitionMap.put("/screen/**", "anon");
-        filterChainDefinitionMap.put("/pad/**", "anon");
-        filterChainDefinitionMap.put("/wap/**", "anon");
-        filterChainDefinitionMap.put("/wx/**", "anon");
-        filterChainDefinitionMap.put("/oauth/**", "anon");
-        filterChainDefinitionMap.put("/register", "anon,captchaValidate");
-        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+
+        //设置需要排除的路径
+        for (String filter:filterList) {
+            String[] kv = filter.split(" ");
+            String k = kv[0].trim();
+            if(k.length()>0) {
+                String v =kv[1].replaceAll("#",",").trim();
+                filterChainDefinitionMap.put( k,  v );
+            }
+
+        }
+
+//        // 对静态资源设置匿名访问
+//        filterChainDefinitionMap.put("/favicon.ico**", "anon");
+//        filterChainDefinitionMap.put("/ruoyi.png**", "anon");
+//        filterChainDefinitionMap.put("/css/**", "anon");
+//        filterChainDefinitionMap.put("/docs/**", "anon");
+//        filterChainDefinitionMap.put("/fonts/**", "anon");
+//        filterChainDefinitionMap.put("/img/**", "anon");
+//        filterChainDefinitionMap.put("/ajax/**", "anon");
+//        filterChainDefinitionMap.put("/js/**", "anon");
+//        filterChainDefinitionMap.put("/ruoyi/**", "anon");
+//        filterChainDefinitionMap.put("/druid/**", "anon");
+//        filterChainDefinitionMap.put("/captcha/captchaImage**", "anon");
+//        // 退出 logout地址，shiro去清除session
+//        filterChainDefinitionMap.put("/logout", "logout");
+//        // 不需要拦截的访问
+//        filterChainDefinitionMap.put("/login", "anon,captchaValidate");
+//        // TODO 业务接口不需要拦截
+//        filterChainDefinitionMap.put("/api/**", "anon");
+//        filterChainDefinitionMap.put("/screen/**", "anon");
+//        filterChainDefinitionMap.put("/pad/**", "anon");
+//        filterChainDefinitionMap.put("/wap/**", "anon");
+//        filterChainDefinitionMap.put("/wx/**", "anon");
+//        filterChainDefinitionMap.put("/oauth/**", "anon");
+//        filterChainDefinitionMap.put("/register", "anon,captchaValidate");
+//        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
 
 
         // 系统权限列表

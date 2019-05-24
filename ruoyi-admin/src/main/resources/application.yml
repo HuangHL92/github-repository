@@ -139,6 +139,31 @@ shiro:
     captchaEnabled: false
     # 验证码类型 math 数组计算 char 字符
     captchaType: math
+    # 不需要拦截的访问
+    filterChainDefinitions:
+      /favicon.ico** anon
+      ,/ruoyi.png** anon
+      ,/css/** anon
+      ,/docs/** anon
+      ,/fonts/** anon
+      ,/img/** anon
+      ,/ajax/** anon
+      ,/js/** anon
+      ,/ruoyi/** anon
+      ,/druid/** anon
+      ,/captcha/captchaImage** anon
+      ,/logout logout
+      ,/login anon#captchaValidate
+      ,/api/** anon
+      ,/screen/** anon
+      ,/pad/** anon
+      ,/wap/** anon
+      ,/wx/** anon
+      ,/oauth/** anon
+      ,/register anon#captchaValidate
+      ,/swagger-ui.html anon
+      ,/website/** anon
+
   cookie:
     # 设置Cookie的域名 默认空，即当前访问的域名
     domain: 

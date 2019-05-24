@@ -13,6 +13,11 @@ public class TableInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
+
+
+    /** 数据库名称 */
+    private String dbName;
+
     /** 表名称 */
     private String tableName;
 
@@ -30,6 +35,14 @@ public class TableInfo extends BaseEntity
 
     /** 类名(第一个字母小写) */
     private String classname;
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
 
     public String getTableName()
     {

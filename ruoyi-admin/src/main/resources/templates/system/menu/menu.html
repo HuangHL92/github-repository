@@ -38,6 +38,10 @@
                 <a class="btn btn-info" id="expandAllBtn">
                     <i class="fa fa-exchange"></i> 展开/折叠
                 </a>
+
+                <a class="btn btn-warning" onclick="refreshCache()">
+                    <i class="fa fa-recycle"></i> 刷新缓存
+                </a>
 	        </div>
        		 <div class="col-sm-12 select-table table-striped">
 	            <table id="bootstrap-tree-table" data-mobile-responsive="true"></table>
@@ -186,6 +190,11 @@
 
 		}
 
+		function refreshCache() {
+            $.modal.confirm("确认要刷新缓存吗？", function() {
+                $.operate.ajax(prefix + "/refreshCache",null);
+            })
+        }
 	</script>
 </body>
 </html>

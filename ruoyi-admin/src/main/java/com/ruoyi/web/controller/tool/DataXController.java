@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.tool;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.annotation.Log;
@@ -141,7 +142,7 @@ public class DataXController extends BaseController {
         } else {
             //是否要加入定时任务
             if (sysDataX.getIsSchedule().equals(SysDataX.DATAX_SCHEDULE_YES)) {
-                sysDataX.setId(UUID.randomUUID().toString());
+                sysDataX.setId(IdUtil.simpleUUID());
                 //如果为新增定时任务
                 addSysJob(sysDataX);
             }
