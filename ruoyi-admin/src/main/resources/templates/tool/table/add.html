@@ -80,7 +80,7 @@
                                 <th><font color="red">*</font>说明</th>
                                 <th th:width="100">物理类型</th>
                                 <th th:width="80">长度</th>
-                                <th th:width="80">主键</th>
+                                <th th:width="80" style="text-align: center;">主键</th>
                                 <th th:width="80">列表显示</th>
                                 <th th:width="60" style="text-align: center;">
                                     <button class="btn btn-primary btn-xs" type="button" onclick="addtr()">
@@ -94,38 +94,38 @@
                             </template>
 
                             <tbody>
-                            <tr>
+                            <tr id="pktr">
                                 <td style="position: relative; text-align: center;">
                                     <label class="label-index"></label>
-                                    <input type="hidden" data-name="orderNum" value="" />
+                                    <input type="hidden" value="" />
                                 </td>
                                 <td style="position: relative; text-align: center;">
-                                    <input type="text" class="form-control required" readonly data-name="name" value="id">
+                                    <input type="text" class="form-control required" readonly  value="id">
                                 </td>
                                 <td style="position: relative">
-                                    <input type="text" class="form-control required" readonly data-name="comments" value="主键">
+                                    <input type="text" class="form-control required" readonly value="主键">
                                 </td>
                                 <td style="position: relative">
-                                    <select class="form-control required"></select>
-                                    <input type="hidden" data-name="viewJdbc" value="varchar" />
+                                    <select class="form-control required" disabled="disabled"></select>
+                                    <input type="hidden" value="varchar" />
                                 </td>
                                 <td style="position: relative">
-                                    <input type="text" class="form-control" readonly data-name="length" value="64" />
+                                    <input type="text" class="form-control" readonly  value="32" />
                                 </td>
                                 <td style="position: relative; text-align: center;">
                                     <div class="checkbox i-checks">
                                         <!--默认选中checked和value都要设置-->
                                         <input type="checkbox" checked disabled >
-                                        <input type="hidden" data-name="isPk" value="1" >
+                                        <input type="hidden" value="1" >
                                     </div>
                                 </td>
                                 <td style="position: relative; text-align: center;">
                                     <div class="checkbox i-checks">
                                         <input type="checkbox" >
-                                        <input type="hidden" data-name="listshow" value="0" >
+                                        <input type="hidden" value="0" >
                                     </div>
                                 </td>
-                                <td style="position: relative; text-align: center;">
+                                <td style="position: relative; text-align: center;" class="pk">
                                 </td>
                             </tr>
                             </tbody>
@@ -145,7 +145,7 @@
     var copy = '<tr><td style="position: relative; text-align: center;"><label class="label-index"></label><input type="hidden" data-name="orderNum" value="" /></td>' +
         '<td style="position: relative"><input type="text" class="form-control required" data-name="name" value=""></td>' +
         '<td style="position: relative"><input type="text" class="form-control required" data-name="comments" value=""></td>' +
-        '<td style="position: relative"><select class="form-control required"></select><input type="hidden" data-name="viewJdbc" /></td>' +
+        '<td style="position: relative"><select class="form-control required" onchange="change(this)"></select><input type="hidden" data-name="viewJdbc" /></td>' +
         '<td style="position: relative"><input type="text" class="form-control" data-name="length" /></td>' +
         '<td style="position: relative; text-align: center;"><div class="checkbox i-checks"><input type="checkbox" value="" data-name="isPk"></div></td>' +
         '<td style="position: relative; text-align: center;"><div class="checkbox i-checks"><input type="checkbox" ><input type="hidden" data-name="listshow" value="0" ></div></td>'+
@@ -161,6 +161,23 @@
         $("table").sortable({items: "tbody tr", cursor: 'move', axis: "y",stop:function () {restIndexAndBtn();}}); // 可拖拽排序
         restIndexAndBtn();
     })
+
+    // 物理类型下拉change事件
+    function change(select) {
+        var $length = $(select).next().parent('td').next('td').find('input');
+        if (select.selectedOptions[0].value && (
+            select.selectedOptions[0].value.toUpperCase() == 'TEXT'
+            || select.selectedOptions[0].value.toUpperCase() == 'LONGTEXT'
+            || select.selectedOptions[0].value.toUpperCase() == 'LONGBLOB'
+            || select.selectedOptions[0].value.toUpperCase() == 'DATETIME'
+            || select.selectedOptions[0].value.toUpperCase() == 'TIMESTAMP'
+        )) {
+            $length.val('');
+            $length.attr('disabled', 'disabled');
+        } else {
+            $length.removeAttr('disabled');
+        }
+    }
 
     function addtr(){
         if(copy){
@@ -190,7 +207,6 @@
             }
             return result;
         });
-        // 当input有值并且没有匹配到默认的选项(即设置的值不在字典里)，创建新tag
         if (!isMatchedFlag && $input.val()) {
             var tagData = {
                 id: $input.val(),
@@ -231,8 +247,7 @@
             $label.next('input[type="hidden"]').val(index); // 赋值orderNum
             $label.html(index);
             // 重建删除按钮
-            $(tr).find('td').eq(-1).find('button').remove();
-            index != 1 ? $(rmbtn).appendTo($(tr).find('td').eq(-1)) : false;
+            $(tr).find('td.pk button').remove();
         })
     }
 
@@ -252,7 +267,7 @@
     function doBeforeSubmit() {
         // $('#genIdType').val($('#genIdTypeSelect').val());
         var colFieldName = 'columnList';
-        $('table tr').each(function (index, tr) {
+        $('table tr').not('#pktr').each(function (index, tr) {
             var $select = $(tr).find('select');
             $select.parent().find('input').val($select.val());
             var $input = $(tr).find('input[data-name]');

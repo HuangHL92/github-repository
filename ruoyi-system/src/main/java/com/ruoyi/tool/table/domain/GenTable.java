@@ -49,6 +49,12 @@ public class GenTable extends BaseEntity {
     @TableField(exist = false)
     private List<String> pkList;
 
+    /**
+     * 表总记录数
+     */
+    @TableField(exist = false)
+    private Integer totalCount;
+
     public GenTable() {
     }
 

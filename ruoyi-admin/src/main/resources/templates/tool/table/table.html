@@ -24,6 +24,12 @@
     #alertContent .diy-content .radio.i-checks label:nth-child(1){
         padding-left: 0 !important;
     }
+    .totalCount{
+        min-width: 140px;
+    }
+    .isSync{
+        min-width: 160px;
+    }
 </style>
 <body class="gray-bg">
 <!--alert框内容-->
@@ -160,12 +166,27 @@
                 {
                     field: 'comments',
                     title: '说明',
-                    width: '40%'
+                    width: '25%'
+                },
+                {
+                    field: 'totalCount',
+                    title: '数据量',
+                    align: 'center',
+                    class: 'totalCount',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (value == null) {
+                            actions.push('<span>未生成表</span>');
+                        } else {
+                            actions.push('<span title="查看数据"><a href="#" style="color: #10AEFF;" onclick="toDataCount(\'' + row.id + '\'' + ",'" + row.name + '\')">' + value + '</a></span>');
+                        }
+                        return actions.join('');
+                    }
                 },
                 {
                     field: 'isSync',
                     title: '同步数据库',
-                    width: '10%',
+                    class: 'isSync',
                     formatter: function (value, row, index) {
                         var actions = [];
                         value == '1' ? actions.push('<span>已同步</span>') : actions.push('<span>未同步</span>')
@@ -175,7 +196,7 @@
                 {
                     title: '操作',
                     align: 'center',
-                    width: '30%',
+                    width: 260,
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs '+ editFlag +'" href="#" onclick="$.operate.editFull(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
@@ -188,6 +209,11 @@
         };
         $.table.init(options);
     });
+
+    function toDataCount(id, name) {
+        var url = ctx + "tool/table/data/" + id;
+        createMenuItem(url, name + "-数据");
+    }
 </script>
 </body>
 </html>

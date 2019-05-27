@@ -7,7 +7,6 @@ import com.ruoyi.common.page.TableDataInfo;
 import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.tool.table.domain.GenTable;
 import com.ruoyi.tool.table.service.IGenTableService;
-import com.ruoyi.system.service.ISysDictDataService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,8 +25,6 @@ public class TableController extends BaseController {
 
     @Autowired
     IGenTableService genTableService;
-    @Autowired
-    private ISysDictDataService sysDictDataService;
 
     private String prefix = "tool/table";
 

@@ -20,6 +20,7 @@ public class GenTableColumn extends BaseEntity {
     public static final String DEL_FLAG_DELETE = "1"; // 已删除
     public static final String YES = "1"; // 对
     public static final String NO = "0"; // 错
+    public static final String PK_NAME = "id";  // 主键名称
 
 
     @TableId(type = IdType.UUID)
@@ -63,10 +64,14 @@ public class GenTableColumn extends BaseEntity {
     }
 
     public GenTableColumn(String name, String comments, String jdbcType) {
+        this(name, comments, jdbcType, "0");
+    }
+
+    public GenTableColumn(String name, String comments, String jdbcType, String isPk) {
         this.name = name;
         this.comments = comments;
         this.jdbcType = jdbcType;
-        this.setIsPk("0");
+        this.setIsPk(isPk);
         this.setDelFlag("0");
     }
 
@@ -101,14 +106,28 @@ public class GenTableColumn extends BaseEntity {
         return this.length;
     }
 
+    public Long getLengthNumber() {
+        String length = getLength();
+        if (StringUtils.isNotEmpty(length)) {
+            if (length.indexOf(",") > -1) {
+                return Long.parseLong(length.substring(0, length.indexOf(",")));
+            }
+            return Long.parseLong(length);
+        }
+        return null;
+    }
+
     public void setLength(String length) {
         this.length = length;
     }
 
     public String getJdbcType() {
         if (this.jdbcType == null) {
-            if ("LONGTEXT".equals(StringUtils.upperCase(this.getViewJdbc())) ||
-                    "LONGBLOB".equals(StringUtils.upperCase(this.getViewJdbc()))) {
+            if ("TEXT".equals(StringUtils.upperCase(this.getViewJdbc()))
+                    || "LONGTEXT".equals(StringUtils.upperCase(this.getViewJdbc()))
+                    || "LONGBLOB".equals(StringUtils.upperCase(this.getViewJdbc()))
+                    || "DATETIME".equals(StringUtils.upperCase(this.getViewJdbc()))
+                    || "TIMESTAMP".equals(StringUtils.upperCase(this.getViewJdbc()))) {
                 this.jdbcType = this.getViewJdbc();
             } else {
                 this.jdbcType = this.getViewJdbc() + "(" + this.getLength() + ")";

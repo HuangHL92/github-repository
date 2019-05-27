@@ -1,11 +1,14 @@
 package com.ruoyi.tool.table.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.tool.table.domain.GenTable;
 import com.ruoyi.tool.table.domain.GenTableColumn;
@@ -15,11 +18,12 @@ import com.ruoyi.tool.table.service.IGenTableService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author: xjm
@@ -29,8 +33,13 @@ import java.util.List;
 public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> implements IGenTableService {
 
     private static final Logger log = LoggerFactory.getLogger(GenTableServiceImpl.class);
+
     @Autowired
     private GenTableColumnMapper genTableColumnMapper;
+    @Autowired
+    private GenTableMapper genTableMapper;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Override
     public List<GenTable> selectAllList(GenTable genTable) {
@@ -39,7 +48,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
                 i -> i.like(GenTable::getComments, genTable.getComments()));
         query.lambda().and(StrUtil.isNotBlank(genTable.getName()),
                 i -> i.like(GenTable::getName, genTable.getName()));
-        return list(query);
+        return genTableMapper.selectListWithCount(query);
     }
 
     @Override
@@ -68,7 +77,9 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
         for (GenTableColumn column : columnList) {
             column.setGenTableId(genTable.getId());
             column.setDelFlag(GenTableColumn.DEL_FLAG_NORMAL);
-            genTableColumnMapper.insert(column);
+            if (genTableColumnMapper.insert(column) <= 0) {
+                throw new BusinessException("插入表单字段失败");
+            }
         }
         return result;
     }
@@ -459,6 +470,7 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
      * @param allColumnList
      */
     private void setDefaultColumns(List<GenTableColumn> allColumnList) {
+        allColumnList.add(0, new GenTableColumn(GenTableColumn.PK_NAME, "主键", "varchar(32)", "1"));
         allColumnList.add(new GenTableColumn("create_by", "创建者", "varchar(64)"));
         allColumnList.add(new GenTableColumn("create_time", "创建时间", "datetime"));
         allColumnList.add(new GenTableColumn("update_by", "更新者", "varchar(64)"));
@@ -536,6 +548,238 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
     }
 
     /**
+     * 查询指定表名的数据内容
+     * @param tableName
+     * @return
+     */
+    @Override
+    public List<Object> searchTableData(String tableName) {
+        String sql = "select * from " + tableName + " order by create_time desc";
+        return genTableMapper.searchSql(sql);
+    }
+
+    @Override
+    public Object searchDataById(String tableName, String id) {
+        String sql = "select * from " + tableName + " where id = '"
+                + id + "' order by create_time desc";
+        return genTableMapper.searchOne(sql);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean addTableData(Map<String, String[]> requestMap) {
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            String tableId = requestMap.get("tableId")[0];
+            GenTable genTable = selectTableById(tableId);
+            List<GenTableColumn> columnList = genTable.getColumnList();
+
+            sb.append("INSERT INTO ");
+            sb.append(genTable.getName());
+
+            // 列名
+            sb.append(" (");
+            sb.append(GenTableColumn.PK_NAME).append(",");   // 默认主键
+            sb.append("create_time").append(",");             // 创建时间
+            for (GenTableColumn column : columnList) {
+                sb.append(column.getName()).append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1).append(")");
+
+            sb.append(" VALUES (");
+            sb.append("'" + UUID.randomUUID().toString().replaceAll("-", "") + "'").append(",");  // 主键的值
+            sb.append("'" + DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + "'").append(",");             // 操作时间
+            // 列值
+            for (GenTableColumn column : columnList) {
+                String value;
+                // 判断自定义添加的字段是否为主键
+                if (GenTableColumn.YES.equals(column.getIsPk())) {
+                    value = UUID.randomUUID().toString().replaceAll("-", "");
+                    sb.append("'" + value + "'");
+                } else {
+                    value = requestMap.get(column.getName())[0];
+                    if (StringUtils.isEmpty(value)) {
+                        sb.append("NULL");
+                    } else {
+                        sb.append("'" + value + "'");
+                    }
+                }
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length() - 1).append(");");
+
+            jdbcTemplate.execute(sb.toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new BusinessException("新增失败，请检查数据长度或类型是否匹配：" + ex.getMessage());
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean updateTableData(Map<String, String[]> requestMap, String currentUserId) {
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            String tableId = requestMap.get("tableId")[0];
+            GenTable genTable = selectTableById(tableId);
+            List<GenTableColumn> columnList = genTable.getColumnList();
+            sb.append(" UPDATE " + genTable.getName());
+            sb.append(" SET ");
+
+            for (GenTableColumn column : columnList) {
+                sb.append(column.getName()).append(" = ");
+                String value = requestMap.get(column.getName())[0];
+                // varchar 可以保存空字符串''
+                if (StringUtils.isNotEmpty(value) || "varchar".equals(column.getViewJdbc())) {
+                    sb.append("'").append(value).append("'");
+                } else {
+                    sb.append("NULL");
+                }
+                sb.append(",");
+            }
+            sb.append(" update_by = '").append(currentUserId).append("', ");
+            sb.append(" update_time = '" + DateUtils.parseDateToStr("yyyy-MM-dd HH:mm:ss", new Date()) + "'");
+            sb.append(" WHERE");
+            sb.append(" id = '" + requestMap.get("id")[0] + "'");
+
+            jdbcTemplate.execute(sb.toString());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new BusinessException("更新失败");
+        }
+
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteTableData(String ids, String tableId) {
+
+        try {
+            GenTable table = getById(tableId);
+            String[] oidArray = ids.split(",");
+            StringBuffer sb = new StringBuffer();
+            sb.append("delete from  " + table.getName() + " where id in ( ");
+            for (int i = 0; i < oidArray.length; i++) {
+                if (i == 0) {
+                    sb.append("'" + oidArray[0] + "'");
+                } else {
+                    sb.append(", '" + oidArray[i] + "'");
+                }
+            }
+            sb.append(" );");
+            String sql = sb.toString();
+
+            jdbcTemplate.execute(sql);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw new BusinessException("删除失败：" + ex.getMessage());
+        }
+
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String importData(List<Map<String, Object>> list, String tableId) {
+        StringBuilder failureMsg = new StringBuilder();
+        Date day = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        //计数
+        int count_insert = 0;
+        int count_failed = 0;
+
+        //根据id查询未删除字段
+        GenTable table = selectTableById(tableId);
+        List<GenTableColumn> columnList = table.getColumnList();
+
+        try {
+            for (int i = 0; i < list.size(); i++) {
+                try {
+                    Map<String, Object> row = list.get(i);
+                    Map<String,Object> map = new HashMap<>();
+                    //循环遍历columnList
+                    for (GenTableColumn column:columnList){
+                        for (String key : row.keySet()) {
+                            if (key.equals(column.getComments())){
+                                //如果key为comments的值,map存入name和value,拼接sql
+                                map.put(column.getName(),row.get(key));
+                            }
+                        }
+                    }
+                    //拼接sql
+                    String createSql = createInsertSQL(table.getName(), map, columnList);
+                    jdbcTemplate.execute(createSql);
+                    count_insert++;
+                } catch (Exception ex) {
+                    //错误计数
+                    count_failed++;
+                    failureMsg.append("<br/>第" + (i + 2) + "行数据存在错误; ");
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            //不做处理
+        }
+
+        if (count_failed == 0) {
+            return "导入数据成功：插入-[" + count_insert + "]条数据";
+        } else if (count_insert == 0) {
+            return null;
+        } else {
+            return "导入数据成功：插入-[" + count_insert + "]条数据，失败-["
+                    + count_failed + "]条数据。信息：" + failureMsg.toString();
+        }
+
+    }
+
+    /**
+     * 创建导入语句
+     * @param tableName
+     * @param map
+     * @param columnList
+     * @return
+     */
+    private String createInsertSQL(String tableName, Map<String, Object> map, List<GenTableColumn> columnList) {
+
+        StringBuffer values = new StringBuffer();
+        StringBuffer keys = new StringBuffer();
+        StringBuffer sql = new StringBuffer();
+        String cmdDate = DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss"); // 操作时间
+        sql.append("INSERT INTO " + tableName + " (");
+
+        //业务字段
+        for (Object key : map.keySet()) {
+            keys.append(key.toString()).append(",");
+            Object val = map.get(key);
+            if (val == null || val == "" || "null".equals(val)) {
+                val = null;
+                values.append(val).append(",");
+            } else {
+                values.append("'").append(val).append("'").append(",");
+            }
+        }
+        //常规字段
+        keys.append("id").append(",");
+        values.append("'").append(IdUtil.simpleUUID()).append("'").append(",");
+        keys.append("create_time").append(",");
+        values.append("'").append(cmdDate).append("'").append(",");
+        keys.append("update_time");
+        values.append("'").append(cmdDate).append("'");
+
+        String str_key = keys.toString();
+        String str_value = values.toString();
+        sql.append(str_key).append(") values(");
+        sql.append(str_value).append(")");
+        sql.append(" on duplicate key update id='" + map.get("id") + "'");
+        return sql.toString();
+    }
+
+    /**
      * 验证是否有字段变更
      */
     private boolean checkNeedSynch(GenTable newTable, GenTable oldTable) {
@@ -555,16 +799,10 @@ public class GenTableServiceImpl extends ServiceImpl<GenTableMapper, GenTable> i
             for (GenTableColumn newColumn : newColumns) {
                 if (oldColumn.getId().equals(newColumn.getId())) {
                     isMatched = true;
-                    if (!oldColumn.getName().equals(newColumn.getName())) {
-                        return true;
-                    }
-                    if (!oldColumn.getComments().equals(newColumn.getComments())) {
-                        return true;
-                    }
-                    if (!oldColumn.getIsPk().equals(newColumn.getIsPk())) {
-                        return true;
-                    }
-                    if (!oldColumn.getJdbcType().equals(newColumn.getJdbcType())) {
+                    if (!oldColumn.getName().equals(newColumn.getName())
+                            || !oldColumn.getComments().equals(newColumn.getComments())
+                            || !oldColumn.getIsPk().equals(newColumn.getIsPk())
+                            || !oldColumn.getJdbcType().equals(newColumn.getJdbcType())) {
                         return true;
                     }
                 }

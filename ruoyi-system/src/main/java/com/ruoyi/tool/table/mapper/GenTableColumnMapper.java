@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface GenTableColumnMapper extends BaseMapper<GenTableColumn>
 {
+
     public List<GenTableColumn> selectTableColumnListByTableName(@Param("name") String tableName);
+
 }

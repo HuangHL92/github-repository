@@ -1,15 +1,17 @@
 package com.ruoyi.tool.table.service;
 
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.tool.table.domain.GenTable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author: xjm
  * @date: 2019/04/01
  */
-public interface IGenTableService {
+public interface IGenTableService extends IService<GenTable> {
 
     /**
      * 获取所有表
@@ -71,5 +73,33 @@ public interface IGenTableService {
      * @return
      */
     public boolean checkIsTableExist(GenTable table);
+
+    /**
+     * 查询指定表名的所有数据
+     * @param tableName
+     * @return
+     */
+    public List<Object> searchTableData(String tableName);
+
+    /**
+     * 查询指定表明的指定数据
+     * @param tableName
+     * @param id
+     * @return
+     */
+    public Object searchDataById(String tableName, String id);
+
+    /**
+     * 插入表单数据
+     * @param requestMap
+     * @return
+     */
+    public boolean addTableData(Map<String, String[]> requestMap);
+
+    public boolean updateTableData(Map<String, String[]> requestMap, String currentUserId);
+
+    public boolean deleteTableData(String ids, String tableId);
+
+    public String importData(List<Map<String, Object>> list, String tableId);
 
 }
