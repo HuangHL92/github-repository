@@ -679,6 +679,7 @@ var LookUpUser = function (obj) {
     var height= obj.attr("height")||"90%";
     var dispName= obj.attr("dispName");  //显示控件名称
     var hiddenName= obj.attr("hiddenName"); //选择用户ID保存控件
+    var deptId = obj.attr("deptId") || "100";
     var cls_disp = "js_tree_selected_" +  hiddenName;
 
     var strhtml = $([
@@ -694,7 +695,8 @@ var LookUpUser = function (obj) {
         area: [width,height],  //弹窗框宽高
         search: true,              //开启搜索
         cls_disp: cls_disp,        //已选择用户控件样式（用于查找）
-        selectedids: hiddenName
+        selectedids: hiddenName,
+        deptId: deptId
     });
 
 

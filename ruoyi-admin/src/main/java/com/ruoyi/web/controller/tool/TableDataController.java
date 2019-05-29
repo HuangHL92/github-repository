@@ -1,12 +1,10 @@
 package com.ruoyi.web.controller.tool;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.ruoyi.common.base.AjaxResult;
 import com.ruoyi.common.config.Global;
@@ -17,7 +15,6 @@ import com.ruoyi.framework.web.base.BaseController;
 import com.ruoyi.tool.table.domain.GenTable;
 import com.ruoyi.tool.table.domain.GenTableColumn;
 import com.ruoyi.tool.table.domain.ViewTableColumn;
-import com.ruoyi.tool.table.mapper.GenTableColumnMapper;
 import com.ruoyi.tool.table.service.IGenTableService;
 import org.apache.poi.ss.usermodel.Font;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

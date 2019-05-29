@@ -331,8 +331,8 @@ public class SysUserController extends BaseController
      */
     @GetMapping("/orgTree")
     @ResponseBody
-    public String orgTree() {
-        return JsonFileUtils.getOrgTreeJson();
+    public String orgTree(@RequestParam(required = false, defaultValue = "") String deptId) {
+        return JsonFileUtils.getOrgTreeJson(deptId);
     }
 
     /**
