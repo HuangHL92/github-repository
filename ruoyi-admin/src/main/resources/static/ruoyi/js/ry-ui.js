@@ -38,6 +38,7 @@
                     rightFixedColumns: false,
                     rightFixedNumber: 0,
                     queryParams: $.table.queryParams,
+                    paginationLoop: false
                 };
                 var options = $.extend(defaults, options);
                     var h = $(window).height() - $(".search-collapse").innerHeight()- $(".bs-bars").innerHeight()-$(".pagination-detail").innerHeight()-$(".fixed-table-header").innerHeight()-48;//动态获取窗口高度
@@ -78,6 +79,7 @@
                     rightFixedNumber: options.rightFixedNumber,         // 列冻结的个数（右侧）
                     queryParams: options.queryParams,                   // 传递参数（*）
                     columns: options.columns,                           // 显示列信息（*）
+                    paginationLoop: options.paginationLoop,             // 循环翻页（*）
                     responseHandler: $.table.responseHandler,           // 在加载服务器发送来的数据之前处理函数
                     onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
                 });

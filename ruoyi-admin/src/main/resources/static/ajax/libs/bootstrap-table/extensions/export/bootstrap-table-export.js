@@ -8,23 +8,29 @@
     var sprintf = $.fn.bootstrapTable.utils.sprintf;
 
     var TYPE_NAME = {
+        json: 'JSON',
+        xml: 'XML',
+        png: 'PNG',
         csv: 'CSV',
         txt: 'TXT',
-        doc: 'Word',
-        excel: 'Excel'
+        sql: 'SQL',
+        doc: 'MS-Word',
+        excel: 'MS-Excel',
+        xlsx: 'MS-Excel (OpenXML)',
+        powerpoint: 'MS-Powerpoint',
+        pdf: 'PDF'
     };
 
     $.extend($.fn.bootstrapTable.defaults, {
         showExport: false,
-        exportDataType: 'all', // basic, all, selected
-        exportTypes: ['csv', 'txt', 'doc', 'excel'],
-        exportOptions: {
-        	ignoreColumn: [0]  //忽略列索引
-        }
+        exportDataType: 'basic', // basic, all, selected
+        // 'json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'powerpoint', 'pdf'
+        exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel'],
+        exportOptions: {}
     });
 
     $.extend($.fn.bootstrapTable.defaults.icons, {
-        export: 'glyphicon glyphicon-save'
+        export: 'glyphicon-export icon-share'
     });
 
     $.extend($.fn.bootstrapTable.locales, {
@@ -53,7 +59,7 @@
                         '<button class="btn' +
                             sprintf(' btn-%s', this.options.buttonsClass) +
                             sprintf(' btn-%s', this.options.iconSize) +
-                            ' dropdown-toggle" ' +
+                            ' dropdown-toggle" aria-label="export type" ' +
                             'title="' + this.options.formatExport() + '" ' +
                             'data-toggle="dropdown" type="button">',
                             sprintf('<i class="%s %s"></i> ', this.options.iconsPrefix, this.options.icons.export),
@@ -76,7 +82,7 @@
                 }
                 $.each(exportTypes, function (i, type) {
                     if (TYPE_NAME.hasOwnProperty(type)) {
-                        $menu.append(['<li data-type="' + type + '">',
+                        $menu.append(['<li role="menuitem" data-type="' + type + '">',
                                 '<a href="javascript:void(0)">',
                                     TYPE_NAME[type],
                                 '</a>',
@@ -100,15 +106,21 @@
                         });
                         that.togglePagination();
                     } else if (that.options.exportDataType === 'selected') {
-                        //修改sidePagination属性为server无法导出选中数据
-                    	var trs = that.$body.children(); 
-                    	for (var i = 0; i < trs.length; i++) {
-                    	    var $this = $(trs[i]);
-                    	    if(!$this.find(sprintf('[name="%s"]',that.options.selectItemName)).prop('checked')){
-                    	      $this['hide']();
-                    	 }}
-                    	doExport();
-                    	that.getRowsHidden(true);
+                        var data = that.getData(),
+                            selectedData = that.getAllSelections();
+
+                        // Quick fix #2220
+                        if (that.options.sidePagination === 'server') {
+                            data = {total: that.options.totalRows};
+                            data[that.options.dataField] = that.getData();
+
+                            selectedData = {total: that.options.totalRows};
+                            selectedData[that.options.dataField] = that.getAllSelections();
+                        }
+
+                        that.load(selectedData);
+                        doExport();
+                        that.load(data);
                     } else {
                         doExport();
                     }

@@ -1,3 +1,7 @@
+/**
+ * Bootstrap Table Chinese translation
+ * Author: Zhixin Wen<wenzhixin2010@gmail.com>
+ */
 (function ($) {
     'use strict';
 
@@ -6,10 +10,10 @@
             return '正在努力地加载数据中，请稍候……';
         },
         formatRecordsPerPage: function (pageNumber) {
-            return pageNumber + ' 条记录每页';
+            return '每页显示 ' + pageNumber + ' 条记录';
         },
         formatShowingRows: function (pageFrom, pageTo, totalRows) {
-            return '第 ' + pageFrom + ' 到 ' + pageTo + ' 条，共  ' + totalRows + ' 条记录。';
+            return '显示第 ' + pageFrom + ' 到第 ' + pageTo + ' 条记录，总共 ' + totalRows + ' 条记录';
         },
         formatSearch: function () {
             return '搜索';
