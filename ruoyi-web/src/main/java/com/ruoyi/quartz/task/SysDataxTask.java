@@ -33,7 +33,6 @@ public class SysDataxTask {
             SysDataX sysDataX = iSysDataXService.getOne(new QueryWrapper<SysDataX>().eq("file_name", fileName));
             if(sysDataX!=null){
                 //执行同步命令
-                
                 String log = DataXJsonCommon.exeDataX(fileName);
                 sysDataX.setLog(log);
                 sysDataX.setUpdateBy("admin");

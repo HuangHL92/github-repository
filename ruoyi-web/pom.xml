@@ -30,6 +30,14 @@
             <version>${ruoyi.version}</version>
         </dependency>
 
+        <!--任务模块-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-quartz</artifactId>
+            <version>3.2</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!--DB交换模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
@@ -50,6 +58,8 @@
             <artifactId>JustAuth</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+
 
     </dependencies>
 
