@@ -1,14 +1,11 @@
 package com.ruoyi;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -20,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author ruoyi
  */
 
-@SpringBootApplication( exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication( exclude = {DruidDataSourceAutoConfigure.class})
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 @EnableSwagger2
@@ -30,7 +27,7 @@ public class RuoYiApiApplication implements WebMvcConfigurer
     {
 
         SpringApplication.run(RuoYiApiApplication.class, args);
-        System.out.println("恭喜您！  ruoyi-api 启动成功    \n" +
+        System.out.println("恭喜您！  jy_basic-api 启动成功    \n" +
                 " .-------.       ____     __        \n" +
                 " |  _ _   \\      \\   \\   /  /    \n" +
                 " | ( ' )  |       \\  _. /  '       \n" +
@@ -48,8 +45,5 @@ public class RuoYiApiApplication implements WebMvcConfigurer
         // 注意这里要指向原先用main方法执行的Application启动类
         return builder.sources(RuoYiApiApplication.class);
     }
-
-
-
 
 }

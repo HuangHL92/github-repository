@@ -1,50 +1,18 @@
 package com.ruoyi.config;
 
 import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
-import org.springframework.context.annotation.Import;
-import org.springframework.core.io.ClassPathResource;
 import com.ruoyi.common.config.Global;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
-import org.springframework.web.servlet.resource.PathResourceResolver;
-import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
-import org.springframework.web.util.UrlPathHelper;
-import springfox.documentation.annotations.ApiIgnore;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
-import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spring.web.DocumentationCache;
-import springfox.documentation.spring.web.json.Json;
-import springfox.documentation.spring.web.json.JsonSerializer;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger.web.ApiResourceController;
-import springfox.documentation.swagger.web.SecurityConfiguration;
-import springfox.documentation.swagger.web.SwaggerResource;
-import springfox.documentation.swagger.web.UiConfiguration;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2Mapper;
-import springfox.documentation.swagger2.web.Swagger2Controller;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
 
 /**
  * Swagger2的接口配置
@@ -72,13 +40,11 @@ public class SwaggerConfig
     public Docket createRestApi()
     {
 
-        //添加head参数start
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<Parameter>();
-        tokenPar.name("x-access-token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
-        pars.add(tokenPar.build());
-        //添加head参数end
-
+        //添加head参数
+//        ParameterBuilder tokenPar = new ParameterBuilder();
+//        List<Parameter> pars = new ArrayList<Parameter>();
+//        tokenPar.name("x-access-token").description("令牌").modelRef(new ModelRef("string")).parameterType("header").required(false).build();
+//        pars.add(tokenPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
                 // 详细定制
@@ -88,8 +54,8 @@ public class SwaggerConfig
                 .apis(RequestHandlerSelectors.basePackage(basepackage))
                 // 扫描所有
                 .paths(PathSelectors.any())
-                .build()
-                .globalOperationParameters(pars);
+                .build();
+                //.globalOperationParameters(pars);
     }
 
     /**
@@ -100,8 +66,8 @@ public class SwaggerConfig
 
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
-                .title("吉运业务接口平台")
-                .description("描述：移动、大屏端接口定义和实现")
+                .title("基础开发平台3.0—接口服务")
+                .description("描述：数据写入、数据读取、数据统计等接口定义和实现")
                 .contact(new Contact(Global.getName(), null, null))
                 .version("版本号:" + Global.getVersion())
                 .build();

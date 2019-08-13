@@ -16,6 +16,11 @@ public class ApiRuntimeException extends RuntimeException{
         this.errorCode = errorCode;
     }
 
+    public ApiRuntimeException(ResponseCode errorCode,String msg) {
+        super(msg);
+        this.errorCode = errorCode;
+    }
+
     public ApiRuntimeException(String message) {
         super(message);
     }

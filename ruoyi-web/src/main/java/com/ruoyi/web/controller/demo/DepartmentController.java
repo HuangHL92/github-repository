@@ -3,19 +3,17 @@ package com.ruoyi.web.controller.demo;
 import java.util.Arrays;
 import java.util.List;
 
+import com.ruoyi.area.demo.domain.Demo;
 import com.ruoyi.area.demo.domain.Department;
 import com.ruoyi.area.demo.service.IDepartmentService;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.web.websocket.SocketServer;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.framework.web.base.BaseController;
@@ -37,7 +35,16 @@ public class DepartmentController extends BaseController
 	
 	@Autowired
 	private IDepartmentService departmentService;
-	
+
+    @ModelAttribute
+    public Department get(@RequestParam(required=false) String id) {
+        if (StringUtils.isNotBlank(id)){
+            return departmentService.getById(id);
+        }else{
+            return new Department();
+        }
+    }
+
 	@RequiresPermissions("demo:department:view")
 	@GetMapping()
 	public String department()

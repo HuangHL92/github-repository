@@ -2,7 +2,7 @@
 # 开发环境配置
 server:
   # 服务端口 （TODO 根据项目情况自行更换）
-  port: 81
+  port: 8084
   servlet:
     # 项目contextPath
     context-path: /
@@ -14,24 +14,8 @@ server:
     # Tomcat启动初始化的线程数，默认值25
     min-spare-threads: 30
 
-# Spring配置
 spring:
-  #redis
-  redis:
-    enabled: true # Redis开关/默认关闭
-    database: 0
-    password:
-    host: 127.0.0.1
-    port: 6379
-    lettuce:
-      pool:
-        max-active: 5000 # 连接池最大连接数（使用负值表示没有限制）
-        max-idle: 1000 # 连接池中的最大空闲连接
-        min-idle: 500 # 连接池中的最小空闲连接
-        max-wait: 6000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
-    timeout: 3000ms
-    prefix: jy_basic  #前缀（TODO 重要：用于区分不同项目的空间，根据项目情况自行更换）
-  #数据源配置
+  # 数据源配置
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -39,7 +23,6 @@ spring:
       # 主库数据源
       master:
         url: jdbc:mysql://192.172.18.222:3306/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        #                url: jdbc:mysql://localhost:8066/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: jiyun
         password: develop
       # 从库数据源
@@ -53,9 +36,9 @@ spring:
       third:
         # 从数据源开关/默认关闭
         enabled: true
-        url: jdbc:mysql://192.172.18.223:3306/xxl-job?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        username: root
-        password: 123456
+        url: jdbc:mysql://192.172.18.222:3306/ry_third?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+        username: jiyun
+        password: develop
       # 初始连接数
       initialSize: 5
       # 最小连接池数量
@@ -87,32 +70,32 @@ spring:
         wall:   #SQL防注入
           config:
             multi-statement-allow: true
-
-# 自定义配置
-jiyun:
-  notice:
-    mailto: fei.yu@51e.com.cn   #（TODO 用于接收异常通知等信息的邮件地址，根据项目情况自行更换）
-    isopen: false #是否开启邮件通知
-  websocket:
-    url: ws://localhost:81/socketServer #（TODO websocket服务地址，根据项目情况自行更换）
-  #shorturl地址
-  shortapi:
-    url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
+  # redis
+  redis:
+    enabled: true # Redis开关/默认关闭
+    database: 0
+    password:
+    host: 127.0.0.1
+    port: 6379
+    lettuce:
+      pool:
+        max-active: 5000 # 连接池最大连接数（使用负值表示没有限制）
+        max-idle: 1000 # 连接池中的最大空闲连接
+        min-idle: 500 # 连接池中的最小空闲连接
+        max-wait: 6000ms # 连接池最大阻塞等待时间（使用负值表示没有限制）
+    timeout: 3000ms
+    prefix: jy_dc  #前缀（TODO 重要：用于区分不同项目的空间，根据项目情况自行更换）
 
 # 微信公众号配置
 wx:
   mp:
     configs:
-      - appId: wx2b911f070115b89a #（一个公众号的appid  微驱动）
-        secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret 微驱动）
-        token: 111 #（接口配置里的Token值）
-        aesKey: 111 #（接口配置里的EncodingAESKey值）
-        webPath: http://hahayu.natapp1.cc
-        thirdurl: http://wx.51e.com.cn/get-weixin-code.html
-        ##      - appId: 2222 （另一个公众号的appid，以下同上）
-        #        secret: 1111
-        #        token: 111
-        #        aesKey: 111
+    - appId: wx2b911f070115b89a #（一个公众号的appid  微驱动）
+      secret: a6d343b9592121b3c215c8301b0c3d75 #（公众号的appsecret 微驱动）
+      token: 111 #（接口配置里的Token值）
+      aesKey: 111 #（接口配置里的EncodingAESKey值）
+      webPath: http://hahayu.natapp1.cc
+      thirdurl: http://wx.51e.com.cn/get-weixin-code.html
 
 # restful、jwt配置
 api:
@@ -121,7 +104,13 @@ api:
   basepackage: com.ruoyi.api #restful接口扫描路径
   appsecret: 1q2w3e4r # （TODO token验证用密钥，根据项目情况自行更换）
   token:
-    expires: 10 #jwt token过期时间（单位：分钟）
+    expires: 60 #jwt token过期时间（单位：分钟）
+  putdata-limited: 100 #一次写入数据上限
+  getdata-limited: 100 #一次读取数据上限
+  accessLimit:
+    seconds: 5  #N秒内连续访问（单位：秒）
+    maxcount: 5 #N秒内发生访问次数
+    whiteip: 31.8.10.222,127.0.0.1  #无需限制白名单（多个用","分隔）
 
 # 第三方认证配置
 auth:
@@ -130,27 +119,33 @@ auth:
     client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
     redirect-uri: http://localhost:81/oauth/gitee/login
 
+# 自定义配置
+jiyun:
+  #shorturl地址
+  shortapi:
+    url: http://api.t.sina.com.cn/short_url/shorten.json?source=3271760578&url_long=
+
 # 短信配置
 sms:
   configs:
-    - channel: 1
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 企信通
-      enabled: true
-    - channel: 2
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 大汉三通
-      enabled: true
-    - channel: 3
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 阿里大鱼
-      enabled: true
+  - channel: 1
+    url: http://edoinfo.com:8080/NOSmsPlatform/services/BusinessService
+    account: zjz
+    password: zjz123!@#
+    sign: 朱泾镇
+    remark: 王伟短信平台
+    enabled: true
+  - channel: 2
+    url: http://api.cnsms.cn/?
+    account: adddd
+    password: aaaaa
+    sign: 吉运软件
+    remark: 企信通
+    enabled: true
+  - channel: 3
+    url: http://api.cnsms.cn/?
+    account: adddd
+    password: aaaaa
+    sign: 吉运软件
+    remark: 阿里大鱼
+    enabled: true

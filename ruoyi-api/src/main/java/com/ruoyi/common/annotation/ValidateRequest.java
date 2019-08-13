@@ -15,6 +15,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)//这个注解是应用在方法上
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidateRequest {
+
     /**
      * 是否需要验证权限
      * @return
@@ -26,4 +27,18 @@ public @interface ValidateRequest {
      * @return
      */
     String vtype() default "request";
+
+
+//    /**
+//     * 是否验证token
+//     * @return
+//     */
+//    boolean token() default true;
+//
+//    /**
+//     * 是否验证请求头部
+//     * @return
+//     */
+//    boolean header() default true;
+
 }

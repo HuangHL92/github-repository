@@ -1,5 +1,6 @@
 package com.ruoyi.common.base;
 
+import com.alibaba.fastjson.JSON;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.exception.ApiRuntimeException;
 
@@ -37,7 +38,6 @@ public class ApiResult<T> implements Serializable {
         if (data instanceof Boolean && Boolean.FALSE.equals(data)) {
             aec = ResponseCode.FAILED;
         }
-
         return restResult(data, aec);
     }
 
@@ -62,7 +62,9 @@ public class ApiResult<T> implements Serializable {
     public static <T> ApiResult<T> error(ResponseCode errorCode, String msg) {
         return restResult(null, errorCode.getCode(), msg);
     }
-
+    public static <T> ApiResult<T> error(String errorCode, String msg) {
+        return restResult(null, Long.parseLong(errorCode), msg);
+    }
 
     public static <T> ApiResult<T> restResult(T data, ResponseCode errorCode) {
         return restResult(data, errorCode.getCode(), errorCode.getMsg());
@@ -75,7 +77,16 @@ public class ApiResult<T> implements Serializable {
     private static <T> ApiResult<T> restResult(T data, long code, String msg) {
         ApiResult<T> apiResult = new ApiResult();
         apiResult.setCode(code);
-        apiResult.setData(data);
+//        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+//        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
+//                SerializerFeature.WriteNullNumberAsZero,
+//                SerializerFeature.WriteNullStringAsEmpty,
+//                SerializerFeature.WriteNullBooleanAsFalse,
+//                SerializerFeature.WriteMapNullValue,
+//                SerializerFeature.DisableCircularReferenceDetect,
+//                SerializerFeature.WriteDateUseDateFormat,
+//                SerializerFeature.SortField);
+        apiResult.setData(data==null?data:(T) JSON.toJSON(data));
         apiResult.setMsg(msg);
         return apiResult;
     }

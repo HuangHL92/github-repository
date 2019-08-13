@@ -13,6 +13,7 @@ import com.ruoyi.common.base.ApiResult;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.RegexUtils;
+import com.ruoyi.common.utils.sms.SmsUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.workday.WorkdayUtils;
 import com.ruoyi.system.domain.SysCalendar;
@@ -43,12 +44,13 @@ public class CommController extends ApiBaseController {
     @Autowired
     private ISysCalendarService calendarService;
 
+
     private String VCODE_KEY= "vcodeCache:%s";
 
     @ApiOperation("手机获得验证码（此时临时模拟直接返回，实际通过短信发送）")
     @PostMapping("vcodeSms")
     @ValidateRequest
-    public ApiResult vcodeSms(@RequestParam(name="mobile") String mobile)
+    public ApiResult vcodeSms(@RequestParam(name="mobile") String mobile,@RequestHeader(value = "x-access-token") String token)
     {
 
         //1.参数验证
@@ -66,10 +68,18 @@ public class CommController extends ApiBaseController {
         JedisUtils.set(String.format(VCODE_KEY,mobile), vcode,300);
 
         //4.发送短信至手机 TODO 此时临时模拟直接返回，实际通过短信发送
-        HashMap map =new HashMap();
-        map.put("code",vcode);
+        String msg =  "您本次操作的验证码为" + vcode + "，10分钟内有效。";
 
-        return ApiResult.success(map);
+        SmsUtils smsUtils = new SmsUtils();
+        String res = smsUtils.send(mobile,msg);
+
+        if("success".equals(res)) {
+            return ApiResult.success();
+        } else {
+            return ApiResult.error(res);
+        }
+
+
     }
 
 

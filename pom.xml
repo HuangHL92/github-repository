@@ -27,7 +27,8 @@
 		<pagehelper.boot.version>1.2.5</pagehelper.boot.version>
 		<oshi.version>3.9.1</oshi.version>
         <hutool.version>4.4.5</hutool.version>
-        <weixin-java-mp.version>3.3.0</weixin-java-mp.version>
+        <weixin-java-mp.version>3.4.0</weixin-java-mp.version>
+        <weixin-java-miniapp.version>3.4.0</weixin-java-miniapp.version>
         <zxing.version>3.3.1</zxing.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <jedis.version>2.9.0</jedis.version>
@@ -161,13 +162,19 @@
             <version>${zxing.version}</version>
         </dependency>
 
-        <!-- 微信开发包 https://mvnrepository.com/artifact/com.github.binarywang/weixin-java-mp -->
+        <!-- 微信公众号 Java SDK https://mvnrepository.com/artifact/com.github.binarywang/weixin-java-mp -->
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
             <version>${weixin-java-mp.version}</version>
         </dependency>
 
+        <!-- 微信小程序 Java SDK https://mvnrepository.com/artifact/com.github.binarywang/weixin-java-miniapp -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>${weixin-java-miniapp.version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.itextpdf/itext-asian -->
         <dependency>

@@ -1,16 +1,13 @@
 package com.ruoyi.framework.jwt.service;
 
 
-
+import cn.hutool.crypto.SecureUtil;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.ruoyi.common.enums.ResponseCode;
-import com.ruoyi.common.exception.ApiRuntimeException;
 import com.ruoyi.framework.jwt.domain.Account;
+import com.ruoyi.utils.AESUtil;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
 
 /**
  * @Description $功能描述$
@@ -25,20 +22,16 @@ public class TokenService {
      * @param account
      * @return
      */
-    public String getToken(Account account, String appsecret, int expires) {
-
-        Date date = new Date(System.currentTimeMillis() + expires*60*1000l);
-        String currentTimeMillis = String.valueOf(System.currentTimeMillis());
-
+    public String getToken(Account account) {
         String token="";
-
-        token= JWT.create().withAudience(account.getId())// 将 user id 保存到 token 里面
-                .withClaim("CURRENT_TIME_MILLIS", currentTimeMillis)
-                .withExpiresAt(date)
-                //TODO 密码用于验证token是否有效。可以提供两种实现方式（1：全系统用一个密码 2：跟着每个账号走）
-                .sign(Algorithm.HMAC256(account.getPassword()));// 以 password 作为 token 的密钥
-                //.sign(Algorithm.HMAC256(account.getPassword()));// 以 password 作为 token 的密钥
-
+//        token= JWT.create().withAudience(account.getId())// 将  id 保存到 token 里面
+//                .sign(Algorithm.HMAC256(account.getPassword()));// 以 password 作为 token 的密钥
+        //签名算法
+        Algorithm algorithm = Algorithm.HMAC256(account.getPassword());
+        //生成
+        JWTCreator.Builder builder = JWT.create();
+        builder.withAudience(AESUtil.Encrypt(account.getId()+ "_" + SecureUtil.simpleUUID(),""));
+        token = builder.sign(algorithm);
         return token;
     }
 }

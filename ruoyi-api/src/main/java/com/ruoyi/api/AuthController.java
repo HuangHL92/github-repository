@@ -50,7 +50,7 @@ public class AuthController extends ApiBaseController {
     @ApiOperation("用户验证（成功：返回token）")
     @PostMapping("getToken")
     public ApiResult getToken(@RequestParam(name="account") String account,
-                         @RequestParam(name="password") String password)
+                              @RequestParam(name="password") String password)
     {
 
         //1.参数验证
@@ -121,11 +121,14 @@ public class AuthController extends ApiBaseController {
      * @return
      */
     private String createToken(String account, String password,int exptime) {
+
+        SysUser user = userService.selectUserByLoginName(account);
+
         Account ac = new Account();
         ac.setId(account);
         ac.setUsername(account);
-        ac.setPassword(password);
-        String token = tokenService.getToken(ac,appsecret,exptime);
+        ac.setPassword(encryptPassword(account,password,user.getSalt()));
+        String token = tokenService.getToken(ac);
         JedisUtils.set(String.format(ApiConst.TOKEN_KEY,account), token,exptime);
         return token;
     }

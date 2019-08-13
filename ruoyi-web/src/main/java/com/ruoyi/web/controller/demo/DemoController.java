@@ -87,6 +87,15 @@ public class DemoController extends BaseController {
     @Autowired
     private ISysCalendarService sysCalendarService;
 
+    @ModelAttribute
+    public Demo get(@RequestParam(required=false) String id) {
+        if (StringUtils.isNotBlank(id)){
+            return demoService.getById(id);
+        }else{
+            return new Demo();
+        }
+    }
+
     @RequiresPermissions("demo:all:view")
     @GetMapping()
     public String demo() {

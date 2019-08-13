@@ -4,17 +4,17 @@ package com.ruoyi.framework.aspectj;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
 import com.ruoyi.common.annotation.ValidateRequest;
-import com.ruoyi.common.base.ApiConst;
 import com.ruoyi.common.enums.ResponseCode;
 import com.ruoyi.common.exception.ApiRuntimeException;
-import com.ruoyi.common.utils.IpUtils;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.jwt.domain.Account;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.utils.AESUtil;
+import com.ruoyi.utils.CacheUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -24,6 +24,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -45,9 +46,19 @@ public class AuthenticationAspect {
     @Value("${api.appsecret}")
     private String appsecret;
 
+    @Value("${api.accessLimit.seconds}")
+    private int accessLimitSeconds;
+
+    @Value("${api.accessLimit.maxcount}")
+    private int accessLimitMaxcount;
+
+    @Value("${api.accessLimit.whiteip}")
+    private String accessLimitWhiteIp;
+
+    @Autowired
+    private ISysUserService userService;
 
     // 配置织入点
-//    @Pointcut("@annotation(com.ruoyi.common.annotation.ValidateRequest)")
     @Pointcut("within(com.ruoyi.api..*)")
     public void apiPointCut()
     {
@@ -91,11 +102,8 @@ public class AuthenticationAspect {
         {
             HttpServletRequest request = ServletUtils.getRequest();
 
-            // 重复请求过滤（ip+url）
-            String ip = IpUtils.getIpAddr(request);
-            String url = request.getRequestURL().toString();
-            String tempkey = ( ip + "#" + url).replaceAll(":","");
-            if(!validateRequest(tempkey)) {
+            //1.重复请求过滤（ip+url）
+            if(!accessLimitCheck(request)) {
                 throw new ApiRuntimeException(ResponseCode.RE_REQUEST);
             }
 
@@ -106,41 +114,46 @@ public class AuthenticationAspect {
             {
                 return;
             }
-            //从 http 请求头中取出 token
-            String token = request.getHeader("x-access-token");
 
-            // 执行认证
+            //2.验证token
+            //从 http 请求头中取出 token
+            String token = CacheUtil.getToken4Request();
+
             if (StringUtils.isEmpty(token)) {
+                //非法请求
                 throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
             }
 
-            // 获取 token 中的 user id
-            String cahce_key;
             try {
-                cahce_key = JWT.decode(token).getAudience().get(0);
-
-                //取得缓存中的token并验证
-                String token_cahce  =JedisUtils.get(String.format(ApiConst.TOKEN_KEY,cahce_key));
-                if(token_cahce==null || !token.equals(token_cahce)) {
-                    throw new ApiRuntimeException(ResponseCode.EXPIRE_TOKEN);
+                //取得缓存中的token
+                String cachekey = AESUtil.Decrypt(JWT.decode(token).getAudience().get(0),"");
+                String account =cachekey.split("_")[0];
+                String tokenvalue  = CacheUtil.getToken4Cache(account);
+                if(StringUtils.isEmpty(tokenvalue) || !token.equals(tokenvalue)) {
+                    throw new ApiRuntimeException(ResponseCode.ERROR_40014);
                 }
 
-            } catch (JWTDecodeException j) {
-                throw new ApiRuntimeException(ResponseCode.ILLEGAL_REQUEST);
-            }
-//            User user = userService.findUserById(cahce_key);
-//            if (user == null) {
-//                throw new ApiRuntimeException(ResponseCode.ILLEGAL_ACCOUNT);
-//            }
+                //根据account取得用户信息
+                SysUser user = userService.selectUserByLoginName(account);
+                if(user==null) {
+                    throw new ApiRuntimeException(ResponseCode.ERROR_40014);
+                }
 
-            //TODO 密码用于验证token是否有效。可以提供两种实现方式（1：全系统用一个密码 2：跟着每个账号走）
-            // 验证 token
-            JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(appsecret)).build();
-            try {
+                // 验证token
+                JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPassword())).build();
                 jwtVerifier.verify(token);
-            } catch (JWTVerificationException ex) {
-                throw new ApiRuntimeException(ResponseCode.ILLEGAL_TOKEN);
+
+            } catch (Exception j) {
+                throw new ApiRuntimeException(ResponseCode.ERROR_40014);
             }
+
+            //验证请求次数限制(0代表不限制)
+//            int requestLimit = NumberUtil.parseInt(app.getRate());
+//            if(requestLimit>0) {
+//                if(!limitCheck(app.getAppid(),requestLimit)) {
+//                    throw new ApiRuntimeException(ResponseCode.ERROR_45009);
+//                }
+//            }
 
         }
         catch (Exception exp)
@@ -173,13 +186,37 @@ public class AuthenticationAspect {
      * 是否拒绝服务 (5秒内>5次)
      * @return
      */
-    private boolean validateRequest(String key){
-        long count=JedisUtils.setIncr(key, 5);
-        if(count>5){
+    private boolean accessLimitCheck(HttpServletRequest request){
+
+
+        /*String ip = IpUtils.getIpAddr(request);
+        String url = request.getRequestURL().toString();
+        String tempkey = ( ip + "#" + url).replaceAll(":","");
+        String[] ipList = accessLimitWhiteIp.split(",");
+        for (String whiteip:ipList) {
+            if(whiteip.equals(ip)){
+                return true;
+            }
+        }
+        long count= JedisUtils.setIncr(tempkey,accessLimitSeconds);
+        if(count>accessLimitMaxcount){
+            return false;
+        }*/
+        return true;
+    }
+
+
+    /**
+     * 接口访问限制
+     * @return
+     */
+    private boolean limitCheck(String appid, int limit){
+        //保存某API请求次数到缓存（此缓存每天00:00定时清空，由TaskCache任务完成）
+        long count= JedisUtils.setIncr(appid,60*60*24);
+        if(count>limit){
             return false;
         }
         return true;
     }
-
 
 }

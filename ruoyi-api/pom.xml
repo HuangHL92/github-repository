@@ -9,6 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+
+
     <artifactId>ruoyi-api</artifactId>
 
 
@@ -41,6 +43,13 @@
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-system</artifactId>
+            <version>${ruoyi.version}</version>
+        </dependency>
+
+        <!--实现逻辑模块（非必须）-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>ruoyi-web-service</artifactId>
             <version>${ruoyi.version}</version>
         </dependency>
 
@@ -115,15 +124,20 @@
             <version>1.9.1</version>
         </dependency>
 
-        <!-- org.springframework.security -->
+        <!--fastjson-->
         <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.6</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.51</version>
+            <scope>compile</scope>
         </dependency>
+
+
 
 
     </dependencies>
@@ -156,16 +170,16 @@
                 </executions>
             </plugin>
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-war-plugin</artifactId>-->
-                <!--<version>3.0.0</version>-->
-                <!--<configuration>-->
-                    <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
-                    <!--<warName>${artifactId}</warName>-->
-                <!--</configuration>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-war-plugin</artifactId>-->
+            <!--<version>3.0.0</version>-->
+            <!--<configuration>-->
+            <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
+            <!--<warName>${artifactId}</warName>-->
+            <!--</configuration>-->
             <!--</plugin>-->
         </plugins>
-        <finalName>${artifactId}</finalName>
+        <finalName>dataCenter-api</finalName>
     </build>
 
 
