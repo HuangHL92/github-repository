@@ -29,10 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectListWithCount" resultType="GenTable">
 		SELECT
 			g.*,
-			t.TABLE_ROWS AS totalCount
+		(SELECT TABLE_ROWS from information_schema.`TABLES` where  g.`name` = TABLE_NAME  AND TABLE_SCHEMA =( SELECT database()) ) AS totalCount
 		FROM
 			gen_table g
-				LEFT JOIN information_schema.`TABLES` t ON g.`name` = t.TABLE_NAME AND t.TABLE_SCHEMA = (select database())
 		     <if test="ew!=null">
 				${ew.customSqlSegment}
 			 </if>

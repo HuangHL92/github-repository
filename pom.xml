@@ -27,8 +27,8 @@
 		<pagehelper.boot.version>1.2.5</pagehelper.boot.version>
 		<oshi.version>3.9.1</oshi.version>
         <hutool.version>4.4.5</hutool.version>
-        <weixin-java-mp.version>3.4.0</weixin-java-mp.version>
-        <weixin-java-miniapp.version>3.4.0</weixin-java-miniapp.version>
+        <weixin-java-mp.version>3.3.0</weixin-java-mp.version>
+        <weixin-java-miniapp.version>3.3.0</weixin-java-miniapp.version>
         <zxing.version>3.3.1</zxing.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <jedis.version>2.9.0</jedis.version>

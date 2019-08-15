@@ -38,8 +38,9 @@ spring:
     druid:
       # 主库数据源
       master:
+        # 从数据源开关/默认关闭
+        enabled: true
         url: jdbc:mysql://192.172.18.222:3306/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-        #                url: jdbc:mysql://localhost:8066/ry?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
         username: jiyun
         password: develop
       # 从库数据源
@@ -129,28 +130,3 @@ auth:
     client-id: 716db1779087e1241dd1f3fec0eb4f88619c146de42b26eb493399e4973137e2
     client-secret: 5a9e0552e6eb2a06758f484ceab49b51d4d7260c58eb9b6c904351d5d6ddd215
     redirect-uri: http://localhost:81/oauth/gitee/login
-
-# 短信配置
-sms:
-  configs:
-    - channel: 1
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 企信通
-      enabled: true
-    - channel: 2
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 大汉三通
-      enabled: true
-    - channel: 3
-      url: http://api.cnsms.cn/?
-      account: adddd
-      password: aaaaa
-      sign: 吉运软件
-      remark: 阿里大鱼
-      enabled: true

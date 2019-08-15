@@ -10,7 +10,6 @@ import com.ruoyi.common.exception.ApiRuntimeException;
 import com.ruoyi.common.utils.JedisUtils;
 import com.ruoyi.common.utils.ServletUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.framework.jwt.domain.Account;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.utils.AESUtil;
