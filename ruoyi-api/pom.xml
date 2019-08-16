@@ -11,7 +11,7 @@
 
 
 
-    <artifactId>ruoyi-api</artifactId>
+    <artifactId>jybasic-api</artifactId>
 
 
     <description>
@@ -179,7 +179,7 @@
             <!--</configuration>-->
             <!--</plugin>-->
         </plugins>
-        <finalName>dataCenter-api</finalName>
+        <finalName>${artifactId}</finalName>
     </build>
 
 

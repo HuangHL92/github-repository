@@ -135,3 +135,9 @@ JustAuth：第三方登录
 2、demo：GiteeAuthController、AuthGiteeConfig
 3、QQ、微信的登录功能待实现
 4、逻辑:初次登录创建账号、再次访问可直接登录
+
+
+演示地址：
+1. http://localhost:81
+2. http://localhost:81/screen
+3. http://localhost:81/pad

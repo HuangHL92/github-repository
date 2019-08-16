@@ -4,49 +4,37 @@
 <meta charset="utf-8">
 <head th:include="include :: header"></head>
 <body>
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <div class="layui-tab layui-tab-brief">
-        <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
+<div class="wrapper wrapper-content ">
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-content">
-                                <form method="get" class="form-horizontal">
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label">详细位置:</label>
-                                        <div class="col-sm-5">
-                                            <input type="text"  name="address" id="address" class="form-control" placeholder="请输入详细地址">
-                                        </div>
-                                        <div class="layui-form-mid layui-word-aux">
-                                            <i id="mapMaker" class="glyphicon glyphicon-map-marker" style="font-size: 135%;color: red"></i>
-                                        </div>
-                                        <div class="col-sm-2">
-                                        <div class="layui-form-mid layui-word-aux">X</div>
-                                        <div class="layui-input-inline" style="width: 150px;">
-                                             <input type="text" name="coordinateX"  id="longitude" value="" placeholder="纬度"  class="form-control" readonly="true">
-                                        </div></div>
-                                            <div class="col-sm-2">
-                                        <div class="layui-form-mid layui-word-aux">Y</div>
-                                        <div class="layui-input-inline" style="width: 150px;">
-                                             <input type="text" name="coordinateY"  id="latitude" value="" placeholder="纬度" class="form-control" readonly="true">
-                                        </div>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <form method="get" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">详细位置:</label>
+            <div class="col-sm-6 ">
+                <input type="text"  name="address" id="address" class="form-control" placeholder="请输入详细地址" />
 
             </div>
+            <!--<div class="layui-form-mid">-->
+                <!--<i id="mapMaker" class="glyphicon glyphicon-map-marker" style="font-size: 135%;color: red; cursor: pointer"></i>-->
+            <!--</div>-->
+            <div class="col-sm-4">
+                <div class="layui-input-inline" style="width: 150px; display: none;">
+                    <input type="text" name="coordinateX"  id="longitude" value="" placeholder="经度"  class="form-control" readonly="true">
+                </div>
+                <div class="layui-input-inline" style="width: 150px; display: none;">
+                    <input type="text" name="coordinateY"  id="latitude" value="" placeholder="纬度" class="form-control" readonly="true">
+                </div>
+                <button id="map_btn" type="button" class="btn btn-outline btn-link " onclick="showMap(this.id)">显示地图</button>
+            </div>
+
         </div>
-    </div>
+    </form>
+
 </div>
 
-<div id="baidu_map" data-id="baidu_map" style="margin: auto;width: 95%;height:100%;" data-toggle="map" data-longitudeid="longitude" data-latitudeid="latitude" data-mark-type="markPoint"  data-makerid="mapMaker"/>
+<div id="baidu_map" data-id="baidu_map"
+     style="display:none;margin: auto;width: 400px;height:400px; float:left; margin-left: 50px;"
+     data-toggle="map" data-addressid="address" data-longitudeid="longitude" data-latitudeid="latitude"
+     data-mark-type="markPoint"  data-makerid="mapMaker"/>
 
 <div th:include="include::footer"></div>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=dohAgcOnkdkg9H8hW9TK9tbz"></script>
@@ -54,14 +42,29 @@
 <script type="text/javascript" src="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
 <link rel="stylesheet" href="http://api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
 <script th:src="@{/js/map.js}"></script>
-<style>
-    /*取消显示百度地图版权标志*/
-    .BMap_cpyCtrl {display: none;}
-    .anchorBL {display: none;}
-</style>
+<!--<style>-->
+    <!--/*取消显示百度地图版权标志*/-->
+    <!--.BMap_cpyCtrl {display: none;}-->
+    <!--.anchorBL {display: none;}-->
+<!--</style>-->
 <script type="text/javascript">
     //页面控件初始化
     initMap();
+
+    //显示/隐藏地图
+    function showMap(obj) {
+        var map = $("#baidu_map");
+        var btn = $("#" + obj);
+
+        if(map.is(':hidden')){　　
+            //如果node是隐藏的则显示node元素，否则隐藏
+            map.show();
+            btn.text("隐藏地图");
+        }else{
+            map.hide();
+            btn.text("显示地图")
+        }
+    }
 </script>
 </body>
 </html>

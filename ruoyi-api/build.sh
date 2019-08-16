@@ -1,3 +1,3 @@
 #!/bin/bash
-docker build -t 31.8.10.17:5000/datacenter-api .
-docker push 31.8.10.17:5000/datacenter-api
+docker build -t 192.172.18.242:5000/jybasic/jybasic-api .
+docker push 192.172.18.242:5000/jybasic/jybasic-api

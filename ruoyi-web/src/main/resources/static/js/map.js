@@ -5,6 +5,8 @@ function initMap() {
         var m=new ShowMap($(this))
     })
 }
+
+
 var ShowMap = function (input)
 {
     var  id=input.data("id")||'allmap'//地图标注id
@@ -15,6 +17,8 @@ var ShowMap = function (input)
         ,makerId=input.data("makerid")||''//定位控件id（标点用）
         ,isShow=input.data("isshow")||false //是否显示用，默认false
         ,enableScroll=input.data("enablescroll")||false //启用滚轮放大缩小（默认false）
+        ,addressId=input.data("addressid")//地址输入框
+
     // 百度地图控件
     var recordmap = new BMap.Map(id);  // 创建Map实例
     var point;          // 创建中心点
@@ -59,12 +63,15 @@ var ShowMap = function (input)
             });
             // 绑定点击事件，触发时搜索目标地址并创建Marker
             if (makerId != "") {
+
                 $('#'+mapMaker).on("click", function ()
                 {
                     // 创建地址解析器实例
                     var myGeo = new BMap.Geocoder();
                     // 将地址解析结果显示在地图上,并调整地图视野
-                    var address = $('#'+mapMaker).parent().prev().children("input").val();
+                    var address = $('#' + addressId).val();
+                    //var address = $('#'+mapMaker).parent().prev().children("input").val();
+
                     myGeo.getPoint(address, function (point) {
                         if (point) {
                             $('#'+lng).val(point.lng);
@@ -77,8 +84,34 @@ var ShowMap = function (input)
                         }
                     }, city);
                 });
+
+
+
                 recordmap.addEventListener("load", function () {
                     $('#'+mapMaker).click();
+                });
+            }
+
+            if(addressId != "") {
+
+                $('#'+addressId).blur( function ()
+                {
+                    // 创建地址解析器实例
+                    var myGeo = new BMap.Geocoder();
+                    // 将地址解析结果显示在地图上,并调整地图视野
+                    var address = $('#' + addressId).val();
+
+                    myGeo.getPoint(address, function (point) {
+                        if (point) {
+                            $('#'+lng).val(point.lng);
+                            $('#'+lat).val(point.lat);
+                            recordmap.clearOverlays();
+                            recordmap.centerAndZoom(point, 16);
+                            recordmap.addOverlay(new BMap.Marker(point));
+                        } else {
+                            layer.msg('您填写的地址没有解析到结果!');
+                        }
+                    }, city);
                 });
             }
         }
@@ -98,7 +131,5 @@ var ShowMap = function (input)
     recordmap.addControl(top_right_navigation);
 
 }
-
-
 
 

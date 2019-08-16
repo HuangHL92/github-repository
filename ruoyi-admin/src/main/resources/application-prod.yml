@@ -2,7 +2,7 @@
 # 生产环境配置
 server:
   # 服务端口 （TODO 根据项目情况自行更换）
-  port: 82
+  port: 8080
   servlet:
     # 项目contextPath
     context-path: /
@@ -21,7 +21,7 @@ spring:
     enabled: true # Redis开关/默认关闭
     database: 0
     password:
-    host: 127.0.0.1
+    host: 192.172.18.222
     port: 6379
     lettuce:
       pool:
