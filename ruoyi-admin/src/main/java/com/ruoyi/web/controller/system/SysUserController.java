@@ -37,8 +37,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/system/user")
-public class SysUserController extends BaseController
-{
+public class SysUserController extends BaseController {
     private String prefix = "system/user";
 
     @Autowired
@@ -58,16 +57,14 @@ public class SysUserController extends BaseController
 
     @RequiresPermissions("system:user:view")
     @GetMapping()
-    public String user()
-    {
+    public String user() {
         return prefix + "/user";
     }
 
     @RequiresPermissions("system:user:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(SysUser user)
-    {
+    public TableDataInfo list(SysUser user) {
         startPage();
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
@@ -77,8 +74,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(SysUser user)
-    {
+    public AjaxResult export(SysUser user) {
         List<SysUser> list = userService.selectUserList(user);
         ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
         return util.exportExcel(list, "用户数据");
@@ -88,8 +84,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:import")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
-    {
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
         List<SysUser> userList = util.importExcel(file.getInputStream());
         String operName = getSysUser().getLoginName();
@@ -100,8 +95,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:view")
     @GetMapping("/importTemplate")
     @ResponseBody
-    public AjaxResult importTemplate()
-    {
+    public AjaxResult importTemplate() {
         ExcelUtil<SysUser> util = new ExcelUtil<SysUser>(SysUser.class);
         return util.importTemplateExcel("用户数据");
     }
@@ -110,8 +104,7 @@ public class SysUserController extends BaseController
      * 新增用户
      */
     @GetMapping("/add")
-    public String add(ModelMap mmap)
-    {
+    public String add(ModelMap mmap) {
         mmap.put("roles", roleService.selectRoleAll());
         mmap.put("posts", postService.selectPostAll());
         return prefix + "/add";
@@ -125,10 +118,8 @@ public class SysUserController extends BaseController
     @PostMapping("/add")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public AjaxResult addSave(SysUser user)
-    {
-        if (StringUtils.isNotNull(user.getUserId()) && SysUser.isAdmin(user.getUserId()))
-        {
+    public AjaxResult addSave(SysUser user) {
+        if (StringUtils.isNotNull(user.getUserId()) && SysUser.isAdmin(user.getUserId())) {
             return error("不允许修改超级管理员用户");
         }
         user.setSalt(ShiroUtils.randomSalt());
@@ -143,8 +134,7 @@ public class SysUserController extends BaseController
      * 修改用户
      */
     @GetMapping("/edit/{userId}")
-    public String edit(@PathVariable("userId") String userId, ModelMap mmap)
-    {
+    public String edit(@PathVariable("userId") String userId, ModelMap mmap) {
         mmap.put("user", userService.selectUserById(userId));
         mmap.put("roles", roleService.selectRolesByUserId(userId));
         mmap.put("posts", postService.selectPostsByUserId(userId));
@@ -159,10 +149,8 @@ public class SysUserController extends BaseController
     @PostMapping("/edit")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public AjaxResult editSave(SysUser user)
-    {
-        if (StringUtils.isNotNull(user.getUserId()) && SysUser.isAdmin(user.getUserId()))
-        {
+    public AjaxResult editSave(SysUser user) {
+        if (StringUtils.isNotNull(user.getUserId()) && SysUser.isAdmin(user.getUserId())) {
             return error("不允许修改超级管理员用户");
         }
         user.setUpdateBy(ShiroUtils.getLoginName());
@@ -180,15 +168,14 @@ public class SysUserController extends BaseController
     @PostMapping("/edit/userInfo")
     @Transactional(rollbackFor = Exception.class)
     @ResponseBody
-    public AjaxResult editSaveUserInfo(SysUser user){
+    public AjaxResult editSaveUserInfo(SysUser user) {
         return toAjax(userService.updateUserInfo(user));
     }
 
     @RequiresPermissions("system:user:resetPwd")
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @GetMapping("/resetPwd/{userId}")
-    public String resetPwd(@PathVariable("userId") String userId, ModelMap mmap)
-    {
+    public String resetPwd(@PathVariable("userId") String userId, ModelMap mmap) {
         mmap.put("user", userService.selectUserById(userId));
         return prefix + "/resetPwd";
     }
@@ -197,8 +184,7 @@ public class SysUserController extends BaseController
     @Log(title = "重置密码", businessType = BusinessType.UPDATE)
     @PostMapping("/resetPwd")
     @ResponseBody
-    public AjaxResult resetPwdSave(SysUser user)
-    {
+    public AjaxResult resetPwdSave(SysUser user) {
         user.setSalt(ShiroUtils.randomSalt());
         user.setPassword(passwordService.encryptPassword(user.getLoginName(), user.getPassword(), user.getSalt()));
         // 清空用户缓存
@@ -210,16 +196,12 @@ public class SysUserController extends BaseController
     @Log(title = "用户管理", businessType = BusinessType.DELETE)
     @PostMapping("/remove")
     @ResponseBody
-    public AjaxResult remove(String ids)
-    {
-        try
-        {
+    public AjaxResult remove(String ids) {
+        try {
             // 循环获取用户清空缓存（暂未实现更好的方法）
             String[] userIds = Convert.toStrArray(ids);
-            for (String userId : userIds)
-            {
-                if (SysUser.isAdmin(userId))
-                {
+            for (String userId : userIds) {
+                if (SysUser.isAdmin(userId)) {
                     throw new BusinessException("不允许删除超级管理员用户");
                 }
                 cacheUtils.getUserCache().remove(userService.selectUserById(userId).getLoginName());
@@ -229,9 +211,7 @@ public class SysUserController extends BaseController
             // 删除组织结构json文件
             JsonFileUtils.deleteOrgJsonFile();
             return toAjax(userService.deleteUserByIds(ids));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return error(e.getMessage());
         }
     }
@@ -241,8 +221,7 @@ public class SysUserController extends BaseController
      */
     @PostMapping("/checkLoginNameUnique")
     @ResponseBody
-    public String checkLoginNameUnique(SysUser user)
-    {
+    public String checkLoginNameUnique(SysUser user) {
         return userService.checkLoginNameUnique(user.getLoginName());
     }
 
@@ -251,8 +230,7 @@ public class SysUserController extends BaseController
      */
     @PostMapping("/checkPhoneUnique")
     @ResponseBody
-    public String checkPhoneUnique(SysUser user)
-    {
+    public String checkPhoneUnique(SysUser user) {
         return userService.checkPhoneUnique(user);
     }
 
@@ -261,8 +239,7 @@ public class SysUserController extends BaseController
      */
     @PostMapping("/checkEmailUnique")
     @ResponseBody
-    public String checkEmailUnique(SysUser user)
-    {
+    public String checkEmailUnique(SysUser user) {
         return userService.checkEmailUnique(user);
     }
 
@@ -273,8 +250,7 @@ public class SysUserController extends BaseController
     @RequiresPermissions("system:user:edit")
     @PostMapping("/changeStatus")
     @ResponseBody
-    public AjaxResult changeStatus(SysUser user)
-    {
+    public AjaxResult changeStatus(SysUser user) {
         // 清空用户缓存
         cacheUtils.getUserCache().remove(user.getLoginName());
         // 删除组织结构json文件
@@ -283,50 +259,47 @@ public class SysUserController extends BaseController
     }
 
 
-
-
-
     /**
      * 用户下拉框
      */
     @GetMapping("/getList4Select")
     @ResponseBody
-    public JSONObject getList4Select(HttpServletRequest request)
-    {
-        String deptid  =request.getParameter("deptid");
-        String keyword  =request.getParameter("keyword");
+    public JSONObject getList4Select(HttpServletRequest request) {
+        String deptid = request.getParameter("deptid");
+        String keyword = request.getParameter("keyword");
         SysUser user = new SysUser();
-        if(!StringUtils.isEmpty(deptid)) {
+        if (!StringUtils.isEmpty(deptid)) {
             user.setDeptId(deptid);
         }
-        if(!StringUtils.isEmpty(keyword)) {
+        if (!StringUtils.isEmpty(keyword)) {
             user.setUserName(keyword);
         }
 
         JSONObject robj = new JSONObject();
-        robj.put("code",0);
-        robj.put("msg","success");
+        robj.put("code", 0);
+        robj.put("msg", "success");
         //TODO 取得用户，此处可以优化（1.放入缓存 2.数据库读取sql优化）
         //TODO 理想方案是前端直接读JSON文件
         List<SysUser> list = userService.selectUserList(user);
         JSONArray rList = new JSONArray();
-        for (SysUser u: list) {
+        for (SysUser u : list) {
             JSONObject o = new JSONObject();
 //            o.put("name",u.getUserName()+ "<" + u.getDept().getDeptName() + ">");
-            o.put("name",u.getUserName());
-            o.put("value",u.getUserId());
-            o.put("deptname",u.getDept().getDeptName());
+            o.put("name", u.getUserName());
+            o.put("value", u.getUserId());
+            o.put("deptname", u.getDept().getDeptName());
 //            o.put("disabled",u.getUserId());
 //            o.put("type",u.getUserId());
             rList.add(o);
         }
 
-        robj.put("data",rList);
+        robj.put("data", rList);
         return robj;
     }
 
     /**
      * 获取组织&用户json
+     *
      * @return
      */
     @GetMapping("/orgTree")
@@ -340,12 +313,10 @@ public class SysUserController extends BaseController
      */
     @GetMapping("/updateOrder")
     @ResponseBody
-    public AjaxResult updateOrder(String id, String orderNum)
-    {
+    public AjaxResult updateOrder(String id, String orderNum) {
         try {
             SysUser obj = userService.selectUserById(id);
-            if (obj!=null)
-            {
+            if (obj != null) {
                 obj.setOrderNum(Long.valueOf(orderNum));
                 userService.updateUserInfo(obj);
             }
@@ -355,7 +326,6 @@ public class SysUserController extends BaseController
 
         return AjaxResult.success();
     }
-
 
 
 }

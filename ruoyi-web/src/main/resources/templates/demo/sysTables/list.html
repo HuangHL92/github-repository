@@ -1,0 +1,235 @@
+<!DOCTYPE HTML>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								标签类型：<select name="tableType" th:with="type=${@dict.getType('sys_table_type')}">
+								          <option value="">所有</option>
+								         <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+							            </select>
+							</li>
+
+							<li>
+<!--								状态：<input type="checkbox" th:checked="true" class="onoffswitch-checkbox" id="tableStatus" name="tableStatus">-->
+<!--								<input type="text" name="tableStatus"/>-->
+								状态：<select name="tableStatus" th:with="type=${@dict.getType('sys_normal_disable')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+
+							</li>
+
+
+							<li>
+								关键字：<input type="text" name="parans[keyword]" placeholder="标签名称/备注/人员"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset(); $.table.search()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm hidden-xs" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="demo:sysTables:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.editFull()" shiro:hasPermission="demo:sysTables:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="demo:sysTables:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="demo:sysTables:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('demo:sysTables:editFull')}]];
+        var removeFlag = [[${@permission.hasPermi('demo:sysTables:remove')}]];
+		var datas = [[${@dict.getType('sys_table_type')}]];
+        var prefix = ctx + "demo/sysTables";
+		$(function() {
+			var panehHidden = false;
+			if ($(this).width() < 769) {
+				panehHidden = true;
+			}
+
+			// $('body').layout({
+			// 	initClosed: panehHidden,
+			// 	west__size: 250
+			// 	//applyDefaultStyles: true //应用默认样式
+			// });
+			queryUserList();
+		});
+
+
+
+
+		function queryUserList() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "便签列",
+				search: false,
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'tableId', 
+					title : '便签id',
+					visible: false
+				},
+				// {
+				// 	field : 'tableType',
+				// 	title : '标签类型',
+				// 	sortable: true
+				// },
+					{
+						field : 'tableType',
+						title : '标签类型',
+						sortable: true,
+						formatter: function(value, row, index) {
+							return $.table.selectDictLabel(datas, value);
+						}
+					},
+				{
+					field : 'tableName', 
+					title : '标签名字',
+					sortable: true
+				},
+
+				{
+					    field : 'tableStatus',
+					// title : '状态（1为正常，0不正常）',
+					// sortable: true
+					// visible: editFlag == 'hidden' ? false : true,
+					    title: '状态',
+						align: 'center',
+						width: 80,
+						formatter: function (value, row, index) {
+							return statusTools(row);
+						}
+					},
+
+				{
+					field: 'tableInfo',
+					title: '排序',
+					align: "left",
+					width: 80,
+					// formatter: function (value, row, index) {
+
+						// return '<input type="text"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />'
+						formatter: function (value, row, index) {
+							var actions = [];
+							actions.push('<input type="text" onblur="updateOrderAjax(\'' + row.tableId + '\',this)" value="' + value + '"  class="form-control required digits" style="position: relative; text-align: center;width: 40px;padding: 1px 1px;" />');
+							return actions.join('');
+						}
+
+
+				},
+					{
+						field : 'pepleName',
+						title : '人员',
+						sortable: true,
+						formatter: function (value, row, index) {
+							var actions=[]
+							actions.push()
+
+							return ;
+						}
+					},
+					// {
+					// 	field : 'tableSys',
+					// 	title : '说明',
+					// 	sortable: true
+					// },
+
+				{
+					field : 'tableSys',
+					title : '备注',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editFull(\'' + row.tableId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.tableId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        }
+		/* 用户状态显示 */
+
+		function statusTools(row) {
+			if (row.tableStatus == 1) {
+				return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.tableId + '\')"></i> ';
+
+			} else {
+				return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.tableId + '\')"></i> ';
+			}
+		}
+		/* 用户管理启用 */
+		function enable(tableId) {
+			$.modal.confirm("确认要启用用户吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "tableId": tableId, "tableStatus": 0 });
+			})
+		}
+
+		/* 用户管理-停用 */
+
+		function disable(tableId) {
+			$.modal.confirm("确认要停用用户吗？", function() {
+				$.operate.post(prefix + "/changeStatus", { "tableId": tableId, "tableStatus": 1 });
+			})
+		}
+		//更新显示顺序
+		function updateOrderAjax(tableId, input) {
+
+			$.ajax({
+				type: 'get',
+				dataType: 'json',
+				data: {tableId:tableId , tableInfo: input.value},
+				url: prefix + "/updateOrder",
+				success: function (result) {
+					if (result.code == web_status.SUCCESS) {
+						// do nothing
+					} else {
+						$.modal.msgError(result.msg);
+					}
+				}
+			})
+
+		}
+		// function people(row) {
+		// 	$.operate.post(prefix + "/people", { "tableId": tableId});
+		// 	return undefined;
+		// }
+    </script>
+</body>
+</html>

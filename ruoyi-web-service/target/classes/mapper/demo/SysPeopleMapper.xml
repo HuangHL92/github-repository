@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.area.demo.mapper.SysPeopleMapper">
+    <resultMap type="SysPeople" id="SysPostResult">
+        <id     property="peopleId"        column="people_id"       />
+        <result property="peopleCode"      column="people_code"     />
+        <result property="pepleName"      column="peple_name"     />
+        <result property="peopleSort"      column="people_sort"     />
+        <result property="status"        column="status"        />
+<!--        <result property="Flag"        column=""        />-->
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+        <result property="remark"        column="remark"        />
+    </resultMap>
+    <sql id="selectPostVo">
+        select people_id, people_code, peple_name, people_sort, status, create_by, create_time, remark
+		from sys_people
+    </sql>
+    <select id="selectPeopleAll" resultMap="SysPostResult">
+        <include refid="selectPostVo"/>
+    </select>
+    <select id="selectpeoplesByTableId" parameterType="String" resultMap="SysPostResult">
+       select z.people_id from sys_tables h left join table_people l on h.table_id=l.t_id
+       left join sys_people z on l.p_id=z.people_id where h.table_id=#{tableId};
+    </select>
+</mapper>

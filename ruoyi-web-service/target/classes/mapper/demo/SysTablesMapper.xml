@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.area.demo.mapper.SysTablesMapper">
+
+    <resultMap type="SysUser" id="SysUserResult">
+        <id     property="tableId"       column="table_id"      />
+        <result property="tableType"       column="table_type"      />
+        <result property="tableName"    column="table_name"   />
+        <result property="tableStatus"     column="table_status"    />
+<!--        <result property="tablePeoples"        column="table_peoples"        />-->
+        <result property="tableInfo"        column="table_info"        />
+        <result property="pepleName"  column="peple_name"  />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
+
+    <update id="updateTables" parameterType="SysTables">
+        update sys_tables set table_status = #{tableStatus}
+        where table_id = #{tableId}
+    </update>
+    <select id="selectAllPeople" parameterType="SysTables" resultType="com.ruoyi.area.demo.domain.SysTables">
+     select  table_peoples from  sys_tables c left join table_people on  c.table_id = uc.t_id left join sys_people u  on uc.p_id = u.people_id ;
+
+    </select>
+    <update id="insertPeopleName" parameterType="SysTables">
+        insert into sys_tables (tablePeoples) value ('#{tablePeoples'})
+        where table_id = #{tableId};
+    </update>
+    <select id="selectTableById" parameterType="String" resultType="com.ruoyi.area.demo.domain.SysTables">
+        select * from sys_tables where table_id = #{tableId};
+     </select>
+    <update id="updateTableInfo" parameterType="SysTables" >
+      update sys_tables set table_info = #{tableInfo} where table_id = #{tableId};
+    </update>
+    <select id="selectTableList" parameterType="SysTables" resultType="com.ruoyi.area.demo.domain.SysTables">
+     select h.*,GROUP_CONCAT(z.peple_name) as peple_name from sys_tables h left join table_people l on h.table_id=l.t_id left join sys_people z on l.p_id=z.people_id
+     where 1=1
+        <if test="tableType != null and tableType != ''">
+            AND h.table_type like concat('%', #{tableType}, '%')
+        </if>
+        <if test="tableStatus != null and tableStatus != ''">
+            AND h.table_status=#{tableStatus}
+        </if>
+        group by h.table_id
+        <if test="parans != null and parans.keyword !=null and parans.keyword != ''">
+             having replace(GROUP_CONCAT(z.peple_name),',','' ) like concat('%',#{parans.keyword},'%')
+             or h.table_name like concat('%',#{parans.keyword},'%')
+            or h.table_sys like concat('%',#{parans.keyword},'%')
+        </if>
+        order by h.table_info;
+         </select>
+    <select id="checkTableNameUnique" resultType="java.lang.Integer">
+        select count(*) from sys_tables where table_name = #{tableName}
+    </select>
+</mapper>

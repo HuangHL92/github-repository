@@ -33,7 +33,6 @@ public class SysPostController extends BaseController
 
     @Autowired
     private ISysPostService postService;
-
     @RequiresPermissions("system:post:view")
     @GetMapping()
     public String operlog()
